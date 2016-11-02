@@ -1,4 +1,4 @@
-const electron = require('electron');
+//const electron = require('electron');
 const remote = electron.remote;
 const dialog = electron.remote.dialog;
 const shell = electron.shell;
