@@ -1,3 +1,132 @@
 *{
     box-sizing: border-box;
 }
+html {
+	margin: 0px; 
+    padding: 0px; 
+    height: 100%; 
+    font-family: Verdana, Arial, Helvetica, sans-serif; 
+    font-size: 100%; 
+    background-color: #afbecf;
+}
+body {
+	margin: 0px; 
+    padding: 0px; 
+    height: 100%; 
+    font-family: Verdana, Arial, Helvetica, sans-serif; 
+    font-size: 100%;
+    background-color: #afbecf;
+}
+a:link {
+	color: #ce1126;
+}
+a:visited {
+	color: #ce1126;
+}
+a:hover {
+	color: #ce1126;
+}
+a:active {
+	color: #ce1126;
+}
+.footer {
+	padding: 10px 5px 5px; 
+    width: 100%; 
+    height: 50px;
+    text-align: center; 
+    bottom: 0px; 
+    color: #fcd116; 
+    font-size: 1.2em; 
+    position: fixed; 
+    background-color: #003f87;
+}
+.centerT {
+	margin-right: auto; 
+    margin-left: auto;
+}
+.row {
+	white-space: normal;
+}
+.s-row {
+	display: flex; 
+    flex-wrap: wrap;
+}
+.center {
+	margin-right: auto; 
+    margin-left: auto;
+}
+.mainWidth {
+	width: 100%;
+}
+.tabBoxWidth {
+	width: 100%;
+}
+.main {
+	height: 100%; 
+    padding: 0px; 
+    margin: 10px; 
+    display: flex; 
+    min-width: 800px;
+    overflow: hidden;
+}
+.tabBox {
+	padding-bottom: 20px; 
+    margin-right: auto; 
+    vertical-align: top; 
+    min-width: 800px;
+    min-height: 600px;
+    width: 100%;
+}
+.tabcontent {
+	border-width: medium 1px 1px; 
+    border-style: none solid solid; 
+    border-color: #b09003 #b09003; 
+    padding: 6px 12px; 
+    border-image: none; 
+    font-size: 0.8em; 
+    display: none;
+    height: calc(100% - 110px);
+}
+ul.tab {
+	margin: 0px; 
+    padding: 0px; 
+    overflow: hidden; 
+    border-bottom-color: #b09003; 
+    border-bottom-width: 1px; 
+    border-bottom-style: solid; 
+    list-style-type: none; 
+    background-color: #afbecf;
+}
+ul.tab li {
+	float: left;
+}
+ul.tab li a {
+	padding: 14px 16px; 
+    transition:0.3s; 
+    text-align: center; 
+    color: rgb(0, 106, 113); 
+    font-size: 0.9em; 
+    text-decoration: none; 
+    border-top-color: #b09003; 
+    border-right-color: #b09003; 
+    border-left-color: #b09003; 
+    border-top-width: 1px; 
+    border-right-width: 1px; 
+    border-left-width: 1px; 
+    border-top-style: solid; 
+    border-right-style: solid; 
+    border-left-style: solid; 
+    display: inline-block; 
+    border-top-left-radius: 10px; 
+    border-top-right-radius: 10px; 
+    background-color: #afbecf;
+}
+ul.tab li a:hover {
+	background-color: #fdeb9b;
+}
+ul.tab li a:focus {
+	color: #ce1126; background-color: #fcd116;
+}
+ul.tab .active {
+	color: #ce1126; background-color: #fcd116;
+}

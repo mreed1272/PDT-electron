@@ -14,7 +14,7 @@ app.on('ready',()=>{
         frame: false,
         //transparent: true
         });
-    mainWindow.loadURL(`file://${__dirname}/index.html`);
+    mainWindow.loadURL(`file://${__dirname}/app/index.html`);
 
     mainWindow.openDevTools();
 
