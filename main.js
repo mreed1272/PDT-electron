@@ -1,7 +1,7 @@
 const electron = require('electron');
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
-const ipcMain = electron.ipcMain;
+//const ipcMain = electron.ipcMain;
 
 var mainWindow = null;
 
