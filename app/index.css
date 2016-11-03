@@ -18,6 +18,10 @@ body {
     background-color: #afbecf;
     overflow: hidden;
 }
+.tabsImg {
+	float: left;
+	margin: 10px 10px 0 0;
+}
 a:link {
 	color: #ce1126;
 }
@@ -118,11 +122,16 @@ a:active {
 		    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.4), inset 0 1px 0 #afbecf;
 		    text-shadow: 0 1px #afbecf;
 		    margin: 0;
-		    padding: 5px 35px;
+		    padding: 0px 35px 5px 5px;
+			height: 60px;
+			line-height: 60px;
 }
 .tabrow a {
 			  color: #444;
 			  text-decoration: none;
+			  display: inline-block;
+			  vertical-align: middle;
+			  line-height: 1.5;
 }
 .tabrow li.selected {
 		    background: rgb(204,228,255);
