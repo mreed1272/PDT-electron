@@ -16,6 +16,7 @@ body {
     font-family: Verdana, Arial, Helvetica, sans-serif; 
     font-size: 100%;
     background-color: #afbecf;
+    overflow: hidden;
 }
 a:link {
 	color: #ce1126;
@@ -64,69 +65,109 @@ a:active {
 .main {
 	height: 100%; 
     padding: 0px; 
-    margin: 10px; 
+    margin: 2px; 
     display: flex; 
     min-width: 800px;
     overflow: hidden;
 }
 .tabBox {
-	padding-bottom: 20px; 
+	padding-bottom: 10px; 
     margin-right: auto; 
     vertical-align: top; 
     min-width: 800px;
-    min-height: 600px;
+    /*min-height: 600px;*/
     width: 100%;
 }
 .tabcontent {
-	border-width: medium 1px 1px; 
-    border-style: none solid solid; 
-    border-color: #b09003 #b09003; 
-    padding: 6px 12px; 
+	border: 1px none; 
+    border-color: #b09003;
+    padding: 20px 6px 6px 12px; 
     border-image: none; 
     font-size: 0.8em; 
     display: none;
-    height: calc(100% - 110px);
+    height: calc(100% - 85px);
+    background-color: rgb(204,228,255);
+    
 }
-ul.tab {
-	margin: 0px; 
-    padding: 0px; 
-    overflow: hidden; 
-    border-bottom-color: #b09003; 
-    border-bottom-width: 1px; 
-    border-bottom-style: solid; 
-    list-style-type: none; 
-    background-color: #afbecf;
+
+.tabrow {
+		    text-align: center;
+		    list-style: none;
+		    margin: 0;
+		    padding: 0;
+		    /*line-height: 24px;
+		    height: 26px;*/
+		    overflow: hidden;
+		    font-size: 12px;
+		    font-family: verdana;
+		    position: relative;
 }
-ul.tab li {
-	float: left;
+.tabrow li {
+	    border: 1px solid #b09003;
+		    background: #afbecf;
+		    /*background: -o-linear-gradient(top, #ECECEC 50%, #D1D1D1 100%);
+		    background: -ms-linear-gradient(top, #ECECEC 50%, #D1D1D1 100%);
+		    background: -moz-linear-gradient(top, #ECECEC 50%, #D1D1D1 100%);
+		    background: -webkit-linear-gradient(top, #ECECEC 50%, #D1D1D1 100%);*/
+		    background: linear-gradient(to top,#afbecf 30%, #b09003 100%);
+		    display: inline-block;
+		    position: relative;
+		    z-index: 0;
+		    border-top-left-radius: 6px;
+		    border-top-right-radius: 6px;
+		    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.4), inset 0 1px 0 #afbecf;
+		    text-shadow: 0 1px #afbecf;
+		    margin: 0;
+		    padding: 5px 35px;
 }
-ul.tab li a {
-	padding: 14px 16px; 
-    transition:0.3s; 
-    text-align: center; 
-    color: rgb(0, 106, 113); 
-    font-size: 0.9em; 
-    text-decoration: none; 
-    border-top-color: #b09003; 
-    border-right-color: #b09003; 
-    border-left-color: #b09003; 
-    border-top-width: 1px; 
-    border-right-width: 1px; 
-    border-left-width: 1px; 
-    border-top-style: solid; 
-    border-right-style: solid; 
-    border-left-style: solid; 
-    display: inline-block; 
-    border-top-left-radius: 10px; 
-    border-top-right-radius: 10px; 
-    background-color: #afbecf;
+.tabrow a {
+			  color: #444;
+			  text-decoration: none;
 }
-ul.tab li a:hover {
-	background-color: #fdeb9b;
+.tabrow li.selected {
+		    background: rgb(204,228,255);
+            background: linear-gradient(to top, rgb(204,228,255) 35%, #b09003 90%);
+		    color: #ce1126;
+		    z-index: 2;
+		    border-bottom-color: rgb(204,228,255);
 }
-ul.tab li a:focus {
-	color: #ce1126; background-color: #fcd116;
+.tabrow li.selected a {
+    color: #ce1126;
 }
-ul.tab .active {
-	color: #ce1126; background-color: #fcd116;
+.tabrow:before {
+		    position: absolute;
+		    content: " ";
+		    width: 100%;
+		    bottom: 0;
+		    left: 0;
+		    border-bottom: 1px solid #b09003;
+		    z-index: 1;
+            background-color: #afbecf;
+}
+.tabrow li:before,
+.tabrow li:after {
+		    border: 1px solid #b09003;
+		    position: absolute;
+		    bottom: -1px;
+		    width: 5px;
+		    height: 5px;
+		    content: " ";
+}
+.tabrow li:before {
+		    left: -6px;
+		    border-bottom-right-radius: 6px;
+		    border-width: 0 1px 1px 0;
+		    box-shadow: 2px 2px 0 #afbecf;
+}
+.tabrow li:after {
+		    right: -6px;
+		    border-bottom-left-radius: 6px;
+		    border-width: 0 0 1px 1px;
+		    box-shadow: -2px 2px 0 #afbecf;
+}
+.tabrow li.selected:before {
+		    box-shadow: 2px 2px 0 rgb(204,228,255);
+}
+.tabrow li.selected:after {
+		    box-shadow: -2px 2px 0 rgb(204,228,255);
 }

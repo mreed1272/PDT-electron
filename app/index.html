@@ -11,21 +11,21 @@
 <body onload="onBodyLoad()">
 	<div id="mainContent" class="main">
 		<div class="tabBox" id="tabbedItems">
-			<ul class="tab">
-				<li>
-					<a class="tablinks" id="mainTab" onclick="openTabContent(event, 'mainT')" href="javascript:void(0);"><br/>PDT Main</a>
+			<ul class="tabrow">
+				<li class="selected" onclick="openTabContent(event,'mainT')">
+					<a href="javascript:void(0);"><br/>PDT Main</a>
 				</li>
-				<li>
-					<a class="tablinks" id="testTrackTab" onclick="openTabContent(event,'testTrackT')" href="javascript:void(0);"><br/>Test Track</a>
+				<li onclick="openTabContent(event,'testTrackT')">
+					<a href="javascript:void(0);"><br/>Test Track</a>
 				</li>
-				<li>
-					<a class="tablinks" id="editRacersTab" onclick="openTabContent(event,'editRacersT')" href="javascript:void(0);"><br/>Edit Racers</a>
+				<li onclick="openTabContent(event,'editRacersT')">
+					<a href="javascript:void(0);"><br/>Edit Racers</a>
 				</li>
-				<li>
-					<a class="tablinks" id="runRaceTab" onclick="openTabContent(event, 'runRaceT')" href="javascript:void(0);"><br/>Run Race</a>
+				<li onclick="openTabContent(event,'runRaceT')">
+					<a href="javascript:void(0);"><br/>Run Race</a>
 				</li>
-				<li>
-					<a class="tablinks" id="PDT-configTab" onclick="openTabContent(event, 'PDT-configT')" href="javascript:void(0);">Configure PDT<br/>Race Manager</a>
+				<li onclick="openTabContent(event,'PDT-configT')">
+					<a href="javascript:void(0);">Configure PDT<br/>Race Manager</a>
 				</li>
 			</ul>
 			<div class="tabcontent" id="mainT">

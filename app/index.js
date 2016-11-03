@@ -9,8 +9,8 @@
 
 function onBodyLoad(){
   document.getElementById("mainT").style.display = "block";
-  document.getElementById("mainTab").className += " active";
-  document.activeElement.blur();
+  //document.getElementById("mainTabLi").className += " active";
+  //document.activeElement.blur();
 }
 
 function openTabContent(evt, tabName) {
@@ -19,10 +19,10 @@ function openTabContent(evt, tabName) {
   for (i = 0; i < tabcontent.length; i++) {
     tabcontent[i].style.display = "none";
   }
-  tablinks = document.getElementsByClassName("tablinks");
+  tablinks = document.getElementsByClassName("selected");
   for (i = 0; i < tablinks.length; i++) {
-    tablinks[i].className = tablinks[i].className.replace(" active", "");
+    tablinks[i].className = tablinks[i].className.replace("selected", "");
   }
   document.getElementById(tabName).style.display = "block";
-  evt.currentTarget.className += " active";
+  evt.currentTarget.className += "selected";
 }
