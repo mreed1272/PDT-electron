@@ -99,20 +99,14 @@ a:active {
 		    list-style: none;
 		    margin: 0;
 		    padding: 0;
-		    /*line-height: 24px;
-		    height: 26px;*/
 		    overflow: hidden;
 		    font-size: 12px;
 		    font-family: verdana;
 		    position: relative;
 }
 .tabrow li {
-	    border: 1px solid #b09003;
+	    	border: 1px solid #b09003;
 		    background: #afbecf;
-		    /*background: -o-linear-gradient(top, #ECECEC 50%, #D1D1D1 100%);
-		    background: -ms-linear-gradient(top, #ECECEC 50%, #D1D1D1 100%);
-		    background: -moz-linear-gradient(top, #ECECEC 50%, #D1D1D1 100%);
-		    background: -webkit-linear-gradient(top, #ECECEC 50%, #D1D1D1 100%);*/
 		    background: linear-gradient(to top,#afbecf 30%, #b09003 100%);
 		    display: inline-block;
 		    position: relative;
@@ -125,6 +119,7 @@ a:active {
 		    padding: 0px 35px 5px 5px;
 			height: 60px;
 			line-height: 60px;
+			cursor: pointer;
 }
 .tabrow a {
 			  color: #444;

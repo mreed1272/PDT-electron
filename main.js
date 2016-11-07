@@ -9,9 +9,9 @@ var mainWindow = null;
 
 app.on('ready',()=>{
     mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
-        frame: false,
+        width: 1280,
+        height: 720,
+        frame: true,
         //transparent: true
         });
     mainWindow.loadURL(`file://${__dirname}/app/index.html`);
