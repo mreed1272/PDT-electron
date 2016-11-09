@@ -12,6 +12,8 @@ app.on('ready',()=>{
         width: 1280,
         height: 720,
         frame: true,
+        x: 25,
+        y: 25
         //transparent: true
         });
     mainWindow.loadURL(`file://${__dirname}/app/index.html`);
