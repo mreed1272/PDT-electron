@@ -41,9 +41,21 @@ a:active {
     text-align: center; 
     bottom: 0px; 
     color: #fcd116; 
-    font-size: 1.2em; 
+    font-size: 0.9em; 
     position: fixed; 
     background-color: #003f87;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+}
+.footer-item {
+	display: flex;
+	margin-left: 30px;
+	justify-content: center;
+	width: 150px;
+	height: 30px;
+	border: 5px outset #fcd116;
+	align-items: center;
 }
 .centerT {
 	margin-right: auto; 

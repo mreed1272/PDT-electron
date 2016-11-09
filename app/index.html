@@ -34,25 +34,55 @@
 				</li>
 			</ul>
 			<div class="tabcontent" id="mainT">
-                Main Content
+				Main Content
+				<div id="RaceInfo">
+					<p>Race Information:</p>
+					<ul>
+						<li>Organization Name</li>
+						<li>Number of Racers</li>
+						<li>Date of Race</li>
+						<li>Status of Race</li>
+					</ul>
+					<button id="load-race">Load Race</button>
+					<button id="save-race">Save Race</button>
+					<button id="edit-race">Edit Race</button>
+				</div>
+				<div id="RacerInfo">
+					<p>Table of Racers - to be filled in from file</p>
+					<table>
+						<tr>
+							<th>Racer #</th>
+							<th>Racer Name</th>
+							<th>Race Car Weight (oz)</th>
+							<th>Total Time (s)</th>
+						</tr>
+						<tr>
+							<td>1</td>
+							<td>Tom Smith</td>
+							<td>4.3</td>
+							<td>0.000</td>
+						</tr>
+					</table>
+				</div>
 			</div>
 			<div class="tabcontent" id="testTrackT">
-                Testing Track
+				Testing Track
 			</div>
 			<div class="tabcontent" id="editRacersT">
-                Add / Edit Racers
+				Add / Edit Racers
 			</div>
 			<div class="tabcontent" id="runRaceT">
-                Run the Race
+				Run the Race
 			</div>
 			<div class="tabcontent" id="PDT-configT">
-                Configure the software.
+				Configure the software.
 			</div>
 		</div>
 	</div>
-    <footer class="footer">
-        &nbsp;Status Information will go here.
-    </footer>
+	<footer class="footer">
+		<span class="footer-item" id="timerVer">PDT Timer version</span>
+		<span class="footer-item" id="conTimer">No connection</span>
+	</footer>
 </body>
 
 </html>
