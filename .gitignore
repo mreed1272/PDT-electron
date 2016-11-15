@@ -47,4 +47,6 @@ jspm_packages
 .yarn-integrity
 
 .vscode
-
+.eslintrc.json
+jsconfig.json
+launch.json

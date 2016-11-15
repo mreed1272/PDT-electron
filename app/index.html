@@ -75,7 +75,40 @@
 				Run the Race
 			</div>
 			<div class="tabcontent" id="PDT-configT">
-				Configure the software.
+				<p>Timer configuration:
+					<select>
+					<option value="Arduino" selected>PDT-Arduino</option>
+					<option value="custom">Custom Timer</option>
+					</select>
+				</p>
+				<div id="timer-config">
+					<p>Serial Port:
+						<select id="serial-port-list">
+						<option value="auto">auto</option>						
+						</select>
+					</p>
+					<p>Serial Commands</p>
+					<ul>
+						<li>Timer Version : V</li>
+						<li>Gate Query : G</li>
+						<li>Number of Lanes : N</li>
+						<li>Timer Reset : R</li>
+						<li>Force End : F</li>
+						<li>Trigger Start Solenoid: S</li>
+					</ul>
+
+					<p>Serial Messages</p>
+					<ul>
+						<li>Timer Ready : K</li>
+						<li>Command Acknowledge : .</li>
+						<li>Gate Open : O</li>
+						<li>Timer Version : vert=<i>[version number]</i></li>
+						<li>Number of Lanes : numl=<i>[integer]</i></li>
+						<li>Lane 1 Time : 1 - <i>[time in seconds]</i></li>
+						<li>Lane 2 Time : 2 - <i>[time in seconds]</i></li>
+						<li>Lane 3 Time : 3 - <i>[time in seconds]</i></li>
+					</ul>
+				</div>
 			</div>
 		</div>
 	</div>

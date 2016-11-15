@@ -1,12 +1,9 @@
-const electron = require('electron');
-const remote = electron.remote;
-const dialog = electron.remote.dialog;
-const shell = electron.shell;
-const fs = require('fs');
-const ipcRenderer = electron.ipcRenderer;
+// This file is required by the index.html file and will
+// be executed in the renderer process for that window.
+// All of the Node.js APIs are available in this process.
 
-//const serialport = require('serialport');
-var SerialPort = require('serialport');//serialport.SerialPort;
+const serialport = require('serialport');
+var SerialPort = serialport.SerialPort;
 
 var PDT = null;
 
@@ -17,40 +14,17 @@ var laneTimes = [];
 var initArduino = false;
 
 var patt = "Arduino";
-
-
-function onBodyLoad(){
-  document.getElementById("mainT").style.display = "block";
-  initSerial();
-}
-
-function openTabContent(evt, tabName) {
-  var i, tabcontent, tablinks;
-  tabcontent = document.getElementsByClassName("tabcontent");
-  for (i = 0; i < tabcontent.length; i++) {
-    tabcontent[i].style.display = "none";
-  }
-  tablinks = document.getElementsByClassName("selected");
-  for (i = 0; i < tablinks.length; i++) {
-    tablinks[i].className = tablinks[i].className.replace("selected", "");
-  }
-  document.getElementById(tabName).style.display = "block";
-  evt.currentTarget.className += "selected";
-}
-
 function initSerial() {
     console.log("Initializing serial port");
-    SerialPort.list(function (err, ports) {
-        var outStr = [];
+    serialport.list(function (err, ports) {
+        var outStr = "";
         if (err) { console.log(err); return; };
 
         outStr = ports.map(function (port) {
             return port.comName
-        });
-        console.log(outStr);
-        loadSelect("serial-port-list",outStr,"");
+        }).join(", ");
 
-        //document.getElementById('port-names').innerHTML = `${outStr}<br/>`;
+        document.getElementById('port-names').innerHTML = `${outStr}<br/>`;
         if (ports.length !== 0) {
             setupArduino(ports);
         } else {
@@ -59,31 +33,15 @@ function initSerial() {
     });
 }
 
-function loadSelect (selectID,optListArr,selectItem) {
-  var selElem = document.getElementById(selectID);
-  var option = document.createElement("option");
-  
-  for (var i = 0; i < optListArr.length; i++){
-    var option = document.createElement("option");
-    option.text = optListArr[i];
-    option.value = optListArr[i];
-    selElem.add(option,i);
-    if (optListArr[i].value == selectItem) {
-      selElem.selectedIndex = i;
-    }
-  }
-}
-
-
 function setupArduino(availPorts) {
 
     for (var i = 0; i < availPorts.length; i++) {
         var testStr = availPorts[i].manufacturer.toString();
         if (testStr.search(patt) >= 0) {
-            PDT = new SerialPort(availPorts[i].comName, { baudrate: 9600, parser: SerialPort.parsers.readline('\n') });
+            PDT = new SerialPort(availPorts[i].comName, { baudrate: 9600, parser: serialport.parsers.readline('\n') });
             initArduino = true;
         } else {
-            console.log("No timer found")
+            console.log("No port found")
             return false;
         };
     };
