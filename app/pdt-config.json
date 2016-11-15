@@ -15,10 +15,10 @@
         {"name": "Racing", "value": "B"},
         {"name": "Command Acknowledge", "value": "."},
         {"name": "Gate Open", "value": "O"},
-        {"name": "Timer Version", "value": "vert=", "regexValue": "/vert=(.*)/"},
-        {"name": "Number of Lanes", "value": "numl=", "regexValue": "/numl=(\d)/"},
-        {"name": "Lane 1 Time", "value": "1 - ", "regexValue": "/(\d) - (\d+\.\d+)/"},
-        {"name": "Lane 2 Time", "value": "2 - ", "regexValue": "/(\d) - (\d+\.\d+)/"},
-        {"name": "Lane 3 Time", "value": "3 - ", "regexValue": "/(\d) - (\d+\.\d+)/"}
+        {"name": "Timer Version", "value": "vert=", "regexValue": "vert=(.*)"},
+        {"name": "Number of Lanes", "value": "numl=", "regexValue": "numl=(\\d)"},
+        {"name": "Lane 1 Time", "value": "1 - ", "regexValue": "(\\d) - (\\d+\\.\\d+)"},
+        {"name": "Lane 2 Time", "value": "2 - ", "regexValue": "(\\d) - (\\d+\\.\\d+)"},
+        {"name": "Lane 3 Time", "value": "3 - ", "regexValue": "(\\d) - (\\d+\\.\\d+)"}
     ]
 }
