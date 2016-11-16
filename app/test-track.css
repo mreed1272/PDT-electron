@@ -1,0 +1,134 @@
+@font-face {
+    font-family: LEDfont;
+    src: url(./images/Segment7Standard.otf);
+}
+
+.flex-contain {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    height: 100px;
+    align-items: center;
+    align-content: center;
+} 
+
+.flex-contain span {
+    border: 1px solid blue;
+    width: 200px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    font-size: 1.5em;
+}
+#gate-timer.closed {
+    border: 5px outset gold;
+    background-color: darkgreen;
+    color: #eee;
+}
+#gate-timer.open {
+    border: 5px inset gold;
+    background-color: darkred;
+    color: #eee;
+}
+#status-timer {
+    background-color: darkblue;
+    color: #eee;
+    border: 5px solid gold;
+}
+#status-timer.ready {
+    border-style: outset;
+    background-color: darkblue;
+}
+#status-timer.racing {
+    border-style: inset;
+    background-color: darkgreen;
+}
+#status-timer.finished {
+    border-style: groove;
+    background-color: darkred;
+}
+#reset-pdt {
+    user-select: none;
+    border: 5px outset gold;
+    color: #eee;
+    background-color: darkred;
+    cursor: pointer;
+}
+#reset-pdt.clicked {
+    border-style: inset;
+}
+#timer-version {
+    border: 5px outset gold;
+    background-color: darkblue;
+    color: #eee;
+}
+
+#lanes-timer {
+    border: 5px outset gold;
+    background-color: darkblue;
+    color: #eee;
+}
+
+.laneTimes {
+    float: left;
+    font-size: 2.2em;
+    list-style: none;
+    width: 55%;
+    margin-right: auto;
+    margin-left: 0;
+    min-width: 575px;
+}
+.laneTimes li {
+    border: 3px ridge #444;
+    background-color: dimgray;
+    padding-left: 10px;
+    margin-right: auto;
+    text-align: left;
+}
+.laneTimes li.winner1{
+    border: 3px ridge red;
+    background-color: gold;
+}
+.laneTimes li.winner1::after {
+    content: "1st";
+    padding-left: 50px;
+    font-size: 1.5em;
+    padding-right: 20px;
+    padding-top: 10px;
+}
+.laneTimes li.winner2::after {
+    content: "2nd";
+    padding-left: 50px;
+    font-size: 1.5em;
+    padding-right: 20px;
+    padding-top: 10px;
+}
+.laneTimes li.winner3::after {
+    content: "3rd";
+    padding-left: 50px;
+    font-size: 1.5em;
+    padding-right: 20px;
+    padding-top: 10px;
+}
+.LEDdisplay {
+    font-family: LEDfont;
+    color: red;
+    background-color: black;
+    font-size: 2.2em;
+    border: 3px groove #333;
+    margin-left: 10px;
+}
+#serial-display {
+    float: left;
+    width: 40%;
+    margin-left: 20px;
+    margin-right: auto;
+}
+#serial-output {
+    border: 2px groove darkblue;
+    padding: 5px;
+    height: 340px;
+    overflow: auto;
+}

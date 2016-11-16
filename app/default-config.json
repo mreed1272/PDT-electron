@@ -7,7 +7,8 @@
         {"name": "Number of Lanes", "value": "N"},
         {"name": "Timer Reset", "value": "R"},
         {"name": "Force Race End", "value": "F"},
-        {"name": "Trigger Start", "value": "S"}
+        {"name": "Trigger Start", "value": "S"},
+        {"name": "Toggle Debug", "value": "D"}
     ],
     "messages" : [
         {"name": "Timer Ready", "value": "K"},

@@ -15,42 +15,48 @@ var lastSerialResponse = "";
 var laneMask = [];
 var laneTimes = [];
 var initArduino = false;
+var initLane = false;
+var numLanes = 3; //default to 3 lanes
+var currentTab = "mainT";
 
 var patt = "Arduino";
 
 
-function onBodyLoad(){
-  document.getElementById("mainT").style.display = "block";
-  initSerial();
+function onBodyLoad() {
+    document.getElementById("mainT").style.display = "block";
+    initSerial();
 }
 
 function openTabContent(evt, tabName) {
-  var i, tabcontent, tablinks;
-  tabcontent = document.getElementsByClassName("tabcontent");
-  for (i = 0; i < tabcontent.length; i++) {
-    tabcontent[i].style.display = "none";
-  }
-  tablinks = document.getElementsByClassName("selected");
-  for (i = 0; i < tablinks.length; i++) {
-    tablinks[i].className = tablinks[i].className.replace("selected", "");
-  }
-  document.getElementById(tabName).style.display = "block";
-  evt.currentTarget.className += "selected";
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("selected");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace("selected", "");
+    }
+    document.getElementById(tabName).style.display = "block";
+    evt.currentTarget.className += "selected";
+    currentTab = tabName;
 }
 
 function initSerial() {
     console.log("Initializing serial port");
     SerialPort.list(function (err, ports) {
         var outStr = [];
+        var serPorts = [];
         if (err) { console.log(err); return; };
 
-        outStr = ports.map(function (port) {
+        serPorts = ports.map(function (port) {
             return port.comName
         });
-        console.log(outStr);
-        loadSelect("serial-port-list",outStr,"");
+        outStr = serPorts.join();
+        //console.log(serPorts);
+        loadSelect("serial-port-list", serPorts, "");
 
-        //document.getElementById('port-names').innerHTML = `${outStr}<br/>`;
+        document.getElementById('port-names').innerHTML = `${outStr}<br/>`;
         if (ports.length !== 0) {
             setupArduino(ports);
         } else {
@@ -59,31 +65,59 @@ function initSerial() {
     });
 }
 
-function loadSelect (selectID,optListArr,selectItem) {
-  var selElem = document.getElementById(selectID);
-  var option = document.createElement("option");
-  
-  for (var i = 0; i < optListArr.length; i++){
-    var option = document.createElement("option");
-    option.text = optListArr[i];
-    option.value = optListArr[i];
-    selElem.add(option,i);
-    if (optListArr[i].value == selectItem) {
-      selElem.selectedIndex = i;
+function loadSelect(selectID, optListArr, selectItem) {
+    var selElem = document.getElementById(selectID);
+    //var option = document.createElement("option");
+
+    for (var i = 0; i < optListArr.length; i++) {
+        var option = document.createElement("option");
+        option.text = optListArr[i];
+        option.value = optListArr[i];
+        selElem.add(option, i);
+        if (optListArr[i].value == selectItem) {
+            selElem.selectedIndex = i;
+        }
     }
-  }
 }
 
+function initLanes(numLanes, ulId) {
+    var selElem = document.getElementById(ulId);
+    //console.log(selElem);
+    for (var i = 1; i <= numLanes; i++) {
+        var liID = `${ulId}-lane${i}-Li`;
+        //console.log(liID);
+        var spanID = `${ulId}-lane${i}`;
+        //console.log(spanID);
+        var liLane = document.createElement("li");
+
+        liLane.id = liID;
+        liLane.innerHTML = `Lane ${i}: <span class="LEDdisplay" id="${spanID}">0.0000</span> s`;
+        //console.log(liLane);
+        selElem.appendChild(liLane);
+    }
+}
 
 function setupArduino(availPorts) {
 
     for (var i = 0; i < availPorts.length; i++) {
         var testStr = availPorts[i].manufacturer.toString();
         if (testStr.search(patt) >= 0) {
+            document.getElementById("serial-timer").innerHTML = availPorts[i].comName;
             PDT = new SerialPort(availPorts[i].comName, { baudrate: 9600, parser: SerialPort.parsers.readline('\n') });
-            initArduino = true;
+            //initArduino = true;
         } else {
             console.log("No timer found")
+            var footerElem = document.getElementsByClassName("footer-item");
+
+            for (var i = 0; i < footerElem.length; i++) {
+                footerElem[i].style.visibility = "hidden";
+            }
+            document.getElementById("serial-timer").innerHTML = "No Timer Connected";
+            document.getElementById("serial-timer").style.visibility = "visible";
+            if (!initLane) {
+                initLanes(numLanes, "tlane");
+                initLane = true;
+            }
             return false;
         };
     };
@@ -95,6 +129,7 @@ function setupArduino(availPorts) {
             writeToArduino("V");
             writeToArduino("N");
             writeToArduino("G");
+            initArduino = true;
         }
         var serialDiv = document.getElementById('serial-output');
         serialDiv.innerHTML += outStr;
@@ -132,26 +167,27 @@ function checkSerialData(data) {
     switch (data.charAt(0)) {
         case "K":
             console.log("Timer ready");
-            document.getElementById("race-status").innerHTML = "Ready";
-            document.getElementById("race-status").className = "ready";
+            document.getElementById("status-timer").innerHTML = "Ready";
+            document.getElementById("status-timer").className = "footer-item ready";
             break;
 
         case "B":
             console.log("Racing...");
-            document.getElementById("race-status").innerHTML = "Racing...";
-            document.getElementById("race-status").className = "racing";
+            document.getElementById("status-timer").innerHTML = "Racing...";
+            document.getElementById("status-timer").className = "footer-item racing";
             clearDisplay();
             break;
 
         case "P":
             console.log("Arduino power-up");
+            document.getElementById("status-timer").innerHTML = "Powering up...";
             break;
 
         case ".":
             if (lastSerialCommand == "G") {
                 console.log("Gate closed");
-                document.getElementById("gate-status").innerHTML = "Gate Closed";
-                document.getElementById("gate-status").className = "closed";
+                document.getElementById("gate-timer").innerHTML = "Gate Closed";
+                document.getElementById("gate-timer").className = "footer-item closed";
             };
             if (/M(\d)/.test(lastSerialCommand)) {
                 var maskedLane = RegExp.$1;
@@ -172,23 +208,28 @@ function checkSerialData(data) {
 
         case "O":
             console.log("Gate open.");
-            document.getElementById("gate-status").innerHTML = "Gate Open";
-            document.getElementById("gate-status").className = "open";
+            document.getElementById("status-timer").innerHTML = "Not Ready";
+            document.getElementById("status-timer").className = "footer-item not_ready";
+            document.getElementById("gate-timer").innerHTML = "Gate Open";
+            document.getElementById("gate-timer").className = "footer-item open";
             break;
 
         case "v":
             console.log("Update timer version");
             if (/vert=(.*)/.test(data)) {
-                document.getElementById("get-pdt-version").innerHTML = `PDT V${RegExp.$1}`;
+                document.getElementById("timer-version").innerHTML = `PDT V${RegExp.$1}`;
             };
             break;
 
         case "n":
             console.log("Update number of lanes");
-            var numLanes;
             if (/numl=(\d)/.test(data)) {
                 numLanes = RegExp.$1;
-                document.getElementById("num-lanes").innerHTML = `${numLanes} Lanes`;
+                document.getElementById("lanes-timer").innerHTML = `${numLanes} Lanes`;
+                if (!initLane) {
+                    initLanes(numLanes, "test-lanes");
+                    initLane = true;
+                };
             };
             //setup lane mask variable for # of lanes but only if not done already
             //console.log(`laneMask is ${laneMask} and length is ${laneMask.length}`);
@@ -210,7 +251,7 @@ function checkSerialData(data) {
                     document.getElementById(`lane${tempLaneNum}`).innerHTML = tempLaneTime;
                     laneTimes.push({ lane: tempLaneNum, time: tempLaneTime });
                 };
-                if (tempLaneNum == 3) {
+                if (tempLaneNum == numLanes) {
                     //console.log(laneTimes);
                     laneTimes.sort(function (a, b) {
                         return a.time - b.time;
