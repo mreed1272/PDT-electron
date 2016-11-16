@@ -73,30 +73,38 @@
 
 .laneTimes {
     float: left;
-    font-size: 2.2em;
+    font-size: 1.4em;
     list-style: none;
-    width: 55%;
-    margin-right: auto;
-    margin-left: 0;
-    min-width: 575px;
+    width: 350px;
+    margin: 0;
+    padding: 0;
 }
 .laneTimes li {
     border: 3px ridge #444;
     background-color: dimgray;
     padding-left: 10px;
-    margin-right: auto;
+    margin-left: 0;
     text-align: left;
+    /*float: left;*/
+}
+.laneTimes li.laneMask {
+    background: none;
+    border: none;
+    font-size: 0.7em;
 }
 .laneTimes li.winner1{
     border: 3px ridge red;
     background-color: gold;
 }
 .laneTimes li.winner1::after {
-    content: "1st";
-    padding-left: 50px;
-    font-size: 1.5em;
-    padding-right: 20px;
+    font-family: FontAwesome;
+    content: "1st  \f091";
+    padding-left: 30px;
+    font-size: 1.2em;
+    padding-right: 10px;
     padding-top: 10px;
+    color: red;
+    font-weight: bold;
 }
 .laneTimes li.winner2::after {
     content: "2nd";

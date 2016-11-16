@@ -16,7 +16,7 @@ var laneMask = [];
 var laneTimes = [];
 var initArduino = false;
 var initLane = false;
-var numLanes = 3; //default to 3 lanes
+var numLanes = 1; //default to 3 lanes
 var currentTab = "mainT";
 
 var patt = "Arduino";
@@ -82,19 +82,39 @@ function loadSelect(selectID, optListArr, selectItem) {
 
 function initLanes(numLanes, ulId) {
     var selElem = document.getElementById(ulId);
+    var liID = "";
+    var liLane = null;
+    var maskOut = "";
     //console.log(selElem);
     for (var i = 1; i <= numLanes; i++) {
-        var liID = `${ulId}-lane${i}-Li`;
+        liID = `${ulId}-lane${i}-Li`;
         //console.log(liID);
         var spanID = `${ulId}-lane${i}`;
         //console.log(spanID);
-        var liLane = document.createElement("li");
+        liLane = document.createElement("li");
 
         liLane.id = liID;
+        if (!initArduino) {
+        liLane.className = "winner1";
+        }
         liLane.innerHTML = `Lane ${i}: <span class="LEDdisplay" id="${spanID}">0.0000</span> s`;
         //console.log(liLane);
         selElem.appendChild(liLane);
     }
+    liID = `${ulId}-mask-Li`;
+    liLane = document.createElement("li");
+    liLane.id = liID;
+    liLane.className = "laneMask";
+    maskOut = "Mask Lanes: <br/>";
+    for (var i = 1; i <= numLanes; i++) {
+        maskOut += ` Lane ${i} <input type="checkbox"> `;
+        if (numLanes > 4 && i > ((numLanes/2)-0.5) && i <= ((numLanes/2)+0.5)) {
+            maskOut += "<br/>";
+        }
+    };
+    liLane.innerHTML = maskOut;
+    selElem.appendChild(liLane);
+    
 }
 
 function setupArduino(availPorts) {
@@ -246,9 +266,14 @@ function checkSerialData(data) {
             if (testRegEx) {
                 var tempLaneNum = RegExp.$1;
                 var tempLaneTime = RegExp.$2;
+                if (currentTab == "testTrackT") {
+                    var tempLaneId = `tlane-lane${tempLaneNum}`;
+                } else {
+                    var tempLaneId = `lane${tempLaneNum}`;
+                }
                 if (laneMask[tempLaneNum - 1] != 1) {
                     //console.log(`Update lane ${tempLaneNum} with time ${tempLaneTime}`);
-                    document.getElementById(`lane${tempLaneNum}`).innerHTML = tempLaneTime;
+                    document.getElementById(tempLaneId).innerHTML = tempLaneTime;
                     laneTimes.push({ lane: tempLaneNum, time: tempLaneTime });
                 };
                 if (tempLaneNum == numLanes) {
@@ -256,9 +281,12 @@ function checkSerialData(data) {
                     laneTimes.sort(function (a, b) {
                         return a.time - b.time;
                     });
-                    //console.log(laneTimes);
-                    var winnerLane = [`lane${laneTimes[0].lane}Li`, `lane${laneTimes[1].lane}Li`, `lane${laneTimes[2].lane}Li`];
-                    //console.log(winnerLane);
+                    if (currentTab == "testTrackT") {
+                    var winnerLane = [`tlane-lane${laneTimes[0].lane}-Li`, `tlane-lane${laneTimes[1].lane}-Li`, `tlane-lane${laneTimes[2].lane}-Li`];
+                } else {
+                    var winnerLane = [`lane${laneTimes[0].lane}-Li`, `lane${laneTimes[1].lane}Li`, `lane${laneTimes[2].lane}Li`];
+                }
+                    
                     document.getElementById(winnerLane[0]).className = "winner1";
                     document.getElementById(winnerLane[1]).className = "winner2";
                     document.getElementById(winnerLane[2]).className = "winner3";
