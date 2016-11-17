@@ -61,6 +61,17 @@ function initSerial() {
             setupArduino(ports);
         } else {
             console.log("No serial ports found");
+            var footerElem = document.getElementsByClassName("footer-item");
+
+            for (var i = 0; i < footerElem.length; i++) {
+                footerElem[i].style.visibility = "hidden";
+            }
+            document.getElementById("serial-timer").innerHTML = "No Timer Connected";
+            document.getElementById("serial-timer").style.visibility = "visible";
+            if (!initLane) {
+                initLanes(numLanes, "tlane");
+                initLane = true;
+            }
         };
     });
 }
@@ -85,6 +96,7 @@ function initLanes(numLanes, ulId) {
     var liID = "";
     var liLane = null;
     var maskOut = "";
+    //console.log(ulId);
     //console.log(selElem);
     for (var i = 1; i <= numLanes; i++) {
         liID = `${ulId}-lane${i}-Li`;
@@ -95,7 +107,7 @@ function initLanes(numLanes, ulId) {
 
         liLane.id = liID;
         if (!initArduino) {
-        liLane.className = "winner1";
+            liLane.className = "winner1";
         }
         liLane.innerHTML = `Lane ${i}: <span class="LEDdisplay" id="${spanID}">0.0000</span> s`;
         //console.log(liLane);
@@ -108,13 +120,13 @@ function initLanes(numLanes, ulId) {
     maskOut = "Mask Lanes: <br/>";
     for (var i = 1; i <= numLanes; i++) {
         maskOut += ` Lane ${i} <input type="checkbox"> `;
-        if (numLanes > 4 && i > ((numLanes/2)-0.5) && i <= ((numLanes/2)+0.5)) {
+        if (numLanes > 4 && i > ((numLanes / 2) - 0.5) && i <= ((numLanes / 2) + 0.5)) {
             maskOut += "<br/>";
         }
     };
     liLane.innerHTML = maskOut;
     selElem.appendChild(liLane);
-    
+
 }
 
 function setupArduino(availPorts) {
@@ -124,7 +136,7 @@ function setupArduino(availPorts) {
         if (testStr.search(patt) >= 0) {
             document.getElementById("serial-timer").innerHTML = availPorts[i].comName;
             PDT = new SerialPort(availPorts[i].comName, { baudrate: 9600, parser: SerialPort.parsers.readline('\n') });
-            //initArduino = true;
+            initArduino = true;
         } else {
             console.log("No timer found")
             var footerElem = document.getElementsByClassName("footer-item");
@@ -149,7 +161,7 @@ function setupArduino(availPorts) {
             writeToArduino("V");
             writeToArduino("N");
             writeToArduino("G");
-            initArduino = true;
+            //initArduino = true;
         }
         var serialDiv = document.getElementById('serial-output');
         serialDiv.innerHTML += outStr;
@@ -247,7 +259,7 @@ function checkSerialData(data) {
                 numLanes = RegExp.$1;
                 document.getElementById("lanes-timer").innerHTML = `${numLanes} Lanes`;
                 if (!initLane) {
-                    initLanes(numLanes, "test-lanes");
+                    initLanes(numLanes, "tlane");
                     initLane = true;
                 };
             };
@@ -266,6 +278,7 @@ function checkSerialData(data) {
             if (testRegEx) {
                 var tempLaneNum = RegExp.$1;
                 var tempLaneTime = RegExp.$2;
+                //console.log(`current tab-${currentTab}`);
                 if (currentTab == "testTrackT") {
                     var tempLaneId = `tlane-lane${tempLaneNum}`;
                 } else {
@@ -282,11 +295,11 @@ function checkSerialData(data) {
                         return a.time - b.time;
                     });
                     if (currentTab == "testTrackT") {
-                    var winnerLane = [`tlane-lane${laneTimes[0].lane}-Li`, `tlane-lane${laneTimes[1].lane}-Li`, `tlane-lane${laneTimes[2].lane}-Li`];
-                } else {
-                    var winnerLane = [`lane${laneTimes[0].lane}-Li`, `lane${laneTimes[1].lane}Li`, `lane${laneTimes[2].lane}Li`];
-                }
-                    
+                        var winnerLane = [`tlane-lane${laneTimes[0].lane}-Li`, `tlane-lane${laneTimes[1].lane}-Li`, `tlane-lane${laneTimes[2].lane}-Li`];
+                    } else {
+                        var winnerLane = [`lane${laneTimes[0].lane}-Li`, `lane${laneTimes[1].lane}Li`, `lane${laneTimes[2].lane}Li`];
+                    }
+
                     document.getElementById(winnerLane[0]).className = "winner1";
                     document.getElementById(winnerLane[1]).className = "winner2";
                     document.getElementById(winnerLane[2]).className = "winner3";

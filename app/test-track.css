@@ -23,19 +23,19 @@
     font-size: 1.5em;
 }
 #gate-timer.closed {
-    border: 5px outset gold;
+    border: 3px outset gold;
     background-color: darkgreen;
     color: #eee;
 }
 #gate-timer.open {
-    border: 5px inset gold;
+    border: 3px inset gold;
     background-color: darkred;
     color: #eee;
 }
 #status-timer {
     background-color: darkblue;
     color: #eee;
-    border: 5px solid gold;
+    border: 3px solid gold;
 }
 #status-timer.ready {
     border-style: outset;
@@ -51,7 +51,7 @@
 }
 #reset-pdt {
     user-select: none;
-    border: 5px outset gold;
+    border: 3px outset gold;
     color: #eee;
     background-color: darkred;
     cursor: pointer;
@@ -60,13 +60,13 @@
     border-style: inset;
 }
 #timer-version {
-    border: 5px outset gold;
+    border: 3px outset gold;
     background-color: darkblue;
     color: #eee;
 }
 
 #lanes-timer {
-    border: 5px outset gold;
+    border: 3px outset gold;
     background-color: darkblue;
     color: #eee;
 }
@@ -80,7 +80,7 @@
     padding: 0;
 }
 .laneTimes li {
-    border: 3px ridge #444;
+    border: 2px ridge #444;
     background-color: dimgray;
     padding-left: 10px;
     margin-left: 0;
@@ -93,7 +93,7 @@
     font-size: 0.7em;
 }
 .laneTimes li.winner1{
-    border: 3px ridge red;
+    border: 2px ridge red;
     background-color: gold;
 }
 .laneTimes li.winner1::after {
@@ -108,24 +108,24 @@
 }
 .laneTimes li.winner2::after {
     content: "2nd";
-    padding-left: 50px;
-    font-size: 1.5em;
-    padding-right: 20px;
+    padding-left: 30px;
+    font-size: 1.2em;
+    padding-right: 10px;
     padding-top: 10px;
 }
 .laneTimes li.winner3::after {
     content: "3rd";
-    padding-left: 50px;
-    font-size: 1.5em;
-    padding-right: 20px;
+    padding-left: 30px;
+    font-size: 1.2em;
+    padding-right: 10px;
     padding-top: 10px;
 }
 .LEDdisplay {
     font-family: LEDfont;
     color: red;
     background-color: black;
-    font-size: 2.2em;
-    border: 3px groove #333;
+    font-size: 1.5em;
+    border: 2px groove #333;
     margin-left: 10px;
 }
 #serial-display {
@@ -137,6 +137,6 @@
 #serial-output {
     border: 2px groove darkblue;
     padding: 5px;
-    height: 340px;
+    height: 325px;
     overflow: auto;
 }
