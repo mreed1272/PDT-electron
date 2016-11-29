@@ -71,10 +71,19 @@
 				<div class="flex-contain">
 					<span id="reset-pdt" onclick="resetArduino()">Reset</span>
 				</div>
-				<button style="width: 20%;" id="clear-display" onclick="clearDisplay()">Clear Display</button>
+				<button id="clear-display" onclick="clearDisplay()">Clear Display</button>
 				<div>
 					<ul class="laneTimes" id="tlane">
 					</ul>
+				</div>
+				<div id="timer-history-contain">
+					<table id="lane-history-table">
+						<tr>
+							<th>Run #</th>
+							<th>Lane #</th>
+							<th>Time (s)</th>
+						</tr>
+					</table>
 				</div>
 				<form id="serial-display" onsubmit="return false;">
 					Send Command: <input type="text" id="serial-command">

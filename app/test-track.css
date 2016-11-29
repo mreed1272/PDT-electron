@@ -130,13 +130,23 @@
 }
 #serial-display {
     float: left;
-    width: 40%;
+    width: 30%;
     margin-left: 20px;
     margin-right: auto;
 }
 #serial-output {
     border: 2px groove darkblue;
     padding: 5px;
-    height: 325px;
+    height: 300px;
     overflow: auto;
+}
+#clear-display {
+    width: 20%;
+    margin-bottom: 5px;
+}
+#timer-history-contain {
+    float: left;
+    width: 30%;
+    margin-left: 20px;
+    margin-right: auto;
 }
