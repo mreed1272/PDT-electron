@@ -3,6 +3,7 @@
 
 <head>
 	<meta charset="utf=-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>PDT Race Manager</title>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="index.css">
@@ -71,12 +72,13 @@
 				<div class="flex-contain">
 					<span id="reset-pdt" onclick="resetArduino()">Reset</span>
 				</div>
+				<div id="lane-times-contain">
 				<button id="clear-display" onclick="clearDisplay()">Clear Display</button>
-				<div>
 					<ul class="laneTimes" id="tlane">
 					</ul>
 				</div>
 				<div id="timer-history-contain">
+				<button id="clear-history" onclick="clearHistory()">Clear History</button>
 					<table id="lane-history-table">
 						<tr>
 							<th>Run #</th>
@@ -87,7 +89,7 @@
 				</div>
 				<form id="serial-display" onsubmit="return false;">
 					Send Command: <input type="text" id="serial-command">
-					<button id="send-serial" onclick="sendSerialForm()">Send Command</button><br/>
+					<button id="send-serial" onclick="sendSerialForm()">Send</button><br/>
 					<p>Serial Ports:
 						<span id="port-names"></span>
 					</p>
