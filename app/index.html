@@ -73,19 +73,21 @@
 					<span id="reset-pdt" onclick="resetArduino()">Reset</span>
 				</div>
 				<div id="lane-times-contain">
-				<button id="clear-display" onclick="clearDisplay()">Clear Display</button>
+					<button id="clear-display" onclick="clearDisplay()">Clear Display</button>
 					<ul class="laneTimes" id="tlane">
 					</ul>
 				</div>
 				<div id="timer-history-contain">
-				<button id="clear-history" onclick="clearHistory()">Clear History</button>
-					<table id="lane-history-table">
-						<tr>
-							<th>Run #</th>
-							<th>Lane #</th>
-							<th>Time (s)</th>
-						</tr>
-					</table>
+					<button id="clear-history" onclick="clearHistory()">Clear History</button>
+					<div id="table-history-contain">
+						<table id="lane-history-table">
+							<tr>
+								<th>Run #</th>
+								<th>Lane #</th>
+								<th>Time (s)</th>
+							</tr>
+						</table>
+					</div>
 				</div>
 				<form id="serial-display" onsubmit="return false;">
 					Send Command: <input type="text" id="serial-command">

@@ -165,22 +165,34 @@
 }
 #clear-history {
     margin-bottom: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+#table-history-contain{
+    width: 100%;
+    background: #eee;
+    height: calc(100% - 21px);
+    border: 0px solid black;
+    overflow: auto;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
 }
 #lane-history-table {
     width: 100%;
-    height: calc(100% - 1.5em);
-    border: 2px solid black;
+    /*height: calc(100% - 1.5em);
+    border: 2px solid black;*/
     border-collapse: collapse;
-    overflow: auto;
+    /*overflow: auto;*/
     background: #eee;
 }
 #lane-history-table tr {
     vertical-align: top;
 }
+#lane-history-table tr::nth-child()even {
+    background-color: gray;
+}
 #lane-history-table th, #lane-history-table td {
-    border-right: 2px solid black;
+    border-right: 0px solid black;
     width: 10em;
 }
 #lane-history-table th {
-    border-bottom: 2px solid black;
+    border-bottom: 2px solid dimgray;
 }
