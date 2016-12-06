@@ -75,7 +75,7 @@
     /*width: 30%;*/
     margin-left: 20px;
     margin-right: auto;
-    height: calc(100% - 150px);    
+    height: calc(100vh - 245px);    
 
 }
 .laneTimes {

@@ -16,7 +16,7 @@ var laneMask = [];
 var laneTimes = [];
 var initArduino = false;
 var initLane = false;
-var numLanes = 6; //default to 3 lanes
+var numLanes = 1; //default to 1 lanes
 var currentTab = "mainT";
 
 var patt = "Arduino";
@@ -341,8 +341,8 @@ function updateLaneDisplay() {
 }
 function clearClass(class_Name) {
     var tempArr = Array.prototype.slice.call(document.getElementsByClassName(class_Name));
-    if (tempArr.length !== 0){
-        for (var i = 0; i < tempArr.length; i++){
+    if (tempArr.length !== 0) {
+        for (var i = 0; i < tempArr.length; i++) {
             tempArr[i].className = "";
         }
     }
@@ -354,6 +354,16 @@ function clearDisplay() {
     clearClass("winner1");
     clearClass("winner2");
     clearClass("winner3");
-    
+
     laneTimes.length = 0;
+}
+
+function clearText(elemID, newTxt) {
+    var tempElem = document.getElementById(elemID);
+    tempElem.innerHTML = newTxt;
+}
+
+function clearHistory() {
+    var outStr = "<tr><th>Run #</th><th>Time (s)</th><th>Delta (s)</th></tr>";
+    clearText("lane-history-table",outStr);
 }
