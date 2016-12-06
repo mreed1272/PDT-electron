@@ -16,10 +16,12 @@ var laneMask = [];
 var laneTimes = [];
 var initArduino = false;
 var initLane = false;
-var numLanes = 1; //default to 3 lanes
+var numLanes = 6; //default to 3 lanes
 var currentTab = "mainT";
 
 var patt = "Arduino";
+
+var comPorts = [];
 
 
 function onBodyLoad() {
@@ -46,17 +48,20 @@ function initSerial() {
     console.log("Initializing serial port");
     SerialPort.list(function (err, ports) {
         var outStr = [];
-        var serPorts = [];
+        if (comPorts.length != 0) {
+            comPorts.length = 0;
+        }
+        //var serPorts = [];
         if (err) { console.log(err); return; };
 
-        serPorts = ports.map(function (port) {
+        comPorts = ports.map(function (port) {
             return port.comName
         });
-        outStr = serPorts.join();
-        //console.log(serPorts);
-        loadSelect("serial-port-list", serPorts, "");
+        //outStr = comPorts.join();
+        console.log(comPorts);
+        loadSelect("serial-port-list", comPorts, "");
 
-        document.getElementById('port-names').innerHTML = `${outStr}<br/>`;
+        //document.getElementById('port-names').innerHTML = `${outStr}<br/>`;
         if (ports.length !== 0) {
             setupArduino(ports);
         } else {
@@ -106,7 +111,7 @@ function initLanes(numLanes, ulId) {
         liLane = document.createElement("li");
 
         liLane.id = liID;
-        if (!initArduino) {
+        if (!initArduino && i === 1) {
             liLane.className = "winner1";
         }
         liLane.innerHTML = `Lane ${i}: <span class="LEDdisplay" id="${spanID}">0.0000</span> s`;
@@ -334,23 +339,21 @@ function updateLaneDisplay() {
         };
     }
 }
-
+function clearClass(class_Name) {
+    var tempArr = Array.prototype.slice.call(document.getElementsByClassName(class_Name));
+    if (tempArr.length !== 0){
+        for (var i = 0; i < tempArr.length; i++){
+            tempArr[i].className = "";
+        }
+    }
+}
 function clearDisplay() {
     var tempDisplay = document.getElementsByClassName("LEDdisplay");
-    var tempWinner1 = document.getElementsByClassName("winner1");
-    if (tempWinner1[0] != null) {
-        tempWinner1[0].className = "";
-    }
-    var tempWinner2 = document.getElementsByClassName("winner2");
-    if (tempWinner2[0] != null) {
-        tempWinner2[0].className = "";
-    }
-    var tempWinner3 = document.getElementsByClassName("winner3");
-    if (tempWinner3[0] != null) {
-        tempWinner3[0].className = "";
-    }
-    for (var i = 0; i < tempDisplay.length; i++) {
-        tempDisplay[i].innerHTML = "0.0000";
-    };
+    var tempWinner1 = Array.prototype.slice.call(document.getElementsByClassName("winner1"));
+
+    clearClass("winner1");
+    clearClass("winner2");
+    clearClass("winner3");
+    
     laneTimes.length = 0;
 }
