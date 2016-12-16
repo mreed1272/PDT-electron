@@ -16,7 +16,7 @@ var laneMask = [];
 var laneTimes = [];
 var initArduino = false;
 var initLane = false;
-var numLanes = 1; //default to 1 lanes
+var numLanes = 2; //default to 1 lanes
 var currentTab = "mainT";
 
 var patt = "Arduino";
@@ -77,6 +77,13 @@ function initSerial() {
                 initLanes(numLanes, "tlane");
                 initLane = true;
             }
+            //populate lane listing under test track select id "test-lane-watch"
+            var tmpArr = [];
+            for (var i = 0; i < numLanes; i++) {
+                tmpArr[i] = i + 1;
+            }
+            loadSelect("test-lane-watch", tmpArr, 1);
+
         };
     });
 }
@@ -154,6 +161,12 @@ function setupArduino(availPorts) {
             if (!initLane) {
                 initLanes(numLanes, "tlane");
                 initLane = true;
+                //populate lane listing under test track select id "test-lane-watch"
+                var tmpArr = [];
+                for (var i = 0; i < numLanes; i++) {
+                    tmpArr[i] = i + 1;
+                }
+                loadSelect("test-lane-watch", tmpArr, 1);
             }
             return false;
         };
@@ -266,6 +279,12 @@ function checkSerialData(data) {
                 if (!initLane) {
                     initLanes(numLanes, "tlane");
                     initLane = true;
+                    //populate lane listing under test track select id "test-lane-watch"
+                    var tmpArr = [];
+                    for (var i = 0; i < numLanes; i++) {
+                        tmpArr[i] = i + 1;
+                    }
+                    loadSelect("test-lane-watch", tmpArr, 1);
                 };
             };
             //setup lane mask variable for # of lanes but only if not done already
@@ -276,6 +295,7 @@ function checkSerialData(data) {
                     laneMask[i] = 0;
                 };
             };
+
             break;
 
         default:
@@ -365,5 +385,5 @@ function clearText(elemID, newTxt) {
 
 function clearHistory() {
     var outStr = "<tr><th>Run #</th><th>Time (s)</th><th>Delta (s)</th></tr>";
-    clearText("lane-history-table",outStr);
+    clearText("lane-history-table", outStr);
 }
