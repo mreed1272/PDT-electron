@@ -6,10 +6,9 @@
 .flex-contain {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: flex-start;
     height: 100px;
-    align-items: center;
-    align-content: center;
+    align-items: flex-start;
 } 
 
 .flex-contain span {
@@ -49,16 +48,16 @@
     border-style: groove;
     background-color: darkred;
 }
-#reset-pdt {
+/*#reset-pdt {
     user-select: none;
     border: 3px outset gold;
     color: #eee;
     background-color: darkred;
     cursor: pointer;
-}
-#reset-pdt.clicked {
+}*/
+/*#reset-pdt.clicked {
     border-style: inset;
-}
+}*/
 #timer-version {
     border: 3px outset gold;
     background-color: darkblue;
@@ -161,6 +160,12 @@
 button {
     margin-bottom: 5px;
     box-shadow: 3px 3px 8px 0px rgba(0,0,0,0.3);
+    user-select: none;
+    cursor: pointer;
+}
+button:hover {
+    box-shadow: 6px 6px 9px 0px rgba(0,0,0,0.3);
+    transition: 0.3s;
 }
 #table-history-contain{
     width: 100%;
