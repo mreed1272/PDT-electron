@@ -78,7 +78,11 @@
 					<button id="reset-pdt" onclick="resetArduino()">Reset Timer</button>
 					</div>
 					<div style="margin-right: 20px;">
-						<label style="vertical-align: top;" for="textarea">Notes:</label><textarea style="vertical-align: top;" rows="5" cols="40" id="test-notes"></textarea>
+						<label style="vertical-align: top;" for="textarea">Notes:</label>
+						<textarea style="vertical-align: top;" rows="5" cols="40" id="test-notes"></textarea>
+					</div>
+					<div style="margin-right: 20px">
+						Session date: <time id="test-date"></time>
 					</div>
 				</div>
 				<div id="lane-times-contain">
@@ -89,6 +93,7 @@
 				<div id="timer-history-contain">
 					<button id="clear-history" onclick="clearHistory()">Clear History</button>
 					<button id="save-history" onclick="saveHistory()">Save History</button>
+					<button id="load-history" onclick="loadHistory()">Load History</button>
 					<div id="table-history-contain" class="div-contain-shadow">
 						<table id="lane-history-table">
 							<tr>

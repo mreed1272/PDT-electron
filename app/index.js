@@ -363,7 +363,8 @@ function clearClass(class_Name) {
     var tempArr = Array.prototype.slice.call(document.getElementsByClassName(class_Name));
     if (tempArr.length !== 0) {
         for (var i = 0; i < tempArr.length; i++) {
-            tempArr[i].className = "";
+            var tempClass = tempArr[i].className
+            tempArr[i].className = tempClass.replace(class_Name,"");
         }
     }
 }
@@ -386,4 +387,50 @@ function clearText(elemID, newTxt) {
 function clearHistory() {
     var outStr = "<tr><th>Run #</th><th>Time (s)</th><th>Delta (s)</th></tr>";
     clearText("lane-history-table", outStr);
+}
+
+function saveHistory() {
+    dialog.showSaveDialog({
+        title: 'Save History file. . .',
+        filters: [
+            {
+                name: "PDT history files",
+                extensions: ['pdth', 'pdt_history']
+            }
+        ]
+    }, (filenames) => {
+        console.log(`Filenames from save dialog: ${filenames}`);
+        if (!filenames) return;
+        if (filenames.length > 0) {
+            //generate txt
+            var contents = {};
+            contents["lane"] = document.getElementById("test-lane-watch").value;
+            contents["notes"] = document.getElementById("test-notes").value;
+            contents["session_date"] = document.getElementById("test-date").innerHTML;
+            contents["session_table"] = document.getElementById("lane-history-table").innerHTML;
+            var contentJSON = JSON.stringify(contents);
+            //save txt
+            fs.writeFileSync(filenames, contentJSON);
+        }
+    })
+}
+
+function loadHistory() {
+    dialog.showOpenDialog({
+        title: 'Select history file to open:',
+        filters: [
+            {
+                name: 'PDT history files',
+                extensions: ['pdth', 'pdt_history']
+            }
+        ]
+    }, (filenames) => {
+        if (!filenames) return;
+        if (filenames.length > 0) {
+            var tmpData = fs.readFileSync(filenames[0]);
+            // parse, format input txt and put into page
+
+            remote.app.addRecentDocument(filenames[0]);
+        }
+    })
 }
