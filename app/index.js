@@ -364,7 +364,7 @@ function clearClass(class_Name) {
     if (tempArr.length !== 0) {
         for (var i = 0; i < tempArr.length; i++) {
             var tempClass = tempArr[i].className
-            tempArr[i].className = tempClass.replace(class_Name,"");
+            tempArr[i].className = tempClass.replace(class_Name, "");
         }
     }
 }
@@ -387,6 +387,7 @@ function clearText(elemID, newTxt) {
 function clearHistory() {
     var outStr = "<tr><th>Run #</th><th>Time (s)</th><th>Delta (s)</th></tr>";
     clearText("lane-history-table", outStr);
+    document.getElementById("test-notes").value = "";
 }
 
 function saveHistory() {
@@ -429,6 +430,11 @@ function loadHistory() {
         if (filenames.length > 0) {
             var tmpData = fs.readFileSync(filenames[0]);
             // parse, format input txt and put into page
+            var dataObj = JSON.parse(tmpData);
+            document.getElementById("test-lane-watch").value = dataObj["lane"];
+            document.getElementById("test-notes").value = dataObj["notes"];
+            document.getElementById("test-date").innerHTML = dataObj["session_date"];
+            document.getElementById("lane-history-table").innerHTML = dataObj["session_table"];
 
             remote.app.addRecentDocument(filenames[0]);
         }
