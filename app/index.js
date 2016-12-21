@@ -353,12 +353,9 @@ function checkSerialData(data) {
 }
 
 function resetArduino() {
-    document.getElementById("reset-pdt").className = "clicked";
     writeToArduino("R");
-    setTimeout(() => {
-        document.getElementById("reset-pdt").className = "";
-        clearDisplay();
-    }, 100);
+    clearDisplay();
+    setMask();
 }
 
 function updateLaneDisplay() {
