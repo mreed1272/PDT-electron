@@ -487,7 +487,7 @@ function setMask() {
     //check to see if a lane is checked and then mask it
     for (var i = 0; i < numLanes; i++) {
         if (document.getElementById(`mask${i + 1}`).checked) {
-            writeToArduino(`M${i}`);
+            writeToArduino(`M${i + 1}`);
             if (!initArduino) {
                 laneMask[i] = 1;
             }
