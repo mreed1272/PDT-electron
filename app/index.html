@@ -72,7 +72,8 @@
 				<div class="flex-contain">
 					<div style="margin-right: 20px;"> 
 						Choose Lane to test: 
-						<select id="test-lane-watch">
+						<select id="test-lane-watch" onchange="setLane(this.value)">
+							<option value="0" selected>all</option>
 						</select>
 						<br/>
 					<button id="reset-pdt" onclick="resetArduino()">Reset Timer</button>

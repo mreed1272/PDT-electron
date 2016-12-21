@@ -18,6 +18,9 @@ var initArduino = false;
 var initLane = false;
 var numLanes = 2; //default to 1 lanes
 var currentTab = "mainT";
+var currentSessionDate = new Date();
+var runNum = 1;
+var lastRunTimes = [];
 
 var patt = "Arduino";
 
@@ -42,6 +45,11 @@ function openTabContent(evt, tabName) {
     document.getElementById(tabName).style.display = "block";
     evt.currentTarget.className += "selected";
     currentTab = tabName;
+
+    if (tabName == "testTrackT") {
+        var tempSessionDate = currentSessionDate.toDateString();
+        document.getElementById("test-date").innerHTML = tempSessionDate;
+    }
 }
 
 function initSerial() {
@@ -131,13 +139,20 @@ function initLanes(numLanes, ulId) {
     liLane.className = "laneMask";
     maskOut = "Mask Lanes: <br/>";
     for (var i = 1; i <= numLanes; i++) {
-        maskOut += ` Lane ${i} <input type="checkbox"> `;
+        maskOut += ` Lane ${i} <input type="checkbox" id="mask${i}" value="${i}" onchange="setMask()"> `;
         if (numLanes > 4 && i > ((numLanes / 2) - 0.5) && i <= ((numLanes / 2) + 0.5)) {
             maskOut += "<br/>";
         }
     };
     liLane.innerHTML = maskOut;
     selElem.appendChild(liLane);
+
+    if (laneMask.length == "0") {
+        console.log("Initializing laneMask variable")
+        for (var i = 0; i < numLanes; i++) {
+            laneMask[i] = 0;
+        };
+    };
 
 }
 
@@ -190,6 +205,7 @@ function setupArduino(availPorts) {
 }
 
 function writeToArduino(str) {
+    console.log(`Command string: ${str}`);
     if (initArduino) {
         if (PDT.isOpen) {
             setTimeout(() => {
@@ -329,6 +345,7 @@ function checkSerialData(data) {
                     document.getElementById(winnerLane[1]).className = "winner2";
                     document.getElementById(winnerLane[2]).className = "winner3";
 
+                    updateHistoryTable(laneTimes);
                 }
             };
             break;
@@ -346,12 +363,12 @@ function resetArduino() {
 
 function updateLaneDisplay() {
     for (var i = 0; i < laneMask.length; i++) {
-        var tempLaneId = "lane" + (i + 1) + "Li";
-        //        console.log(`temp lane Id: ${tempLaneId}`);
+        var tempLaneId = `tlane-lane${i + 1}-Li`;
+        //console.log(`temp lane Id: ${tempLaneId}`);
         switch (laneMask[i]) {
             case 1:
                 document.getElementById(tempLaneId).style = "visibility: hidden;";
-                //                console.log(`Hiding lane ${i}.`);
+                //console.log(`Hiding lane ${i}.`);
                 break;
             case 0:
                 document.getElementById(tempLaneId).style = "visibility: visible;";
@@ -388,6 +405,7 @@ function clearHistory() {
     var outStr = "<tr><th>Run #</th><th>Time (s)</th><th>Delta (s)</th></tr>";
     clearText("lane-history-table", outStr);
     document.getElementById("test-notes").value = "";
+    runNum = 1;
 }
 
 function saveHistory() {
@@ -432,6 +450,8 @@ function loadHistory() {
             // parse, format input txt and put into page
             var dataObj = JSON.parse(tmpData);
             document.getElementById("test-lane-watch").value = dataObj["lane"];
+            console.log(dataObj["lane"]);
+            setLane(dataObj["lane"]);
             document.getElementById("test-notes").value = dataObj["notes"];
             document.getElementById("test-date").innerHTML = dataObj["session_date"];
             document.getElementById("lane-history-table").innerHTML = dataObj["session_table"];
@@ -439,4 +459,65 @@ function loadHistory() {
             remote.app.addRecentDocument(filenames[0]);
         }
     })
+}
+
+function setLane(laneNum) {
+    console.log(`setLane argument: ${laneNum}`);
+    if (laneNum == 0) {
+        // uncheck all the checkboxes
+        for (var i = 0; i < numLanes; i++) {
+            document.getElementById(`mask${i + 1}`).checked = false;
+        }
+    } else if (laneNum > 0) {
+        //first let's check all lane mask checkboxes
+        for (var i = 0; i < numLanes; i++) {
+            document.getElementById(`mask${i + 1}`).checked = true;
+            //laneMask[i] = 1;
+        }
+        //now check the one that we need to watch
+        document.getElementById(`mask${laneNum}`).checked = false;
+    }
+    setMask();
+}
+
+function setMask() {
+    //unmask all lanes
+    writeToArduino("U");
+
+    //check to see if a lane is checked and then mask it
+    for (var i = 0; i < numLanes; i++) {
+        if (document.getElementById(`mask${i + 1}`).checked) {
+            writeToArduino(`M${i}`);
+            if (!initArduino) {
+                laneMask[i] = 1;
+            }
+        } else if (!initArduino) {
+            laneMask[i] = 0;
+        }
+    }
+    if (!initArduino) { updateLaneDisplay(); }
+}
+
+function updateHistoryTable(runObj) {
+    var outStr = "";
+    var hTable = document.getElementById("lane-history-table");
+
+    for (var i = 0; i < runObj.length; i++) {
+        outStr += "<tr>";
+        outStr += `<td>${runNum} (${runObj[i].lane})</td>`;
+        outStr += `<td>${runObj[i].time}</td>`;
+        if (runNum === 1) {
+            outStr += "<td>-</td>"
+        } else {
+            var tempTime1 = lastRunTimes[i].time;
+            var tempTime2 = runObj[i].time;
+            outStr += `<td>${tempTime1 - tempTime2}</td>`;
+        }
+        outStr += "</tr>"
+    }
+    hTable.innerHTML += outStr;
+
+    lastRunTimes = JSON.parse(JSON.stringify(runObj));
+    console.log(lastRunTimes);
+    console.log(runObj);
 }
