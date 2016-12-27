@@ -214,7 +214,7 @@ function writeToArduino(str) {
                         console.log(err);
                     };
                 })
-            }, 100);
+            }, 200);
         };
         lastSerialCommand = str;
     } else {
@@ -258,7 +258,7 @@ function checkSerialData(data) {
             if (/M(\d)/.test(lastSerialCommand)) {
                 var maskedLane = RegExp.$1;
                 laneMask[maskedLane - 1] = 1;
-                updateLaneDisplay();
+                //updateLaneDisplay();
                 console.log(`Masked Lanes done: ${laneMask}`);
             };
             if (lastSerialCommand == "U") {
@@ -267,7 +267,7 @@ function checkSerialData(data) {
                         laneMask[i] = 0;
                     };
                 };
-                updateLaneDisplay();
+                //updateLaneDisplay();
                 console.log(`All lanes unmasked: ${laneMask}`);
             };
             break;
@@ -329,6 +329,8 @@ function checkSerialData(data) {
                     //console.log(`Update lane ${tempLaneNum} with time ${tempLaneTime}`);
                     document.getElementById(tempLaneId).innerHTML = tempLaneTime;
                     laneTimes.push({ lane: tempLaneNum, time: tempLaneTime });
+                } else {
+                    laneTimes.push({ lane: tempLaneNum, time: 99 });
                 };
                 if (tempLaneNum == numLanes) {
                     //console.log(laneTimes);
@@ -365,14 +367,16 @@ function updateLaneDisplay() {
         switch (laneMask[i]) {
             case 1:
                 document.getElementById(tempLaneId).style = "visibility: hidden;";
-                //console.log(`Hiding lane ${i}.`);
+                //console.log(`Hiding lane ${i + 1}.`);
                 break;
             case 0:
                 document.getElementById(tempLaneId).style = "visibility: visible;";
+                //console.log(`Showing lane ${i + 1}`);
                 break;
         };
     }
 }
+
 function clearClass(class_Name) {
     var tempArr = Array.prototype.slice.call(document.getElementsByClassName(class_Name));
     if (tempArr.length !== 0) {
@@ -382,10 +386,13 @@ function clearClass(class_Name) {
         }
     }
 }
+
 function clearDisplay() {
     var tempDisplay = document.getElementsByClassName("LEDdisplay");
-    var tempWinner1 = Array.prototype.slice.call(document.getElementsByClassName("winner1"));
-
+    //var tempWinner1 = Array.prototype.slice.call(document.getElementsByClassName("winner1"));
+    for (var i = 0; i < tempDisplay.length; i++) {
+        tempDisplay[i].innerHTML = "0.0000";
+    }
     clearClass("winner1");
     clearClass("winner2");
     clearClass("winner3");
@@ -471,50 +478,60 @@ function setLane(laneNum) {
             document.getElementById(`mask${i + 1}`).checked = true;
             //laneMask[i] = 1;
         }
-        //now check the one that we need to watch
+        //now uncheck the one that we need to watch
         document.getElementById(`mask${laneNum}`).checked = false;
     }
     setMask();
 }
 
 function setMask() {
-    //unmask all lanes
-    writeToArduino("U");
-
     //check to see if a lane is checked and then mask it
     for (var i = 0; i < numLanes; i++) {
         if (document.getElementById(`mask${i + 1}`).checked) {
-            writeToArduino(`M${i + 1}`);
-            if (!initArduino) {
-                laneMask[i] = 1;
-            }
-        } else if (!initArduino) {
+            laneMask[i] = 1;
+
+        } else {
             laneMask[i] = 0;
-        }
-    }
-    if (!initArduino) { updateLaneDisplay(); }
+        };
+    };
+    console.log(`LaneMask - ${laneMask}`);
+    updateLaneDisplay();
+    writeToArduino("U");
+    for (var i = 0; i < laneMask.length; i++) {
+        if (laneMask[i] === 1) {
+            writeToArduino(`M${i + 1}`);
+        };
+    };
 }
 
 function updateHistoryTable(runObj) {
     var outStr = "";
     var hTable = document.getElementById("lane-history-table");
 
+    runObj.sort(function (a, b) {
+        return a.lane - b.lane;
+    });
+
     for (var i = 0; i < runObj.length; i++) {
-        outStr += "<tr>";
-        outStr += `<td>${runNum} (${runObj[i].lane})</td>`;
-        outStr += `<td>${runObj[i].time}</td>`;
-        if (runNum === 1) {
-            outStr += "<td>-</td>"
-        } else {
-            var tempTime1 = lastRunTimes[i].time;
-            var tempTime2 = runObj[i].time;
-            outStr += `<td>${tempTime1 - tempTime2}</td>`;
-        }
-        outStr += "</tr>"
+        if (runObj[i].time != 99) {
+            outStr += "<tr>";
+            outStr += `<td>${runNum} (${runObj[i].lane})</td>`;
+            outStr += `<td>${runObj[i].time}</td>`;
+            if (runNum == 1) {
+                outStr += "<td>-</td>"
+            } else {
+                var tempTime2 = lastRunTimes[i].time;
+                var tempTime1 = runObj[i].time;
+                var deltaTime = (tempTime1 - tempTime2).toPrecision(4);
+                outStr += `<td>${deltaTime}</td>`;
+            }
+            outStr += "</tr>"
+        };
     }
     hTable.innerHTML += outStr;
 
     lastRunTimes = JSON.parse(JSON.stringify(runObj));
     console.log(lastRunTimes);
     console.log(runObj);
+    runNum++;
 }

@@ -72,50 +72,51 @@
 <div class="tabcontent" id="testTrackT">
 	<div class="flex-contain">
 		<div style="margin-right: 20px;"> Choose Lane to test:
-<select id="test-lane-watch" onchange="setLane(this.value)">
-<option value="0" selected>all</option>
-</select>
-<br/>
-<button id="reset-pdt" onclick="resetArduino()">Reset Timer</button>
-</div>
-<div style="margin-right: 20px;">
-<label style="vertical-align: top;" for="textarea">Notes:</label>
-<textarea style="vertical-align: top;" rows="5" cols="40" id="test-notes"></textarea>
-</div>
-<div style="margin-right: 20px"> Session date:
-<time id="test-date"></time>
-</div>
-</div>
-<div id="lane-times-contain">
-	<button id="clear-display" onclick="clearDisplay()">Clear Display</button>
-<ul class="laneTimes div-contain-shadow" id="tlane">
-</ul>
-</div>
-<div id="timer-history-contain">
-	<button id="clear-history" onclick="clearHistory()">Clear History</button>
-<button id="save-history" onclick="saveHistory()">Save History</button>
-<button id="load-history" onclick="loadHistory()">Load History</button>
-<div id="table-history-contain" class="div-contain-shadow">
-	<table id="lane-history-table">
-		<tr>
-			<th>Run #</th>
-			<th>Time (s)</th>
-			<th>Delta (s)</th>
-		</tr>
+			<select id="test-lane-watch" onchange="setLane(this.value)">
+				<option value="0" selected>all</option>
+			</select>
+			<br/>
+			<button id="reset-pdt" onclick="resetArduino()">Reset Timer</button>
+		</div>
+		<div style="margin-right: 20px;">
+			<label style="vertical-align: top;" for="textarea">Notes:</label>
+			<textarea style="vertical-align: top;" rows="5" cols="40" id="test-notes"></textarea>
+		</div>
+		<div style="margin-right: 20px"> Session date:
+			<time id="test-date"></time>
+		</div>
+	</div>
+	<div id="lane-times-contain">
+		<button id="clear-display" onclick="clearDisplay()">Clear Display</button>
+		<ul class="laneTimes div-contain-shadow" id="tlane">
+		</ul>
+	</div>
+	<div id="timer-history-contain">
+		<button id="clear-history" onclick="clearHistory()">Clear History</button>
+		<button id="save-history" onclick="saveHistory()">Save History</button>
+		<button id="load-history" onclick="loadHistory()">Load History</button>
+		<div id="table-history-contain" class="div-contain-shadow">
+			<table id="lane-history-table">
+				<tr>
+					<th>Run # (Lane)</th>
+					<th>Time (s)</th>
+					<th>Delta (s)</th>
+				</tr>
 
-	</table>
-</div>
-</div>
-<form id="serial-display" onsubmit="return false;"> Serial Command: <input type="text" id="serial-command">
-<button id="send-serial" onclick="sendSerialForm()">Send</button><br/>
-<!--<p>Serial Ports:
+			</table>
+		</div>
+	</div>
+	<form id="serial-display" onsubmit="return false;"> Serial Command: <input type="text" id="serial-command">
+		<button id="send-serial" onclick="sendSerialForm()">Send</button><br/>
+		<!--<p>Serial Ports:
 						<span id="port-names"></span>
 					</p>-->
 
-<div id="serial-output" class="div-contain-shadow"></div>
-</form>
+		<div id="serial-output" class="div-contain-shadow"></div>
+	</form>
 
 </div>
+
 <div class="tabcontent" id="editRacersT">
 	<div>
 		<p><label>Racer File:</label><span id="racer-data-file">none</span></p>
@@ -123,60 +124,60 @@
 		<button type="button">Save File</button>
 	</div>
 	<div style="columns: 200px 3;">
-		<style>
+<style>
 		ul {
 			break-inside: avoid;
 		}
 		</style>
-		<ul>
-			<li>Racer Name: <span>Rick</span></li>
-			<li>Car Number: <span>1</span></li>
-			<li>Car Weight (oz.): <span>4.3</span></li>
-			<li>Rank: <span>Webelos</span></li>
-		</ul>
-		<ul>
-			<li>Racer Name: <span>Rick</span></li>
-			<li>Car Number: <span>1</span></li>
-			<li>Car Weight (oz.): <span>4.3</span></li>
-			<li>Rank: <span>Webelos</span></li>
-		</ul>
-		<ul>
-			<li>Racer Name: <span>Rick</span></li>
-			<li>Car Number: <span>1</span></li>
-			<li>Car Weight (oz.): <span>4.3</span></li>
-			<li>Rank: <span>Webelos</span></li>
-		</ul>
-		<ul>
-			<li>Racer Name: <span>Rick</span></li>
-			<li>Car Number: <span>1</span></li>
-			<li>Car Weight (oz.): <span>4.3</span></li>
-			<li>Rank: <span>Webelos</span></li>
-		</ul>
-		<ul>
-			<li>Racer Name: <span>Rick</span></li>
-			<li>Car Number: <span>1</span></li>
-			<li>Car Weight (oz.): <span>4.3</span></li>
-			<li>Rank: <span>Webelos</span></li>
-		</ul>
-		<ul>
-			<li>Racer Name: <span>Rick</span></li>
-			<li>Car Number: <span>1</span></li>
-			<li>Car Weight (oz.): <span>4.3</span></li>
-			<li>Rank: <span>Webelos</span></li>
-		</ul>
-		<ul>
-			<li>Racer Name: <span>Rick</span></li>
-			<li>Car Number: <span>1</span></li>
-			<li>Car Weight (oz.): <span>4.3</span></li>
-			<li>Rank: <span>Webelos</span></li>
-		</ul>
-		<ul>
-			<li>Racer Name: <span>Rick</span></li>
-			<li>Car Number: <span>1</span></li>
-			<li>Car Weight (oz.): <span>4.3</span></li>
-			<li>Rank: <span>Webelos</span></li>
-		</ul>
-	</div>
+<ul>
+	<li>Racer Name: <span>Rick</span></li>
+	<li>Car Number: <span>1</span></li>
+	<li>Car Weight (oz.): <span>4.3</span></li>
+	<li>Rank: <span>Webelos</span></li>
+</ul>
+<ul>
+	<li>Racer Name: <span>Rick</span></li>
+	<li>Car Number: <span>1</span></li>
+	<li>Car Weight (oz.): <span>4.3</span></li>
+	<li>Rank: <span>Webelos</span></li>
+</ul>
+<ul>
+	<li>Racer Name: <span>Rick</span></li>
+	<li>Car Number: <span>1</span></li>
+	<li>Car Weight (oz.): <span>4.3</span></li>
+	<li>Rank: <span>Webelos</span></li>
+</ul>
+<ul>
+	<li>Racer Name: <span>Rick</span></li>
+	<li>Car Number: <span>1</span></li>
+	<li>Car Weight (oz.): <span>4.3</span></li>
+	<li>Rank: <span>Webelos</span></li>
+</ul>
+<ul>
+	<li>Racer Name: <span>Rick</span></li>
+	<li>Car Number: <span>1</span></li>
+	<li>Car Weight (oz.): <span>4.3</span></li>
+	<li>Rank: <span>Webelos</span></li>
+</ul>
+<ul>
+	<li>Racer Name: <span>Rick</span></li>
+	<li>Car Number: <span>1</span></li>
+	<li>Car Weight (oz.): <span>4.3</span></li>
+	<li>Rank: <span>Webelos</span></li>
+</ul>
+<ul>
+	<li>Racer Name: <span>Rick</span></li>
+	<li>Car Number: <span>1</span></li>
+	<li>Car Weight (oz.): <span>4.3</span></li>
+	<li>Rank: <span>Webelos</span></li>
+</ul>
+<ul>
+	<li>Racer Name: <span>Rick</span></li>
+	<li>Car Number: <span>1</span></li>
+	<li>Car Weight (oz.): <span>4.3</span></li>
+	<li>Rank: <span>Webelos</span></li>
+</ul>
+</div>
 </div>
 <div class="tabcontent" id="runRaceT">
 	Run the Race
