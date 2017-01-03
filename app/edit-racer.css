@@ -1,0 +1,13 @@
+#RacerStatsList {
+    columns: 250px 3;
+    column-fill: auto;
+    float: left;
+    height: calc(100vh - 150px);
+    padding: 15px;
+}
+
+#RacerStatsList ul{
+    break-inside: avoid;
+    list-style: none;
+    padding: 0px;
+}
