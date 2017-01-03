@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<HTML lang="en">
+
+<head>
+    <meta charset="utf=-8"> 
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>PDT Race Manager - Spectator Window</title>
+	<link rel="stylesheet" href="spectator.css">
+	<script src="spectator.js"></script>
+</head>
+
+<body onload="setupRace();">
+
+<h1 class="title">Pack 54 Pinewood Derby Race <br>
+    <div style="font-size: 30pt"></div>
+</h1>
+<h2 style="columns: 2; margin: 50px 0px 0px 20px;">
+<div id="RoundNo">Round #1</div>
+<div id="HeatNo">Heat #1</div>
+</h2>
+
+<div id="CurrentHeat">
+    <table style="width: 100%; border-spacing: 10px;">
+<tr>
+    <td class="results">
+        <div class="container">
+            <h1>Lane 1</h1>
+            <div class="LanePlace" id="Lane1Place">Place</div>
+            <img id="imgLane1C" src="pictures/blank.jpg" height="250" width="250">
+            <div id="Lane1C" class="center shadowText">Racer
+                <br>#
+                <br>Total Time: 6.3245 min
+                <br> Car Weight: 3.00 oz</div>
+        </div>
+    </td>
+    <td class="results">
+        <div class="container">
+            <h1>Lane 2</h1>
+            <div class="LanePlace" id="Lane2Place">Place</div>
+            <img id="imgLane2C" src="pictures/blank.jpg" height="250" width="250">
+            <div id="Lane2C" class="center shadowText">Racer
+                <br>#
+                <br>Total Time: 6.4231 min
+                <br> Car Weight: 3.00 oz</div>
+        </div>
+    </td>
+    <td class="results">
+        <div class="container">
+            <h1>Lane 3</h1>
+            <div class="LanePlace" id="Lane3Place">Place</div>
+            <img id="imgLane3C" src="pictures/blank.jpg" height="250" width="250">
+            <div id="Lane3C" class="center shadowText">Racer
+                <br>#
+                <br>Total Time: 6.5421 min
+                <br> Car Weight: 3.00 oz</div>
+        </div>
+    </td>
+</tr>
+</table>
+</div>
+<div id="HeatResults">
+    <table style="width: 100%; border-spacing: 10px;">
+<tr>
+    <td style="width: 33%; text-align: center;">
+<input type="text" style="width: 75%; font-size: 20pt;" id="Lane1Time" value="">
+</td>
+<td style="width: 33%; text-align: center;">
+<input type="text" style="width: 75%; font-size: 20pt;" id="Lane2Time">
+</td>
+<td style="width: 33%; text-align: center;">
+<input type="text" style="width: 75%; font-size: 20pt;" id="Lane3Time">
+</td>
+</tr>
+<tr>
+    <td style="text-align: center;" colspan=3>
+<button style="height: 50px; font-size: 18pt; width: 40%;" id="UpdateTime" onclick="updateResults();">Update Results</button>
+<button style="height: 50px; font-size: 18pt; width: 40%;" id="NextRace" onclick="nextRace();">Next Race</button>
+</td>
+</tr>
+</table>
+</div>
+<div id="CurrentRound" style="text-align: center;">
+
+</div>
+</body>
+
+</HTML>
