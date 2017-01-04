@@ -562,14 +562,14 @@ function addRacer() {
                 return;
             }
         };
-        racerStats.push({car: tmpCarNum, racer_name: tmpRacerName, weight: tmpCarWeight, rank: tmpRacerRank, total_time: 0});
+        racerStats.push({ car: tmpCarNum, racer_name: tmpRacerName, weight: tmpCarWeight, rank: tmpRacerRank, total_time: 0 });
     } else {
-        racerStats.push({car: tmpCarNum, racer_name: tmpRacerName, weight: tmpCarWeight, rank: tmpRacerRank, total_time: 0});
+        racerStats.push({ car: tmpCarNum, racer_name: tmpRacerName, weight: tmpCarWeight, rank: tmpRacerRank, total_time: 0 });
     }
     //update display
     console.log(racerStats);
     updateRacerStatsList();
-} 
+}
 
 function updateRacerStatsList() {
     var mainRacerListDiv = document.getElementById("RacerInfo")
@@ -577,30 +577,30 @@ function updateRacerStatsList() {
     var tempOutStr = "";
     var tempOutTable = "<table id='mainRacerList'><tr><th>Car Number</th><th>Racer Name</th><th>Car Weight (oz)</th><th>Rank</th><th>Total Time (s)</th></tr>";
 
-    if (racerStats.length != 0){
-        racerStats.sort(function (a, b){
+    if (racerStats.length != 0) {
+        racerStats.sort(function (a, b) {
             return a.car - b.car;
         })
 
-         for (var i = 0; i < racerStats.length; i++){
-             tempOutStr += `<ul>`;
-             tempOutStr += `<span onclick="console.log(this.parentNode.childNodes, 'delete')" class="faicon">&#xf014</span>`;
-             tempOutStr += `<span onclick="console.log(this.parentNode, 'edit')" class="faicon">&#xf040</span>`;
-             tempOutStr += `<li>Car Number: ${racerStats[i].car}</li>`;
-             tempOutStr += `<li>Racer Name: ${racerStats[i].racer_name}</li>`;
-             tempOutStr += `<li>Car Weight: ${racerStats[i].weight}</li>`;
-             tempOutStr += `<li>Racer Rank: ${racerStats[i].rank}</li>`;
-             tempOutStr += `</ul>`;
+        for (var i = 0; i < racerStats.length; i++) {
+            tempOutStr += `<ul>`;
+            tempOutStr += `<span onclick="editRacer(this.parentNode, 'delete')" class="faicon">&#xf014</span>`;
+            tempOutStr += `<span onclick="editRacer(this.parentNode, 'edit')" class="faicon">&#xf040</span>`;
+            tempOutStr += `<li>Car Number: ${racerStats[i].car}</li>`;
+            tempOutStr += `<li>Racer Name: ${racerStats[i].racer_name}</li>`;
+            tempOutStr += `<li>Car Weight: ${racerStats[i].weight}</li>`;
+            tempOutStr += `<li>Racer Rank: ${racerStats[i].rank}</li>`;
+            tempOutStr += `</ul>`;
 
-             tempOutTable += `<tr><td>${racerStats[i].car}</td>`;
-             tempOutTable += `<td>${racerStats[i].racer_name}</td>`;
-             tempOutTable += `<td>${racerStats[i].weight}</td>`;
-             tempOutTable += `<td>${racerStats[i].rank}</td>`;
-             if (racerStats[i].total_time === undefined) {
-                 racerStats[i].total_time = 0;
-             };
-             tempOutTable += `<td>${racerStats[i].total_time}</td></tr>`;
-         }
+            tempOutTable += `<tr><td>${racerStats[i].car}</td>`;
+            tempOutTable += `<td>${racerStats[i].racer_name}</td>`;
+            tempOutTable += `<td>${racerStats[i].weight}</td>`;
+            tempOutTable += `<td>${racerStats[i].rank}</td>`;
+            if (racerStats[i].total_time === undefined) {
+                racerStats[i].total_time = 0;
+            };
+            tempOutTable += `<td>${racerStats[i].total_time}</td></tr>`;
+        }
     } else {
         tempOutStr = "No Racers.";
     }
@@ -627,7 +627,7 @@ function saveRacers() {
             var contentJSON = JSON.stringify(racerStats);
             //save txt
             fs.writeFileSync(filenames, contentJSON);
-            racerFileDiv.innerHTML = filenames;
+            racerFileDiv.innerHTML = filenames.split('\\').pop().split('/').pop();
             racerStatsFile = filenames;
         }
     })
@@ -652,9 +652,47 @@ function loadRacers() {
             racerStats = JSON.parse(tmpData);
             //racerStats.push(dataObj);
             remote.app.addRecentDocument(filenames[0]);
-            racerFileDiv.innerHTML = filenames;
-            racerStatsFile = filenames;
+            racerFileDiv.innerHTML = filenames[0].split('\\').pop().split('/').pop();
+            racerStatsFile = filenames[0];
             updateRacerStatsList();
         }
     })
+}
+
+function editRacer(objCollection, type) {
+    var liList = objCollection.getElementsByTagName("LI");
+    console.log(liList);
+    console.log(`Function type is ${type}`);
+    var carNumEdit = document.getElementById("CarNum");
+    var racerNameEdit = document.getElementById("RacerName");
+    var carWeightEdit = document.getElementById("CarWeight");
+    var racerRankEdit = document.getElementById("RacerRank");
+
+    var testRegEx = /Car Number: (\d*\.?\d*)/.test(liList[0].innerHTML);
+    console.log(`Test RegEx - ${testRegEx}`);
+
+    if (testRegEx) {
+        var tempCarNum = RegExp.$1;
+        for (var i = 0; i < racerStats.length; i++) {
+            if (racerStats[i].car === tempCarNum) {
+                console.log(`Checking for entry ${i} in array ${(racerStats[i].car === tempCarNum)}`);
+                if (type == "edit") {
+                    carNumEdit.value = racerStats[i].car;
+                    racerNameEdit.value = racerStats[i].racer_name;
+                    carWeightEdit.value = racerStats[i].weight;
+                    racerRankEdit.value = racerStats[i].rank;
+                    racerStats.splice(i, 1);
+
+                }
+
+                if (type == "delete") {
+                    racerStats.splice(i, 1);
+                    //updateRacerStatsList();
+                }
+                break;
+            }
+          
+        }
+    }
+    updateRacerStatsList();
 }

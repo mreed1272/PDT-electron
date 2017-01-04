@@ -25,4 +25,6 @@
     float: right; 
     width: 30px;
     font-size: 1.5em;
+    color: #003f87;
+    cursor: default;
 }
