@@ -16,11 +16,15 @@ var laneMask = [];
 var laneTimes = [];
 var initArduino = false;
 var initLane = false;
-var numLanes = 2; //default to 1 lanes
+var numLanes = 2; //default to 2 lanes
 var currentTab = "mainT";
 var currentSessionDate = new Date();
 var runNum = 1;
 var lastRunTimes = [];
+var racerStats = [];
+var raceInformation = [];
+var ranks = [];
+
 
 var patt = "Arduino";
 
@@ -534,4 +538,94 @@ function updateHistoryTable(runObj) {
     console.log(lastRunTimes);
     console.log(runObj);
     runNum++;
+}
+
+function addRacer() {
+    //first get the values
+    var tmpCarNum = document.getElementById("CarNum").value;
+    var tmpRacerName = document.getElementById("RacerName").value;
+    var tmpCarWeight = document.getElementById("CarWeight").value;
+    var tmpRacerRank = document.getElementById("RacerRank").value;
+
+    //check to see if already in Array
+
+    if (racerStats.length != 0) {
+        for (var i = 0; i < racerStats.length; i++) {
+            if (racerStats[i].car === tmpCarNum) {
+                racerStats[i].racer_name = tmpRacerName;
+                racerStats[i].weight = tmpCarWeight;
+                racerStats[i].rank = tmpRacerRank;
+                
+                //update racer display
+                console.log(racerStats);
+                updateRacerStatsList();
+                return;
+            }
+        };
+        racerStats.push({car: tmpCarNum, racer_name: tmpRacerName, weight: tmpCarWeight, rank: tmpRacerRank});
+    } else {
+        racerStats.push({car: tmpCarNum, racer_name: tmpRacerName, weight: tmpCarWeight, rank: tmpRacerRank});
+    }
+    //update display
+    console.log(racerStats);
+    updateRacerStatsList();
+} 
+
+function updateRacerStatsList() {
+    var racerListDiv = document.getElementById("RacerStatsList");
+    var tempOutStr = "";
+
+    if (racerStats.length != 0){
+         for (var i = 0; i < racerStats.length; i++){
+             tempOutStr += `<ul><li>Car No.: ${racerStats[i].car}</li>`;
+             tempOutStr += `<li>Racer Name: ${racerStats[i].racer_name}</li>`;
+             tempOutStr += `<li>Car Weight: ${racerStats[i].weight}</li>`;
+             tempOutStr += `<li>Racer Rank: ${racerStats[i].rank}</li>`;
+             tempOutStr += `</ul>`;
+         }
+    } else {
+        tempOutStr = "No Racers.";
+    }
+    racerListDiv.innerHTML = tempOutStr;
+}
+function saveRacers() {
+    dialog.showSaveDialog({
+        title: 'Save Racer Stats file. . .',
+        filters: [
+            {
+                name: "PDT racer files",
+                extensions: ['pdtr', 'pdt_racer']
+            }
+        ]
+    }, (filenames) => {
+        console.log(`Filenames from save dialog: ${filenames}`);
+        if (!filenames) return;
+        if (filenames.length > 0) {
+            var contentJSON = JSON.stringify(racerStats);
+            //save txt
+            fs.writeFileSync(filenames, contentJSON);
+        }
+    })
+}
+
+function loadRacers() {
+    dialog.showOpenDialog({
+        title: 'Select Racer Stats file to open:',
+        filters: [
+            {
+                name: 'PDT racer files',
+                extensions: ['pdtr', 'pdt_racer']
+            }
+        ]
+    }, (filenames) => {
+        if (!filenames) return;
+        if (filenames.length > 0) {
+            var tmpData = fs.readFileSync(filenames[0]);
+            // parse, format input txt and put into page
+            racerStats = JSON.parse(tmpData);
+            //racerStats.push(dataObj);
+            remote.app.addRecentDocument(filenames[0]);
+            updateRacerStatsList();
+        }
+    })
 }
