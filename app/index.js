@@ -24,7 +24,7 @@ var lastRunTimes = [];
 var racerStats = [];
 var raceInformation = [];
 var ranks = [];
-
+var racerStatsFile = "";
 
 var patt = "Arduino";
 
@@ -555,16 +555,16 @@ function addRacer() {
                 racerStats[i].racer_name = tmpRacerName;
                 racerStats[i].weight = tmpCarWeight;
                 racerStats[i].rank = tmpRacerRank;
-                
+                racerStats[i].total_time = 0;
                 //update racer display
                 console.log(racerStats);
                 updateRacerStatsList();
                 return;
             }
         };
-        racerStats.push({car: tmpCarNum, racer_name: tmpRacerName, weight: tmpCarWeight, rank: tmpRacerRank});
+        racerStats.push({car: tmpCarNum, racer_name: tmpRacerName, weight: tmpCarWeight, rank: tmpRacerRank, total_time: 0});
     } else {
-        racerStats.push({car: tmpCarNum, racer_name: tmpRacerName, weight: tmpCarWeight, rank: tmpRacerRank});
+        racerStats.push({car: tmpCarNum, racer_name: tmpRacerName, weight: tmpCarWeight, rank: tmpRacerRank, total_time: 0});
     }
     //update display
     console.log(racerStats);
@@ -572,23 +572,46 @@ function addRacer() {
 } 
 
 function updateRacerStatsList() {
+    var mainRacerListDiv = document.getElementById("RacerInfo")
     var racerListDiv = document.getElementById("RacerStatsList");
     var tempOutStr = "";
+    var tempOutTable = "<table id='mainRacerList'><tr><th>Car Number</th><th>Racer Name</th><th>Car Weight (oz)</th><th>Rank</th><th>Total Time (s)</th></tr>";
 
     if (racerStats.length != 0){
+        racerStats.sort(function (a, b){
+            return a.car - b.car;
+        })
+
          for (var i = 0; i < racerStats.length; i++){
-             tempOutStr += `<ul><li>Car No.: ${racerStats[i].car}</li>`;
+             tempOutStr += `<ul>`;
+             tempOutStr += `<span onclick="console.log(this.parentNode.childNodes, 'delete')" class="faicon">&#xf014</span>`;
+             tempOutStr += `<span onclick="console.log(this.parentNode, 'edit')" class="faicon">&#xf040</span>`;
+             tempOutStr += `<li>Car Number: ${racerStats[i].car}</li>`;
              tempOutStr += `<li>Racer Name: ${racerStats[i].racer_name}</li>`;
              tempOutStr += `<li>Car Weight: ${racerStats[i].weight}</li>`;
              tempOutStr += `<li>Racer Rank: ${racerStats[i].rank}</li>`;
              tempOutStr += `</ul>`;
+
+             tempOutTable += `<tr><td>${racerStats[i].car}</td>`;
+             tempOutTable += `<td>${racerStats[i].racer_name}</td>`;
+             tempOutTable += `<td>${racerStats[i].weight}</td>`;
+             tempOutTable += `<td>${racerStats[i].rank}</td>`;
+             if (racerStats[i].total_time === undefined) {
+                 racerStats[i].total_time = 0;
+             };
+             tempOutTable += `<td>${racerStats[i].total_time}</td></tr>`;
          }
     } else {
         tempOutStr = "No Racers.";
     }
+    tempOutTable += "</table>";
+
     racerListDiv.innerHTML = tempOutStr;
+    mainRacerListDiv.innerHTML = tempOutTable;
 }
 function saveRacers() {
+    var racerFileDiv = document.getElementById("racer-data-file");
+
     dialog.showSaveDialog({
         title: 'Save Racer Stats file. . .',
         filters: [
@@ -598,17 +621,21 @@ function saveRacers() {
             }
         ]
     }, (filenames) => {
-        console.log(`Filenames from save dialog: ${filenames}`);
+        console.log(`Filename from save dialog: ${filenames}`);
         if (!filenames) return;
         if (filenames.length > 0) {
             var contentJSON = JSON.stringify(racerStats);
             //save txt
             fs.writeFileSync(filenames, contentJSON);
+            racerFileDiv.innerHTML = filenames;
+            racerStatsFile = filenames;
         }
     })
 }
 
 function loadRacers() {
+    var racerFileDiv = document.getElementById("racer-data-file");
+
     dialog.showOpenDialog({
         title: 'Select Racer Stats file to open:',
         filters: [
@@ -625,6 +652,8 @@ function loadRacers() {
             racerStats = JSON.parse(tmpData);
             //racerStats.push(dataObj);
             remote.app.addRecentDocument(filenames[0]);
+            racerFileDiv.innerHTML = filenames;
+            racerStatsFile = filenames;
             updateRacerStatsList();
         }
     })

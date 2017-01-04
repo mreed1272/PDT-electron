@@ -15,6 +15,8 @@
 <body onload="onBodyLoad()">
 <div id="mainContent" class="main">
 	<div class="tabBox" id="tabbedItems">
+
+		<!--Start of defining menu tabs-->
 		<ul class="tabrow">
 			<span style="width: 10px; display: inline-block;"> </span>
 			<li class="selected" onclick="openTabContent(event,'mainT')">
@@ -38,8 +40,9 @@
 				<a href="javascript:void(0);">Configure PDT<br/>Race Manager</a>
 			</li>
 		</ul>
+		<!--End of defining menu tabs-->
 
-<!--Tab Content - Main-->
+<!--Tab Content - Main Tab Body-->
 		<div class="tabcontent" id="mainT">
 			Main Content
 			<div id="RaceInfo">
@@ -72,7 +75,7 @@
 				</table>
 			</div>
 		</div>
-<!--End Tab Content - Main-->
+<!--End Tab Content - Main Tab Body-->
 
 <!--Tab Content - Test Track-->
 		<div class="tabcontent" id="testTrackT">
@@ -127,7 +130,7 @@
 <!--Tab Content - Racers-->
 		<div class="tabcontent" id="editRacersT">
 			<div style="float: left; width: 300px; height: calc(100vh - 150px);">
-				<p><label>Racer File:</label><span id="racer-data-file">none</span></p>
+				<p><label>Racer File: </label><span id="racer-data-file">none</span></p>
 				<button type="button" onclick="loadRacers()">Load File</button>
 				<button type="button" onclick="saveRacers()">Save File</button>
 				<div style="background: #eee; box-shadow: 3px 3px 8px 0px rgba(0,0,0,0.3); padding: 5px;">
@@ -163,9 +166,7 @@
 					<button type="button" onclick="addRacer()">Update/Add Racer</button>
 				</div>
 			</div>
-			<div id="RacerStatsList">
-			
-			</div>
+			<div id="RacerStatsList"></div>
 		</div>
 <!--End Tab Content - Racers-->
 

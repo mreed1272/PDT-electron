@@ -1,13 +1,28 @@
 #RacerStatsList {
-    columns: 250px 3;
+    -webkit-columns: 3 250px;
+    columns: 3 250px;
     column-fill: auto;
     float: left;
     height: calc(100vh - 150px);
     padding: 15px;
+    -webkit-column-gap: 50px;
+    column-gap: 50px;
+    overflow: auto;
+    /*width: calc (100% - 300px);*/
 }
 
 #RacerStatsList ul{
     break-inside: avoid;
     list-style: none;
-    padding: 0px;
+    padding: 10px;
+    background: #eee;
+    box-shadow: 3px 3px 8px 0px rgba(0,0,0,0.3);
+    margin: 0px 0px 10px 0px;
+}
+
+.faicon {
+    font-family: FontAwesome; 
+    float: right; 
+    width: 30px;
+    font-size: 1.5em;
 }
