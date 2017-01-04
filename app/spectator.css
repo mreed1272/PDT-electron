@@ -1,0 +1,91 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+        
+h1 {
+    font-size: 40pt;
+    text-align: center;
+}
+        
+img {
+    /*width: 100%;*/
+    /*height: auto;*/
+    opacity: 0.8
+}
+        
+.container {
+    position: relative;
+    text-align: center;
+}
+        
+.title {
+    text-align: center;
+    color: Blue;
+    font-variant: small-caps;
+    background-color: Gold;
+    border: 2px ridge DarkgoldenRod;
+    border-radius: 25px;
+    background: linear-gradient(Gold, DarkGoldenRod);
+    text-shadow: 1px 1px 3px DarkRed;
+    margin: 10px;
+}
+        
+.results {
+    border: 1px solid DarkGoldenRod;
+    border-radius: 25px;
+    box-shadow: 0 7px 15px 0 grey, 0 10px 15px 0 DarkGrey;
+}
+        
+.center {
+    position: RELATIVE;
+    /*text-align: center;
+    top: 50%;
+    width: 100%;*/
+    margin: 0;
+    font-size: 24pt;
+    /*transform: translate(0, -30%);*/
+}
+        
+.center.shadowText {
+    text-shadow: 2px 2px 5px Darkgrey;
+}
+        
+.LanePlace {
+    visibility: visible;
+    font-size: 30pt;
+    text-shadow: 2px 2px 5px GoldenRod;
+    font-style: italic;
+    margin-bottom: 10px;
+}
+        
+table#tableRound {
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 85%;
+    margin-top: 40px;
+    margin-left: 40px;
+    font-size: 20pt;
+}
+        
+table#tableRound th {
+    border: 1px solid black;
+    border-collapse: collapse;
+    color: white;
+    background-color: DarkBlue
+}
+        
+table#tableRound td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    /*color: white;
+    background-color: DarkBlue*/
+}
+        
+table#tableRound tr:nth-child(even) {
+    background-color: #e6f0ff;
+}
+        
+table#tableRound tr:nth-child(odd) {
+    background-color: #fff2cc;
+}
