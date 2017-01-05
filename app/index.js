@@ -542,32 +542,45 @@ function updateHistoryTable(runObj) {
 
 function addRacer() {
     //first get the values
-    var tmpCarNum = document.getElementById("CarNum").value;
-    var tmpRacerName = document.getElementById("RacerName").value;
-    var tmpCarWeight = document.getElementById("CarWeight").value;
-    var tmpRacerRank = document.getElementById("RacerRank").value;
+    var tmpCarNum = document.getElementById("CarNum");
+    var tmpRacerName = document.getElementById("RacerName");
+    var tmpCarWeight = document.getElementById("CarWeight");
+    var tmpRacerRank = document.getElementById("RacerRank");
 
     //check to see if already in Array
 
     if (racerStats.length != 0) {
         for (var i = 0; i < racerStats.length; i++) {
-            if (racerStats[i].car === tmpCarNum) {
-                racerStats[i].racer_name = tmpRacerName;
-                racerStats[i].weight = tmpCarWeight;
-                racerStats[i].rank = tmpRacerRank;
+            if (racerStats[i].car === tmpCarNum.value) {
+                racerStats[i].racer_name = tmpRacerName.value;
+                racerStats[i].weight = tmpCarWeight.value;
+                racerStats[i].rank = tmpRacerRank.value;
                 racerStats[i].total_time = 0;
                 //update racer display
-                console.log(racerStats);
+                //console.log(racerStats);
                 updateRacerStatsList();
+                tmpCarNum.value = "";
+                tmpRacerName.value = "";
+                tmpCarWeight.value = "";
+                tmpRacerRank.value = "Tiger";
+
                 return;
             }
         };
-        racerStats.push({ car: tmpCarNum, racer_name: tmpRacerName, weight: tmpCarWeight, rank: tmpRacerRank, total_time: 0 });
+        racerStats.push({ car: tmpCarNum.value, racer_name: tmpRacerName.value, weight: tmpCarWeight.value, rank: tmpRacerRank.value, total_time: 0 });
+        tmpCarNum.value = "";
+        tmpRacerName.value = "";
+        tmpCarWeight.value = "";
+        tmpRacerRank.value = "Tiger";
     } else {
-        racerStats.push({ car: tmpCarNum, racer_name: tmpRacerName, weight: tmpCarWeight, rank: tmpRacerRank, total_time: 0 });
+        racerStats.push({ car: tmpCarNum.value, racer_name: tmpRacerName.value, weight: tmpCarWeight.value, rank: tmpRacerRank.value, total_time: 0 });
+        tmpCarNum.value = "";
+        tmpRacerName.value = "";
+        tmpCarWeight.value = "";
+        tmpRacerRank.value = "Tiger";
     }
     //update display
-    console.log(racerStats);
+    //console.log(racerStats);
     updateRacerStatsList();
 }
 
@@ -691,7 +704,7 @@ function editRacer(objCollection, type) {
                 }
                 break;
             }
-          
+
         }
     }
     updateRacerStatsList();

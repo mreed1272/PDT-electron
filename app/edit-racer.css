@@ -1,23 +1,22 @@
 #RacerStatsList {
-    -webkit-columns: 3 250px;
-    columns: 3 250px;
+    column-width: 350px;
     column-fill: auto;
     float: left;
     height: calc(100vh - 150px);
     padding: 15px;
-    -webkit-column-gap: 50px;
-    column-gap: 50px;
+    column-gap: 15px;
     overflow: auto;
-    /*width: calc (100% - 300px);*/
+    width: calc(100% - 300px);
 }
 
 #RacerStatsList ul{
     break-inside: avoid;
     list-style: none;
-    padding: 10px;
+    padding: 10px 5px 10px 10px;
     background: #eee;
     box-shadow: 3px 3px 8px 0px rgba(0,0,0,0.3);
     margin: 0px 0px 10px 0px;
+    width: 350px;
 }
 
 .faicon {
@@ -26,5 +25,6 @@
     width: 30px;
     font-size: 1.5em;
     color: #003f87;
-    cursor: default;
+    cursor: pointer;
+    text-align: right;
 }
