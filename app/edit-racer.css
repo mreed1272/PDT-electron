@@ -43,3 +43,6 @@
     left: calc(100% - 45px);
     margin-right: 10px;
 }
+.faicon:hover {
+    text-shadow: 2px 2px 6px rgb(252, 209, 22);
+}

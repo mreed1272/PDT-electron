@@ -1,46 +1,59 @@
 
-function addRacer() {
+function addRacer(type, oldCarNum) {
     //first get the values
     var tmpCarNum = document.getElementById("CarNum");
     var tmpRacerName = document.getElementById("RacerName");
     var tmpCarWeight = document.getElementById("CarWeight");
     var tmpRacerRank = document.getElementById("RacerRank");
 
-    //check to see if already in Array
-
-    if (racerStats.length != 0) {
-        for (var i = 0; i < racerStats.length; i++) {
-            if (racerStats[i].car === tmpCarNum.value) {
-                racerStats[i].racer_name = tmpRacerName.value;
-                racerStats[i].weight = tmpCarWeight.value;
-                racerStats[i].rank = tmpRacerRank.value;
-                racerStats[i].total_time = 0;
-                //update racer display
-                //console.log(racerStats);
-                updateRacerStatsList();
-                tmpCarNum.value = "";
-                tmpRacerName.value = "";
-                tmpCarWeight.value = "";
-                tmpRacerRank.value = "Tiger";
-
-                return;
-            }
-        };
-        racerStats.push({ car: tmpCarNum.value, racer_name: tmpRacerName.value, weight: tmpCarWeight.value, rank: tmpRacerRank.value, total_time: 0 });
-        tmpCarNum.value = "";
-        tmpRacerName.value = "";
-        tmpCarWeight.value = "";
-        tmpRacerRank.value = "Tiger";
-    } else {
-        racerStats.push({ car: tmpCarNum.value, racer_name: tmpRacerName.value, weight: tmpCarWeight.value, rank: tmpRacerRank.value, total_time: 0 });
-        tmpCarNum.value = "";
-        tmpRacerName.value = "";
-        tmpCarWeight.value = "";
-        tmpRacerRank.value = "Tiger";
+    //make sure none of the fields are empty
+    if (tmpCarNum.value == "" || tmpRacerName.value == "" || tmpCarWeight.value == "") {
+        alert(`Please make sure none of the fields are empty.`);
+        return;
     }
-    //update display
-    //console.log(racerStats);
-    updateRacerStatsList();
+    if (type == "update") {
+        console.log(oldCarNum);
+    }
+    if (type == "add") {
+        //check to see the car number is already being used
+
+        if (racerStats.length != 0) {
+            for (var i = 0; i < racerStats.length; i++) {
+                if (racerStats[i].car === tmpCarNum.value) {
+                    alert(`This car number (${tmpCarNum.value}) is already being used.  Please enter a new number.`);
+                    tmpCarNum.focus();
+                    /*racerStats[i].racer_name = tmpRacerName.value;
+                    racerStats[i].weight = tmpCarWeight.value;
+                    racerStats[i].rank = tmpRacerRank.value;
+                    racerStats[i].total_time = 0;
+                    //update racer display
+                    //console.log(racerStats);
+                    updateRacerStatsList();
+                    tmpCarNum.value = "";
+                    tmpRacerName.value = "";
+                    tmpCarWeight.value = "";
+                    tmpRacerRank.value = "Tiger";
+    */
+                    return;
+                }
+            };
+            racerStats.push({ car: tmpCarNum.value, racer_name: tmpRacerName.value, weight: tmpCarWeight.value, rank: tmpRacerRank.value, total_time: 0 });
+            tmpCarNum.value = "";
+            tmpRacerName.value = "";
+            tmpCarWeight.value = "";
+            tmpRacerRank.value = "Tiger";
+        } else {
+            racerStats.push({ car: tmpCarNum.value, racer_name: tmpRacerName.value, weight: tmpCarWeight.value, rank: tmpRacerRank.value, total_time: 0 });
+            tmpCarNum.value = "";
+            tmpRacerName.value = "";
+            tmpCarWeight.value = "";
+            tmpRacerRank.value = "Tiger";
+        }
+        //update display
+        //console.log(racerStats);
+        updateRacerStatsList();
+    };
+
 }
 
 function updateRacerStatsList() {
@@ -132,34 +145,59 @@ function loadRacers() {
 }
 
 function editRacer(objCollection, type) {
+    var editDialog = document.getElementById("RacerStatsMod");
+    var editButtons = editDialog.getElementsByTagName("button");
+    //console.log(editButtons);
+    var modButton = editButtons[(editButtons.length - 1)];
+    //console.log(modButton.innerHTML);
+    //console.log(modButton.outerHTML);
     var liList = objCollection.getElementsByTagName("LI");
-    console.log(liList);
-    console.log(`Function type is ${type}`);
+    //console.log(liList);
+    //console.log(`Function type is ${type}`);
     var carNumEdit = document.getElementById("CarNum");
     var racerNameEdit = document.getElementById("RacerName");
     var carWeightEdit = document.getElementById("CarWeight");
     var racerRankEdit = document.getElementById("RacerRank");
 
     var testRegEx = /Car Number: (\d*\.?\d*)/.test(liList[0].innerHTML);
-    console.log(`Test RegEx - ${testRegEx}`);
+    // console.log(`Test RegEx - ${testRegEx}`);
+
+    //make sure last button in list it the correct one
+    if (modButton.innerHTML == "Add Racer" && type == "edit") {
+        //now change to read Update Racer
+        modButton.innerHTML = "Update Racer"
+        //now change onclick to update
+        modButton.setAttribute('onclick', `addRacer("update",${RegExp.$1})`);
+    }
 
     if (testRegEx) {
         var tempCarNum = RegExp.$1;
         for (var i = 0; i < racerStats.length; i++) {
             if (racerStats[i].car === tempCarNum) {
-                console.log(`Checking for entry ${i} in array ${(racerStats[i].car === tempCarNum)}`);
+                //console.log(`Checking for entry ${i} in array ${(racerStats[i].car === tempCarNum)}`);
                 if (type == "edit") {
                     carNumEdit.value = racerStats[i].car;
                     racerNameEdit.value = racerStats[i].racer_name;
                     carWeightEdit.value = racerStats[i].weight;
                     racerRankEdit.value = racerStats[i].rank;
-                    racerStats.splice(i, 1);
+                    //racerStats.splice(i, 1);
 
                 }
 
                 if (type == "delete") {
                     racerStats.splice(i, 1);
                     //updateRacerStatsList();
+                    carNumEdit.value = "";
+                    racerNameEdit.value = "";
+                    carWeightEdit.value = "";
+                    racerRankEdit.value = "Tiger";
+                    if (modButton.innerHTML == "Update Racer") {
+                        //now change to read Update Racer
+                        modButton.innerHTML = "Add Racer"
+                        //now change onclick to update
+                        modButton.setAttribute('onclick', `addRacer("add")`);
+                    }
+
                 }
                 break;
             }

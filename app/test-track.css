@@ -44,16 +44,7 @@
     border-style: groove;
     background-color: darkred;
 }
-/*#reset-pdt {
-    user-select: none;
-    border: 3px outset gold;
-    color: #eee;
-    background-color: darkred;
-    cursor: pointer;
-}*/
-/*#reset-pdt.clicked {
-    border-style: inset;
-}*/
+
 #timer-version {
     border: 3px outset gold;
     background-color: darkblue;
