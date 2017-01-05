@@ -10,6 +10,9 @@
 	<link rel="stylesheet" href="test-track.css">
 	<link rel="stylesheet" href="edit-racer.css">
 	<script src="index.js"></script>
+	<script src="serial.js"></script>
+	<script src="test-track.js"></script>
+	<script src="edit-racer.js"></script>
 </head>
 
 <body onload="onBodyLoad()">
@@ -129,11 +132,11 @@
 
 <!--Tab Content - Racers-->
 		<div class="tabcontent" id="editRacersT">
-			<div style="float: left; width: 300px; height: calc(100vh - 150px);">
+			<div id="RacerStatsMod">
 				<p><label>Racer File: </label><span id="racer-data-file">none</span></p>
 				<button type="button" onclick="loadRacers()">Load File</button>
 				<button type="button" onclick="saveRacers()">Save File</button>
-				<div style="background: #eee; box-shadow: 3px 3px 8px 0px rgba(0,0,0,0.3); padding: 5px; margin-top: 20px;">
+				<div>
 					<table style="border-collapse: collapse">
 						<tr>
 							<td><label for="CarNum">Car No.:</label></td>

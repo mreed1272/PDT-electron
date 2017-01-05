@@ -1,30 +1,45 @@
-#RacerStatsList {
-    column-width: 350px;
-    column-fill: auto;
+#RacerStatsMod {
     float: left;
+    width: 300px;
+    height: calc(100vh - 150px);
+}
+
+#RacerStatsMod div {
+    background: #eee;
+    box-shadow: 3px 3px 8px 0px rgba(0,0,0,0.3);
+    padding: 5px;
+    margin-top: 20px;
+}
+
+#RacerStatsList {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-content: flex-start;
+    align-items: flex-start;
     height: calc(100vh - 150px);
     padding: 15px;
-    column-gap: 15px;
     overflow: auto;
     width: calc(100% - 300px);
 }
 
 #RacerStatsList ul{
-    break-inside: avoid;
+    flex: 0 0 auto;
     list-style: none;
     padding: 10px 5px 10px 10px;
     background: #eee;
     box-shadow: 3px 3px 8px 0px rgba(0,0,0,0.3);
-    margin: 0px 0px 10px 0px;
-    width: 350px;
+    margin: 0px 0px 10px 10px;
+    width: 285px;
 }
 
 .faicon {
     font-family: FontAwesome; 
-    float: right; 
-    width: 30px;
+    position: relative; 
     font-size: 1.5em;
     color: #003f87;
     cursor: pointer;
     text-align: right;
+    left: calc(100% - 45px);
+    margin-right: 10px;
 }
