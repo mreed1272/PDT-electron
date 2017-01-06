@@ -132,3 +132,11 @@ function clearText(elemID, newTxt) {
     tempElem.innerHTML = newTxt;
 }
 
+function checkKeyValue(arrayObj,key,value){
+    for (var i = 0; i < arrayObj.length; i++){
+        if (arrayObj[i][key] == value){
+            return i;
+        }
+    }
+    return -1;
+}

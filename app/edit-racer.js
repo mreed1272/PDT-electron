@@ -1,59 +1,97 @@
 
 function addRacer(type, oldCarNum) {
     //first get the values
+    var modButton = document.getElementById("buttonAddRacer");
     var tmpCarNum = document.getElementById("CarNum");
     var tmpRacerName = document.getElementById("RacerName");
     var tmpCarWeight = document.getElementById("CarWeight");
     var tmpRacerRank = document.getElementById("RacerRank");
+    var index = -1;
+    var oldIndex = -1;
+
+    //console.log(`Old car number is ${oldCarNum}`);
+
+    if (oldCarNum != undefined) {
+        oldIndex = checkKeyValue(racerStats, "car", oldCarNum);
+    }
+    //let's check to see if car number already in use and save the index for later
+    /*for (var i = 0; i < racerStats.length; i++) {
+        if (racerStats[i].car === tmpCarNum.value) {
+            index = i;
+            break;
+        }
+    }*/
+    index = checkKeyValue(racerStats, "car", tmpCarNum.value);
+    //console.log(`Index is ${index} and old index is ${oldIndex}`);
 
     //make sure none of the fields are empty
-    if (tmpCarNum.value == "" || tmpRacerName.value == "" || tmpCarWeight.value == "") {
+    if ((tmpCarNum.value == "" || tmpRacerName.value == "" || tmpCarWeight.value == "") && (type == "add" || type == "update")) {
         alert(`Please make sure none of the fields are empty.`);
         return;
     }
-    if (type == "update") {
-        console.log(oldCarNum);
-    }
-    if (type == "add") {
-        //check to see the car number is already being used
 
-        if (racerStats.length != 0) {
-            for (var i = 0; i < racerStats.length; i++) {
-                if (racerStats[i].car === tmpCarNum.value) {
+    switch (type) {
+        case "cancel":
+            tmpCarNum.value = "";
+            tmpRacerName.value = "";
+            tmpCarWeight.value = "";
+            tmpRacerRank.value = "Tiger";
+
+            if (modButton.innerHTML == "Update Racer") {
+                //now change to read Update Racer
+                modButton.innerHTML = "Add Racer"
+                //now change onclick to update
+                modButton.setAttribute('onclick', `addRacer("add")`);
+            }
+
+            break;
+
+        case "add":
+            if (index >= 0) {
+                alert(`This car number (${tmpCarNum.value}) is already being used.  Please enter a new number.`);
+                tmpCarNum.focus();
+                return;
+            }
+            racerStats.push({ car: tmpCarNum.value, racer_name: tmpRacerName.value, weight: tmpCarWeight.value, rank: tmpRacerRank.value, total_time: 0 });
+            tmpCarNum.value = "";
+            tmpRacerName.value = "";
+            tmpCarWeight.value = "";
+            tmpRacerRank.value = "Tiger";
+
+            break;
+
+        case "update":
+            if (oldCarNum != tmpCarNum.value) {
+                if (index === -1) {
+                    racerStats.splice(oldIndex, 1);
+                    racerStats.push({ car: tmpCarNum.value, racer_name: tmpRacerName.value, weight: tmpCarWeight.value, rank: tmpRacerRank.value, total_time: 0 });
+                } else {
                     alert(`This car number (${tmpCarNum.value}) is already being used.  Please enter a new number.`);
                     tmpCarNum.focus();
-                    /*racerStats[i].racer_name = tmpRacerName.value;
-                    racerStats[i].weight = tmpCarWeight.value;
-                    racerStats[i].rank = tmpRacerRank.value;
-                    racerStats[i].total_time = 0;
-                    //update racer display
-                    //console.log(racerStats);
-                    updateRacerStatsList();
-                    tmpCarNum.value = "";
-                    tmpRacerName.value = "";
-                    tmpCarWeight.value = "";
-                    tmpRacerRank.value = "Tiger";
-    */
                     return;
                 }
-            };
-            racerStats.push({ car: tmpCarNum.value, racer_name: tmpRacerName.value, weight: tmpCarWeight.value, rank: tmpRacerRank.value, total_time: 0 });
+            } else {
+                racerStats[index].car = tmpCarNum.value;
+                racerStats[index].racer_name = tmpRacerName.value;
+                racerStats[index].weight = tmpCarWeight.value;
+                racerStats[index].rank = tmpRacerRank.value;
+            }
             tmpCarNum.value = "";
             tmpRacerName.value = "";
             tmpCarWeight.value = "";
             tmpRacerRank.value = "Tiger";
-        } else {
-            racerStats.push({ car: tmpCarNum.value, racer_name: tmpRacerName.value, weight: tmpCarWeight.value, rank: tmpRacerRank.value, total_time: 0 });
-            tmpCarNum.value = "";
-            tmpRacerName.value = "";
-            tmpCarWeight.value = "";
-            tmpRacerRank.value = "Tiger";
-        }
-        //update display
-        //console.log(racerStats);
-        updateRacerStatsList();
-    };
 
+            if (modButton.innerHTML == "Update Racer") {
+                //now change to read Update Racer
+                modButton.innerHTML = "Add Racer"
+                //now change onclick to update
+                modButton.setAttribute('onclick', `addRacer("add")`);
+            }
+
+            break;
+    }
+
+    updateRacerStatsList();
 }
 
 function updateRacerStatsList() {
@@ -69,8 +107,8 @@ function updateRacerStatsList() {
 
         for (var i = 0; i < racerStats.length; i++) {
             tempOutStr += `<ul>`;
-            tempOutStr += `<span onclick="editRacer(this.parentNode, 'delete')" class="faicon">&#xf014</span>`;
             tempOutStr += `<span onclick="editRacer(this.parentNode, 'edit')" class="faicon">&#xf040</span>`;
+            tempOutStr += `<span onclick="editRacer(this.parentNode, 'delete')" class="faicon">&#xf014</span>`;
             tempOutStr += `<li>Car Number: ${racerStats[i].car}</li>`;
             tempOutStr += `<li>Racer Name: ${racerStats[i].racer_name}</li>`;
             tempOutStr += `<li>Car Weight: ${racerStats[i].weight}</li>`;
@@ -145,64 +183,69 @@ function loadRacers() {
 }
 
 function editRacer(objCollection, type) {
-    var editDialog = document.getElementById("RacerStatsMod");
-    var editButtons = editDialog.getElementsByTagName("button");
-    //console.log(editButtons);
-    var modButton = editButtons[(editButtons.length - 1)];
-    //console.log(modButton.innerHTML);
-    //console.log(modButton.outerHTML);
+    //var editDialog = document.getElementById("RacerStatsMod");
+    var modButton = document.getElementById("buttonAddRacer");
     var liList = objCollection.getElementsByTagName("LI");
-    //console.log(liList);
-    //console.log(`Function type is ${type}`);
     var carNumEdit = document.getElementById("CarNum");
     var racerNameEdit = document.getElementById("RacerName");
     var carWeightEdit = document.getElementById("CarWeight");
     var racerRankEdit = document.getElementById("RacerRank");
+    var tempCarNum = 0;
+    var index = -1;
 
-    var testRegEx = /Car Number: (\d*\.?\d*)/.test(liList[0].innerHTML);
-    // console.log(`Test RegEx - ${testRegEx}`);
-
-    //make sure last button in list it the correct one
-    if (modButton.innerHTML == "Add Racer" && type == "edit") {
-        //now change to read Update Racer
-        modButton.innerHTML = "Update Racer"
-        //now change onclick to update
-        modButton.setAttribute('onclick', `addRacer("update",${RegExp.$1})`);
-    }
-
-    if (testRegEx) {
-        var tempCarNum = RegExp.$1;
-        for (var i = 0; i < racerStats.length; i++) {
-            if (racerStats[i].car === tempCarNum) {
-                //console.log(`Checking for entry ${i} in array ${(racerStats[i].car === tempCarNum)}`);
-                if (type == "edit") {
-                    carNumEdit.value = racerStats[i].car;
-                    racerNameEdit.value = racerStats[i].racer_name;
-                    carWeightEdit.value = racerStats[i].weight;
-                    racerRankEdit.value = racerStats[i].rank;
-                    //racerStats.splice(i, 1);
-
-                }
-
-                if (type == "delete") {
-                    racerStats.splice(i, 1);
-                    //updateRacerStatsList();
-                    carNumEdit.value = "";
-                    racerNameEdit.value = "";
-                    carWeightEdit.value = "";
-                    racerRankEdit.value = "Tiger";
-                    if (modButton.innerHTML == "Update Racer") {
-                        //now change to read Update Racer
-                        modButton.innerHTML = "Add Racer"
-                        //now change onclick to update
-                        modButton.setAttribute('onclick', `addRacer("add")`);
-                    }
-
-                }
-                break;
-            }
-
+    //find out which entry was clicked on
+    for (var i = 0; i < liList.length; i++) {
+        var testRegEx = /Car Number: (\d*\.?\d*)/.test(liList[i].innerHTML);
+        // console.log(`Test RegEx - ${testRegEx}`);
+        if (testRegEx) {
+            tempCarNum = RegExp.$1;
+            break;
         }
     }
+
+    //find the index position of the entry in the array
+    index = checkKeyValue(racerStats, "car", tempCarNum)
+    /*for (var i = 0; i < racerStats.length; i++) {
+        if (racerStats[i].car === tempCarNum) {
+            index = i;
+            break;
+        }
+    }*/
+
+    //now let's deal with the delete or edit
+    switch (type) {
+        case "edit":
+            //check to see if the button is Add or Update - change if needed
+            if (modButton.innerHTML == "Add Racer") {
+                //now change to read Update Racer
+                modButton.innerHTML = "Update Racer"
+                //now change onclick to update
+                modButton.setAttribute('onclick', `addRacer("update",${RegExp.$1})`);
+            }
+            carNumEdit.value = racerStats[index].car;
+            racerNameEdit.value = racerStats[index].racer_name;
+            carWeightEdit.value = racerStats[index].weight;
+            racerRankEdit.value = racerStats[index].rank;
+
+            break;
+
+        case "delete":
+            racerStats.splice(index, 1);
+            //updateRacerStatsList();
+            carNumEdit.value = "";
+            racerNameEdit.value = "";
+            carWeightEdit.value = "";
+            racerRankEdit.value = "Tiger";
+            if (modButton.innerHTML == "Update Racer") {
+                //now change to read Update Racer
+                modButton.innerHTML = "Add Racer"
+                //now change onclick to update
+                modButton.setAttribute('onclick', `addRacer("add")`);
+            }
+
+            break;
+    }
+
+    //update the display of racers
     updateRacerStatsList();
 }

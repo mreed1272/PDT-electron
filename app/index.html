@@ -138,7 +138,7 @@
 				<div>
 					<table style="border-collapse: collapse">
 						<tr>
-							<td><label for="CarNum">Car No.:</label></td>
+							<td><label for="CarNum">Car Number:</label></td>
 							<td><input type="text" name="CarNum" id="CarNum" value="" placeholder="Car Number"></td>
 						</tr>
 						<tr>
@@ -146,7 +146,7 @@
 							<td><input type="text" name="RacerName" id="RacerName" value="" placeholder="Racer Name"></td>
 						</tr>
 						<tr>
-							<td><label for="CarWeight">Car Weight (oz.):</label></td>
+							<td><label for="CarWeight">Car Weight (oz):</label></td>
 							<td><input type="text" name="CarWeight" id="CarWeight" value="" placeholder="Car Weight"></td>
 						</tr>
 						<tr>
@@ -163,7 +163,8 @@
 						</tr>
 					</table>
 					<br/>
-					<button type="button" onclick="addRacer('add')">Add Racer</button>
+					<button id="buttonAddRacer" type="button" onclick="addRacer('add')">Add Racer</button>
+					<button id="buttonCancelRacer" type="button" onclick="addRacer('cancel')">Cancel</button>
 				</div>
 			</div>
 			<div id="RacerStatsList"></div>

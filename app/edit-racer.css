@@ -1,7 +1,7 @@
 #RacerStatsMod {
     float: left;
     width: 300px;
-    height: calc(100vh - 150px);
+    /*height: calc(100vh - 150px);*/
 }
 
 #RacerStatsMod div {
@@ -14,13 +14,14 @@
 #RacerStatsList {
     display: flex;
     flex-flow: row wrap;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-content: flex-start;
     align-items: flex-start;
     height: calc(100vh - 150px);
-    padding: 15px;
+    padding: 10px;
     overflow: auto;
-    width: calc(100% - 300px);
+    /*width: calc(100% - 300px);*/
+    min-width: 350px;
 }
 
 #RacerStatsList ul{
