@@ -83,11 +83,18 @@ ipcMain.on('spectator-window', (event, command) => {
             //transparent: true
         });
         spectatorWindow.loadURL(`file://${__dirname}/app/spectator.html`);
-        spectatorWindow.once('ready-to-show', ()=> {
-            if (command === "open"){
+
+        spectatorWindow.once('ready-to-show', () => {
+            if (command === "open") {
                 spectatorWindow.show();
             }
         })
+
+        spectatorWindow.on('closed', () => {
+            console.log("User clicked on close for spectator window - clear the reference.")
+            spectatorWindow = null;
+        });
+
     };
 
 });

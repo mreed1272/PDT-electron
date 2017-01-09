@@ -85,64 +85,64 @@ function finishRace() {
 
     switch (RacerRank[0]) {
         case "Tiger":
-            var racerImg1 = "pictures/tiger.jpg";
+            var racerImg1 = "images/tiger.jpg";
             break;
         case "Wolf":
-            var racerImg1 = "pictures/wolf.jpg";
+            var racerImg1 = "images/wolf.jpg";
             break;
         case "Bear":
-            var racerImg1 = "pictures/bear.jpg";
+            var racerImg1 = "images/bear.jpg";
             break;
         case "Webelos":
-            var racerImg1 = "pictures/webelos.jpg";
+            var racerImg1 = "images/webelos.jpg";
             break;
         case "AOL":
-            var racerImg1 = "pictures/aol2.jpg";
+            var racerImg1 = "images/aol2.jpg";
             break;
         case "none":
-            var racerImg1 = "pictures/blank.jpg";
+            var racerImg1 = "images/pdt-main-256.png";
             break;
     };
 
     switch (RacerRank[1]) {
         case "Tiger":
-            var racerImg2 = "pictures/tiger.jpg";
+            var racerImg2 = "images/tiger.jpg";
             break;
         case "Wolf":
-            var racerImg2 = "pictures/wolf.jpg";
+            var racerImg2 = "images/wolf.jpg";
             break;
         case "Bear":
-            var racerImg2 = "pictures/bear.jpg";
+            var racerImg2 = "images/bear.jpg";
             break;
         case "Webelos":
-            var racerImg2 = "pictures/webelos.jpg";
+            var racerImg2 = "images/webelos.jpg";
             break;
         case "AOL":
-            var racerImg2 = "pictures/aol2.jpg";
+            var racerImg2 = "images/aol2.jpg";
             break;
         case "none":
-            var racerImg2 = "pictures/blank.jpg";
+            var racerImg2 = "images/pdt-main-256.png";
             break;
     };
 
     switch (RacerRank[2]) {
         case "Tiger":
-            var racerImg3 = "pictures/tiger.jpg";
+            var racerImg3 = "images/tiger.jpg";
             break;
         case "Wolf":
-            var racerImg3 = "pictures/wolf.jpg";
+            var racerImg3 = "images/wolf.jpg";
             break;
         case "Bear":
-            var racerImg3 = "pictures/bear.jpg";
+            var racerImg3 = "images/bear.jpg";
             break;
         case "Webelos":
-            var racerImg3 = "pictures/webelos.jpg";
+            var racerImg3 = "images/webelos.jpg";
             break;
         case "AOL":
-            var racerImg3 = "pictures/aol2.jpg";
+            var racerImg3 = "images/aol2.jpg";
             break;
         case "none":
-            var racerImg3 = "pictures/blank.jpg";
+            var racerImg3 = "images/pdt-main-256.png";
             break;
     };
     var out1 = NameRacer[0] + "<br>#" + CarNum[0] + "<br> Total Time: " + TotalTime[0].toFixed(4) + " min<br> Car Weight: " + CarWt[0] + " oz";
@@ -315,64 +315,64 @@ function setDisplay(HNum, L1, L2, L3, Lane1ID, Lane2ID, Lane3ID) {
 
     switch (RacerRank1) {
         case "Tiger":
-            var racerImg1 = "pictures/tiger.jpg";
+            var racerImg1 = "images/tiger.jpg";
             break;
         case "Wolf":
-            var racerImg1 = "pictures/wolf.jpg";
+            var racerImg1 = "images/wolf.jpg";
             break;
         case "Bear":
-            var racerImg1 = "pictures/bear.jpg";
+            var racerImg1 = "images/bear.jpg";
             break;
         case "Webelos":
-            var racerImg1 = "pictures/webelos.jpg";
+            var racerImg1 = "images/webelos.jpg";
             break;
         case "AOL":
-            var racerImg1 = "pictures/aol2.jpg";
+            var racerImg1 = "images/aol2.jpg";
             break;
         case "none":
-            var racerImg1 = "pictures/blank.jpg";
+            var racerImg1 = "images/pdt-main-256.png";
             break;
     }
 
     switch (RacerRank2) {
         case "Tiger":
-            var racerImg2 = "pictures/tiger.jpg";
+            var racerImg2 = "images/tiger.jpg";
             break;
         case "Wolf":
-            var racerImg2 = "pictures/wolf.jpg";
+            var racerImg2 = "images/wolf.jpg";
             break;
         case "Bear":
-            var racerImg2 = "pictures/bear.jpg";
+            var racerImg2 = "images/bear.jpg";
             break;
         case "Webelos":
-            var racerImg2 = "pictures/webelos.jpg";
+            var racerImg2 = "images/webelos.jpg";
             break;
         case "AOL":
-            var racerImg2 = "pictures/aol2.jpg";
+            var racerImg2 = "images/aol2.jpg";
             break;
         case "none":
-            var racerImg2 = "pictures/blank.jpg";
+            var racerImg2 = "images/pdt-main-256.png";
             break;
     }
 
     switch (RacerRank3) {
         case "Tiger":
-            var racerImg3 = "pictures/tiger.jpg";
+            var racerImg3 = "images/tiger.jpg";
             break;
         case "Wolf":
-            var racerImg3 = "pictures/wolf.jpg";
+            var racerImg3 = "images/wolf.jpg";
             break;
         case "Bear":
-            var racerImg3 = "pictures/bear.jpg";
+            var racerImg3 = "images/bear.jpg";
             break;
         case "Webelos":
-            var racerImg3 = "pictures/webelos.jpg";
+            var racerImg3 = "images/webelos.jpg";
             break;
         case "AOL":
-            var racerImg3 = "pictures/aol2.jpg";
+            var racerImg3 = "images/aol2.jpg";
             break;
         case "none":
-            var racerImg3 = "pictures/blank.jpg";
+            var racerImg3 = "images/pdt-main-256.png";
             break;
     }
 
