@@ -189,6 +189,7 @@ a:active {
 	padding: 10px 20px;
 	height: calc(100% - 170px);
 	overflow: auto;
+	width: 65em;
 }
 
 #RacerInfo table {
