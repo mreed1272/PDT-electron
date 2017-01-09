@@ -1,3 +1,4 @@
+var patt = "Arduino";
 
 function initSerial() {
     console.log("Initializing serial port");
@@ -26,7 +27,7 @@ function initSerial() {
             for (var i = 0; i < footerElem.length; i++) {
                 footerElem[i].style.visibility = "hidden";
             }
-            document.getElementById("serial-timer").innerHTML = "No Timer Connected";
+            document.getElementById("serial-timer").innerHTML = "No Serial Ports";
             document.getElementById("serial-timer").style.visibility = "visible";
             if (!initLane) {
                 initLanes(numLanes, "tlane");

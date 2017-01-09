@@ -37,7 +37,9 @@ function clearHistory() {
 }
 
 function saveHistory() {
-    dialog.showSaveDialog({
+    var currentWindowObj = remote.getCurrentWindow();
+
+    dialog.showSaveDialog(currentWindowObj, {
         title: 'Save History file. . .',
         filters: [
             {
@@ -63,7 +65,9 @@ function saveHistory() {
 }
 
 function loadHistory() {
-    dialog.showOpenDialog({
+    var currentWindowObj = remote.getCurrentWindow();
+
+    dialog.showOpenDialog(currentWindowObj, {
         title: 'Select history file to open:',
         filters: [
             {

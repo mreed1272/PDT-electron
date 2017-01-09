@@ -134,8 +134,9 @@ function updateRacerStatsList() {
 }
 function saveRacers() {
     var racerFileDiv = document.getElementById("racer-data-file");
+    var currentWindowObj = remote.getCurrentWindow();
 
-    dialog.showSaveDialog({
+    dialog.showSaveDialog(currentWindowObj, {
         title: 'Save Racer Stats file. . .',
         filters: [
             {
@@ -158,8 +159,10 @@ function saveRacers() {
 
 function loadRacers() {
     var racerFileDiv = document.getElementById("racer-data-file");
+    var currentWindowObj = remote.getCurrentWindow();
+    //console.log(currentWindowObj);
 
-    dialog.showOpenDialog({
+    dialog.showOpenDialog(currentWindowObj, {
         title: 'Select Racer Stats file to open:',
         filters: [
             {

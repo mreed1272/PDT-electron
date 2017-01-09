@@ -17,45 +17,7 @@
     align-items: center;
     font-size: 1.5em;
 }
-#gate-timer.closed {
-    border: 3px outset gold;
-    background-color: darkgreen;
-    color: #eee;
-}
-#gate-timer.open {
-    border: 3px inset gold;
-    background-color: darkred;
-    color: #eee;
-}
-#status-timer {
-    background-color: darkblue;
-    color: #eee;
-    border: 3px solid gold;
-}
-#status-timer.ready {
-    border-style: outset;
-    background-color: darkblue;
-}
-#status-timer.racing {
-    border-style: inset;
-    background-color: darkgreen;
-}
-#status-timer.finished {
-    border-style: groove;
-    background-color: darkred;
-}
 
-#timer-version {
-    border: 3px outset gold;
-    background-color: darkblue;
-    color: #eee;
-}
-
-#lanes-timer {
-    border: 3px outset gold;
-    background-color: darkblue;
-    color: #eee;
-}
 #lane-times-contain {
     float: left;
     /*width: 30%;*/

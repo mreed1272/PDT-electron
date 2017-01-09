@@ -5,8 +5,7 @@ const shell = electron.shell;
 const fs = require('fs');
 const ipcRenderer = electron.ipcRenderer;
 
-//const serialport = require('serialport');
-var SerialPort = require('serialport');//serialport.SerialPort;
+var SerialPort = require('serialport');
 
 var PDT = null;
 
@@ -26,7 +25,6 @@ var raceInformation = [];
 var ranks = [];
 var racerStatsFile = "";
 
-var patt = "Arduino";
 
 var comPorts = [];
 
