@@ -189,7 +189,7 @@ a:active {
 	padding: 10px 20px;
 	height: calc(100% - 170px);
 	overflow: auto;
-	width: 65em;
+	width: 55em;
 }
 
 #RacerInfo table {
@@ -211,7 +211,7 @@ a:active {
 }
 
 #RacerInfo td:nth-child(2), #RacerInfo th:nth-child(2) {
-	width: 25em;
+	width: 15em;
 	text-align: left; 
 }
 #RacerInfo td:nth-child(3), #RacerInfo th:nth-child(3) {
