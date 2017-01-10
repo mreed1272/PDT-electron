@@ -131,7 +131,14 @@ function updateRacerStatsList() {
 
     racerListDiv.innerHTML = tempOutStr;
     mainRacerListDiv.innerHTML = tempOutTable;
+
+    if (racerStats.length == 0){
+        document.getElementById("RacerInfo").style.display = "none";
+    } else if (racerStats.length != 0) {
+        document.getElementById("RacerInfo").style.display = "block";
+    }
 }
+
 function saveRacers() {
     var racerFileDiv = document.getElementById("racer-data-file");
     var currentWindowObj = remote.getCurrentWindow();
@@ -183,6 +190,15 @@ function loadRacers() {
             updateRacerStatsList();
         }
     })
+}
+
+function clearRacers(){
+    var racerFileDiv = document.getElementById("racer-data-file");
+    
+    racerStats.length = 0;
+    racerFileDiv.innerHTML = "none";
+    racerStatsFile = "";
+    updateRacerStatsList();
 }
 
 function editRacer(objCollection, type) {

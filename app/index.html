@@ -46,29 +46,79 @@
 		</ul>
 		<!--End of defining menu tabs-->
 
-<!--Tab Content - Main Tab Body-->
+		<!--Tab Content - Main Tab Body-->
 		<div class="tabcontent" id="mainT">
-			Main Content
-			<div id="RaceInfo">
-				<p>Race Information:</p>
-				<ul>
-					<li>Organization Name</li>
-					<li>Number of Racers</li>
-					<li>Date of Race</li>
-					<li>Status of Race</li>
-				</ul>
-				<button id="load-race">Load Race</button>
-				<button id="save-race">Save Race</button>
-				<button id="edit-race">Edit Race</button>
-			</div>
-			<div id="RacerInfo">
-				<p>Table of Racers - to be filled in from file</p>
-				
-			</div>
-		</div>
-<!--End Tab Content - Main Tab Body-->
 
-<!--Tab Content - Test Track-->
+			<div id="RaceInfo">
+				<button id="new-race" type="button" onclick="newRace()">New Race</button>
+				<button id="edit-race" type="button" onclick="editRace()">Edit Race</button>
+				<button id="load-race" type="button" onclick="loadRace()">Load Race</button>
+				<button id="save-race" type="button" onclick="saveRace()">Save Race</button>
+
+				<div id="RaceInfoDisplay"></div>
+				<!-- Create a popup modal to enter the information when New or Edit is clicked -->
+				<div id="RaceInfoEditModal" class="modal">
+					<div class="modal-content">
+						<span class="close">&times;</span>
+						<div id="editRaceDialog">
+							<table>
+								<tr>
+									<td>Organization Name:</td>
+									<td>
+										<input type="text" name="orgName" id="orgName" value="">
+									</td>
+								</tr>
+								<tr>
+									<td>Organization Type:</td>
+									<td>
+										<select id="orgTypeSelect">
+											<option value="Cubscout">Cub Scout</option>
+											<option value="Boyscout">Boy Scout</option>
+											<option value="Other">Other (grade based ranks)</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<td>Ranks to include:</td>
+									<td id="orgRankInclude"></td>
+								</tr>
+								<tr>
+									<td>Number of Heats:</td>
+									<td><input type="text" name="raceHeats" id="raceHeats" value=""></td>
+								</tr>
+								<tr>
+									<td>Scoring method:</td>
+									<td>
+										<select id="raceScoreMethod">
+											<option value="timed">Fastest Time</option>
+											<option value="points">Point Elimination</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<td>Race Coordinator:</td>
+									<td>
+										<input type="text" name="raceCoord" id="raceCoord" value="">
+									</td>
+								</tr>
+								<tr>
+									<td>Race Date:</td>
+									<td>
+										<input type="text" name="raceDate" id="raceDate" value="">
+									</td>
+								</tr>
+							</table>
+						</div><!--editRaceDialog-->
+					</div><!--modal content-->
+
+				</div><!--raceInfoEdit modal-->
+			</div><!--raceInfo-->
+
+			<div id="RacerInfo"></div>
+		</div>
+		<!--End Tab Content - Main Tab Body-->
+
+		<!--Tab Content - Test Track-->
 		<div class="tabcontent" id="testTrackT">
 			<div class="flex-contain">
 				<div style="margin-right: 20px;"> Choose Lane to test:
@@ -103,39 +153,59 @@
 							<th>Delta (s)</th>
 						</tr>
 
-					</table>
+					</table>			
 				</div>
 			</div>
-			<form id="serial-display" onsubmit="return false;"> Serial Command: <input type="text" id="serial-command">
+			<form id="serial-display" onsubmit="return false;"> Serial Command:
+				<input type="text" id="serial-command">
 				<button id="send-serial" onclick="sendSerialForm()">Send</button><br/>
 				<div id="serial-output" class="div-contain-shadow"></div>
 			</form>
 
 		</div>
-<!--End Tab Content - Test Track-->
+		<!--End Tab Content - Test Track-->
 
-<!--Tab Content - Racers-->
+		<!--Tab Content - Racers-->
 		<div class="tabcontent" id="editRacersT">
 			<div id="RacerStatsMod">
-				<p><label>Racer File: </label><span id="racer-data-file">none</span></p>
+				<p>
+					<label>Racer File: </label>
+					<span id="racer-data-file">none</span>
+				</p>
 				<button type="button" onclick="loadRacers()">Load File</button>
 				<button type="button" onclick="saveRacers()">Save File</button>
+				<button type="button" onclick="clearRacers()">Clear Racers</button>
+
 				<div>
 					<table style="border-collapse: collapse">
 						<tr>
-							<td><label for="CarNum">Car Number:</label></td>
-							<td><input type="text" name="CarNum" id="CarNum" value="" placeholder="Car Number"></td>
+							<td>
+								<label for="CarNum">Car Number:</label>
+							</td>
+							<td>
+								<input type="text" name="CarNum" id="CarNum" value="" placeholder="Car Number">
+							</td>
 						</tr>
 						<tr>
-							<td><label for="RacerName">Racer Name:</label></td>
-							<td><input type="text" name="RacerName" id="RacerName" value="" placeholder="Racer Name"></td>
+							<td>
+								<label for="RacerName">Racer Name:</label>
+							</td>
+							<td>
+								<input type="text" name="RacerName" id="RacerName" value="" placeholder="Racer Name">
+							</td>
 						</tr>
 						<tr>
-							<td><label for="CarWeight">Car Weight (oz):</label></td>
-							<td><input type="text" name="CarWeight" id="CarWeight" value="" placeholder="Car Weight"></td>
+							<td>
+								<label for="CarWeight">Car Weight (oz):</label>
+							</td>
+							<td>
+								<input type="text" name="CarWeight" id="CarWeight" value="" placeholder="Car Weight">
+							</td>
 						</tr>
 						<tr>
-							<td><label for="RacerRank">Racer Rank:</label></td>
+							<td>
+								<label for="RacerRank">Racer Rank:</label>
+							</td>
 							<td>
 								<select id="RacerRank">
 									<option value="Tiger">Tiger</option>
@@ -154,17 +224,17 @@
 			</div>
 			<div id="RacerStatsList"></div>
 		</div>
-<!--End Tab Content - Racers-->
+		<!--End Tab Content - Racers-->
 
-<!--Tab Content - Run the Race-->
+		<!--Tab Content - Run the Race-->
 		<div class="tabcontent" id="runRaceT">
 			Run the Race
 			<button type="button" id="buttonSpecWinOpen" onclick="specWin('open');">Open Spectator Window</button>
 			<button type="button" id="buttonSpecWinClose" onclick="specWin('close');">Close Spectator Window</button>
 		</div>
-<!--End Tab Content - Run the Race-->
+		<!--End Tab Content - Run the Race-->
 
-<!--Tab Content - Configuration-->
+		<!--Tab Content - Configuration-->
 		<div class="tabcontent" id="PDT-configT">
 			<p>Timer configuration:
 				<select>
@@ -175,7 +245,7 @@
 			<div id="timer-config">
 				<p>Serial Port:
 					<select id="serial-port-list">
-						<option value="auto">auto</option>						
+						<option value="auto">auto</option>
 					</select>
 				</p>
 				<p>Serial Commands</p>
@@ -200,13 +270,14 @@
 					<li>Lane 3 Time : 3 - <i>[time in seconds]</i></li>
 				</ul>
 			</div>
-
-<!--End Tab Content - Configuration-->
 		</div>
+		<!--End Tab Content - Configuration-->
 
-	</div><!--End TabBox-->
+	</div>
+	<!--End TabBox-->
 
-</div><!--End Main-->
+</div>
+<!--End Main-->
 
 <footer class="footer">
 	<span class="footer-item" id="timer-version"> </span>

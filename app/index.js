@@ -28,10 +28,23 @@ var racerStatsFile = "";
 
 var comPorts = [];
 
+window.onclick = (event) => {
+    if (event.target == document.getElementById("RaceInfoEditModal")) {
+        document.getElementById("RaceInfoEditModal").style.display = "none";
+    }
+}
 
 function onBodyLoad() {
     document.getElementById("mainT").style.display = "block";
+    document.getElementById("RacerInfo").style.display = "none";
     initSerial();
+
+    window.onclick = (event) => {
+        if (event.target == document.getElementById("RaceInfoEditModal")) {
+            document.getElementById("RaceInfoEditModal").style.display = "none";
+        }
+    }
+
 }
 
 function openTabContent(evt, tabName) {
@@ -130,11 +143,37 @@ function clearText(elemID, newTxt) {
     tempElem.innerHTML = newTxt;
 }
 
-function checkKeyValue(arrayObj,key,value){
-    for (var i = 0; i < arrayObj.length; i++){
-        if (arrayObj[i][key] == value){
+function checkKeyValue(arrayObj, key, value) {
+    for (var i = 0; i < arrayObj.length; i++) {
+        if (arrayObj[i][key] == value) {
             return i;
         }
     }
     return -1;
 }
+
+function loadRace() {
+    console.log("Try to load race information from file");
+}
+
+function saveRace() {
+    console.log("Try to save race information to file");
+}
+
+function editRace() {
+    //not sure if this function is needed
+    console.log("Edit the race information");
+    var editDialog = document.getElementById("RaceInfoEditModal");
+    var closeSpan = document.getElementsByClassName("close")[0];
+
+    editDialog.style.display = "block";
+
+    closeSpan.onclick = () => {
+        editDialog.style.display = "none";
+    };
+}
+
+function newRace() {
+    console.log("Prompt for race information");
+}
+

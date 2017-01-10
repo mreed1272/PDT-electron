@@ -34,6 +34,10 @@
     width: 285px;
 }
 
+#RacerStatsList ul:hover {
+    box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.5), 5px 5px 13px 1px rgba(0,0,0,0.3);
+}
+
 .faicon {
     font-family: FontAwesome; 
     position: relative; 
@@ -45,5 +49,5 @@
     margin-right: 10px;
 }
 .faicon:hover {
-    text-shadow: 2px 2px 6px rgb(252, 209, 22);
+    text-shadow: -1px -1px 3px rgba(252, 209, 22,1), 2px 2px 5px rgba(0,0,0,0.6),4px 4px 11px rgba(0,0,0,0.3);
 }

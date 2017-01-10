@@ -16,7 +16,8 @@ app.on('ready', () => {
         frame: true,
         x: 25,
         y: 25,
-        show: false
+        show: false,
+        icon: `${__dirname}/app/images/PDT-main.png`
         //transparent: true
     });
     mainWindow.loadURL(`file://${__dirname}/app/index.html`);
@@ -27,7 +28,9 @@ app.on('ready', () => {
         width: 1024,
         height: 768,
         frame: true,
-        show: false
+        show: false,
+        skipTaskbar: true,
+        icon: `${__dirname}/app/images/PDT-main.png`
         //transparent: true
     });
     spectatorWindow.loadURL(`file://${__dirname}/app/spectator.html`);
