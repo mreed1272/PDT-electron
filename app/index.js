@@ -5,9 +5,6 @@ const shell = electron.shell;
 const fs = require('fs');
 const ipcRenderer = electron.ipcRenderer;
 
-var SerialPort = require('serialport');
-
-var PDT = null;
 
 var lastSerialCommand = "";
 var lastSerialResponse = "";
@@ -24,26 +21,29 @@ var racerStats = [];
 var raceInformation = [];
 var ranks = [];
 var racerStatsFile = "";
+var optionsPDT = [];
 
 
-var comPorts = [];
 
-window.onclick = (event) => {
+
+/*window.onclick = (event) => {
     if (event.target == document.getElementById("RaceInfoEditModal")) {
         document.getElementById("RaceInfoEditModal").style.display = "none";
     }
-}
+}*/
 
 function onBodyLoad() {
     document.getElementById("mainT").style.display = "block";
     document.getElementById("RacerInfo").style.display = "none";
+
+    loadOptions();
     initSerial();
 
-    window.onclick = (event) => {
+    /*window.onclick = (event) => {
         if (event.target == document.getElementById("RaceInfoEditModal")) {
             document.getElementById("RaceInfoEditModal").style.display = "none";
         }
-    }
+    }*/
 
 }
 
@@ -68,16 +68,20 @@ function openTabContent(evt, tabName) {
 }
 
 
-function loadSelect(selectID, optListArr, selectItem) {
+function loadSelect(selectID, optValueArr, selectItem, optTextArr) {
     var selElem = document.getElementById(selectID);
     //var option = document.createElement("option");
-
-    for (var i = 0; i < optListArr.length; i++) {
+    //console.log(`Value of optTextArr is ${optTextArr}`);
+    for (var i = 0; i < optValueArr.length; i++) {
         var option = document.createElement("option");
-        option.text = optListArr[i];
-        option.value = optListArr[i];
+        if (optTextArr !== undefined) {
+            option.text = optTextArr[i];
+        } else {
+            option.text = optValueArr[i];
+        };
+        option.value = optValueArr[i];
         selElem.add(option, i);
-        if (optListArr[i].value == selectItem) {
+        if (optValueArr[i].value == selectItem) {
             selElem.selectedIndex = i;
         }
     }
@@ -143,15 +147,6 @@ function clearText(elemID, newTxt) {
     tempElem.innerHTML = newTxt;
 }
 
-function checkKeyValue(arrayObj, key, value) {
-    for (var i = 0; i < arrayObj.length; i++) {
-        if (arrayObj[i][key] == value) {
-            return i;
-        }
-    }
-    return -1;
-}
-
 function loadRace() {
     console.log("Try to load race information from file");
 }
@@ -165,15 +160,67 @@ function editRace() {
     console.log("Edit the race information");
     var editDialog = document.getElementById("RaceInfoEditModal");
     var closeSpan = document.getElementsByClassName("close")[0];
+    var headerTxt = editDialog.getElementsByTagName("H2")[0];
+    //console.log(headerTxt);
+
+    headerTxt.innerHTML = "Edit Race";
 
     editDialog.style.display = "block";
 
     closeSpan.onclick = () => {
         editDialog.style.display = "none";
+        return false;
     };
 }
 
 function newRace() {
     console.log("Prompt for race information");
+    var editDialog = document.getElementById("RaceInfoEditModal");
+    var closeSpan = document.getElementsByClassName("close")[0];
+    var headerTxt = editDialog.getElementsByTagName("H2")[0];
+    //console.log(headerTxt);
+
+    headerTxt.innerHTML = "New Race";
+
+    editDialog.style.display = "block";
+
+    closeSpan.onclick = () => {
+        editDialog.style.display = "none";
+        return false;
+    };
 }
 
+function loadOptions() {
+    console.log("Loading the options/variable file");
+    //load the config json file
+    var tmpData = fs.readFileSync(`${__dirname}/config/default-config.json`);
+    optionsPDT = JSON.parse(tmpData);
+    //console.log(optionsPDT);
+
+    //load default options for cub scout organization
+    //var txtTmp = checkKeyValue(optionsPDT.OrgType, "name", "Cub Scout")
+    loadSelect("RacerRank", optionsPDT.OrgType[checkKeyValue(optionsPDT.OrgType, "name", "Cub Scout")].rank_value, "Tiger", optionsPDT.OrgType[checkKeyValue(optionsPDT.OrgType, "name", "Cub Scout")].rank_text);
+    loadSelect("OrgTypeSelect",getKeyValues(optionsPDT.OrgType, "name"),"Cub Scout");
+}
+
+function getKeyValues(objArr, key) {
+    var tmpArr = [];
+    if (Array.isArray(objArr)) {
+        for (var i = 0; i < objArr.length; i++) {
+            tmpArr.push(objArr[i][key]);
+        }
+        return tmpArr;
+    }
+    return -1;
+}
+
+function checkKeyValue(arrayObj, key, value) {
+    if (Array.isArray(arrayObj)) {
+        for (var i = 0; i < arrayObj.length; i++) {
+            if (arrayObj[i][key] == value) {
+                return i;
+            }
+        }
+    }
+    return -1;
+}

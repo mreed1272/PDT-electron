@@ -59,8 +59,11 @@
 				<!-- Create a popup modal to enter the information when New or Edit is clicked -->
 				<div id="RaceInfoEditModal" class="modal">
 					<div class="modal-content">
-						<span class="close">&times;</span>
-						<div id="editRaceDialog">
+						<div class="modal-header">
+							<span class="close">&times;</span>
+							<h2></h2>
+						</div>
+						<div class="modal-body" id="editRaceDialog">
 							<table>
 								<tr>
 									<td>Organization Name:</td>
@@ -71,11 +74,7 @@
 								<tr>
 									<td>Organization Type:</td>
 									<td>
-										<select id="orgTypeSelect">
-											<option value="Cubscout">Cub Scout</option>
-											<option value="Boyscout">Boy Scout</option>
-											<option value="Other">Other (grade based ranks)</option>
-										</select>
+										<select id="OrgTypeSelect"></select>
 									</td>
 								</tr>
 								<tr>
@@ -108,7 +107,11 @@
 									</td>
 								</tr>
 							</table>
-						</div><!--editRaceDialog-->
+						</div><!--editRaceDialog & modal-body-->
+						<div class="modal-footer">
+							<button type="button">Save</button>
+							<button type="button">Cancel</button>
+						</div>
 					</div><!--modal content-->
 
 				</div><!--raceInfoEdit modal-->
@@ -207,13 +210,7 @@
 								<label for="RacerRank">Racer Rank:</label>
 							</td>
 							<td>
-								<select id="RacerRank">
-									<option value="Tiger">Tiger</option>
-									<option value="Wolf">Wolf</option>
-									<option value="Bear">Bear</option>
-									<option value="Webelos">Webelos</option>
-									<option value="AOL">Arrow of Light</option>
-								</select>
+								<select id="RacerRank"></select>
 							</td>
 						</tr>
 					</table>

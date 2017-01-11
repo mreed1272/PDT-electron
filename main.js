@@ -10,6 +10,12 @@ var splashWindow = null;
 //global.fileToOpen = null;
 
 app.on('ready', () => {
+    let displays = electron.screen.getAllDisplays();
+    let externalDisplay = displays.find((display) => {
+        return display.bounds.x !== 0 || display.bounds.y !== 0;
+    })
+    //console.log(externalDisplay);
+
     mainWindow = new BrowserWindow({
         width: 1280,
         height: 720,
@@ -24,15 +30,29 @@ app.on('ready', () => {
 
     mainWindow.openDevTools();
 
-    spectatorWindow = new BrowserWindow({
-        width: 1024,
-        height: 768,
-        frame: true,
-        show: false,
-        skipTaskbar: true,
-        icon: `${__dirname}/app/images/PDT-main.png`
-        //transparent: true
-    });
+    if (externalDisplay) {
+        spectatorWindow = new BrowserWindow({
+            width: externalDisplay.bounds.width,
+            height: externalDisplay.bounds.height,
+            frame: true,
+            show: false,
+            skipTaskbar: true,
+            icon: `${__dirname}/app/images/PDT-main.png`,
+            x: externalDisplay.bounds.x,
+            y: externalDisplay.bounds.y
+            //transparent: true
+        });
+    } else {
+        spectatorWindow = new BrowserWindow({
+            width: 1024,
+            height: 768,
+            frame: true,
+            show: false,
+            skipTaskbar: true,
+            icon: `${__dirname}/app/images/PDT-main.png`,
+            //transparent: true
+        });
+    };
     spectatorWindow.loadURL(`file://${__dirname}/app/spectator.html`);
 
     /*mainWindow.on('maximize', ()=> {
@@ -78,13 +98,34 @@ ipcMain.on('spectator-window', (event, command) => {
                 spectatorWindow.hide();
         }
     } else if (spectatorWindow === null) {
-        spectatorWindow = new BrowserWindow({
-            width: 1024,
-            height: 768,
-            frame: true,
-            show: false
-            //transparent: true
-        });
+        let displays = electron.screen.getAllDisplays();
+        let externalDisplay = displays.find((display) => {
+            return display.bounds.x !== 0 || display.bounds.y !== 0;
+        })
+
+        if (externalDisplay) {
+            spectatorWindow = new BrowserWindow({
+                width: externalDisplay.bounds.width,
+                height: externalDisplay.bounds.height,
+                frame: true,
+                show: false,
+                skipTaskbar: true,
+                icon: `${__dirname}/app/images/PDT-main.png`,
+                x: externalDisplay.bounds.x,
+                y: externalDisplay.bounds.y
+                //transparent: true
+            });
+        } else {
+            spectatorWindow = new BrowserWindow({
+                width: 1024,
+                height: 768,
+                frame: true,
+                show: false,
+                skipTaskbar: true,
+                icon: `${__dirname}/app/images/PDT-main.png`,
+                //transparent: true
+            });
+        };
         spectatorWindow.loadURL(`file://${__dirname}/app/spectator.html`);
 
         spectatorWindow.once('ready-to-show', () => {

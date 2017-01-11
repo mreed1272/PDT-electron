@@ -21,5 +21,10 @@
         {"name": "Lane 1 Time", "value": "1 - ", "regexValue": "(\\d) - (\\d+\\.\\d+)"},
         {"name": "Lane 2 Time", "value": "2 - ", "regexValue": "(\\d) - (\\d+\\.\\d+)"},
         {"name": "Lane 3 Time", "value": "3 - ", "regexValue": "(\\d) - (\\d+\\.\\d+)"}
+    ],
+    "OrgType": [
+        {"name": "Cub Scout", "rank_value": ["Lion","Tiger","Wolf","Bear","Webelos","AOL"], "rank_text": ["Lion","Tiger","Wolf","Bear","Webelos","Arrow of Light"]},
+        {"name": "Boy Scout", "rank_value": ["Tenderfoot","First Class", "Second Class","Star","Life","Eagle"],"rank_text": ["Tenderfoot","First Class", "Second Class","Star","Life","Eagle"]},
+        {"name": "Other", "rank_value": ["1st", "2nd", "3rd", "4th", "5th"],"rank_text": ["1st grade", "2nd grade", "3rd grade", "4th grade", "5th grade"]}
     ]
 }

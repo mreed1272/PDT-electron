@@ -1,4 +1,8 @@
+var SerialPort = require('serialport');
+
+var PDT = null;
 var patt = "Arduino";
+var comPorts = [];
 
 function initSerial() {
     console.log("Initializing serial port");

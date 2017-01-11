@@ -299,6 +299,7 @@ a:active {
 	display: none;
 	position: fixed;
 	z-index: 10;
+	padding-top: 120px;
 	left: 0;
 	top: 0;
 	width: 100%;
@@ -308,11 +309,20 @@ a:active {
 }
 
 .modal-content {
+	position: relative;
 	background-color: #fefefe;
-	margin: 15% auto;
-	padding: 20px;
+	margin: auto;
+	padding: 0;
 	border: 1px solid #888;
-	width: 80%;
+	width: 50%;
+	box-shadow: 3px 3px 8px 0px rgba(0,0,0,0.3);
+	animation-name: animatetop;
+	animation-duration: 0.4s;
+}
+
+@keyframes animatetop {
+	from {top: -300px; opacity: 0}
+	to {top: 0; opacity: 1}
 }
 
 .close {
@@ -326,4 +336,20 @@ a:active {
 	color: black;
 	text-decoration: none;
 	cursor: pointer;
+}
+
+.modal-header {
+	padding: 2px 16px;
+	background-color: rgba(0,63,135,0.8);
+	color: white;
+}
+
+.modal-body {
+	padding: 2px 16px;
+}
+
+.modal-footer {
+	padding: 2px 16px;
+	background-color: rgba(0,63,135,0.8);
+	color: white;
 }
