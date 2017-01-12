@@ -158,34 +158,34 @@ function saveRace() {
 function editRace() {
     //not sure if this function is needed
     console.log("Edit the race information");
-    var editDialog = document.getElementById("RaceInfoEditModal");
+    var editSideDialog = document.getElementById("RaceSideDialog");
+
     var closeSpan = document.getElementsByClassName("close")[0];
-    var headerTxt = editDialog.getElementsByTagName("H2")[0];
-    //console.log(headerTxt);
-
-    headerTxt.innerHTML = "Edit Race";
-
-    editDialog.style.display = "block";
+    
+    
+    //editDialog.style.display = "block";
+    editSideDialog.style.width = "700px";
 
     closeSpan.onclick = () => {
-        editDialog.style.display = "none";
+        editSideDialog.style.width = "0";
         return false;
     };
 }
 
 function newRace() {
     console.log("Prompt for race information");
-    var editDialog = document.getElementById("RaceInfoEditModal");
+    var editSideDialog = document.getElementById("RaceSideDialog");
+    var headerDialog = editSideDialog.getElementsByTagName("h2")[0];
+
     var closeSpan = document.getElementsByClassName("close")[0];
-    var headerTxt = editDialog.getElementsByTagName("H2")[0];
-    //console.log(headerTxt);
-
-    headerTxt.innerHTML = "New Race";
-
-    editDialog.style.display = "block";
+    
+    headerDialog.innerHTML = "New Race";
+    
+    //editDialog.style.display = "block";
+    editSideDialog.style.width = "700px";
 
     closeSpan.onclick = () => {
-        editDialog.style.display = "none";
+        editSideDialog.style.width = "0";
         return false;
     };
 }
@@ -198,9 +198,17 @@ function loadOptions() {
     //console.log(optionsPDT);
 
     //load default options for cub scout organization
-    //var txtTmp = checkKeyValue(optionsPDT.OrgType, "name", "Cub Scout")
     loadSelect("RacerRank", optionsPDT.OrgType[checkKeyValue(optionsPDT.OrgType, "name", "Cub Scout")].rank_value, "Tiger", optionsPDT.OrgType[checkKeyValue(optionsPDT.OrgType, "name", "Cub Scout")].rank_text);
     loadSelect("OrgTypeSelect",getKeyValues(optionsPDT.OrgType, "name"),"Cub Scout");
+
+    // create checkboxes for ranks in Race Info dialog
+    var raceDialogRanks = document.getElementById("orgRankInclude");
+    var rankOut = "";
+    for (var i = 0; i < optionsPDT.OrgType[checkKeyValue(optionsPDT.OrgType, "name", "Cub Scout")].rank_text.length; i ++){
+    rankOut += `<label for="rank-${i}">${optionsPDT.OrgType[checkKeyValue(optionsPDT.OrgType, "name", "Cub Scout")].rank_text[i]}</label>`;
+    rankOut += `<input type="checkbox" id="rank-${i}" value="${optionsPDT.OrgType[checkKeyValue(optionsPDT.OrgType, "name", "Cub Scout")].rank_value[i]}">`;
+    }
+    raceDialogRanks.innerHTML = rankOut;
 }
 
 function getKeyValues(objArr, key) {

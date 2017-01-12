@@ -54,68 +54,60 @@
 				<button id="edit-race" type="button" onclick="editRace()">Edit Race</button>
 				<button id="load-race" type="button" onclick="loadRace()">Load Race</button>
 				<button id="save-race" type="button" onclick="saveRace()">Save Race</button>
+			</div>
 
-				<div id="RaceInfoDisplay"></div>
-				<!-- Create a popup modal to enter the information when New or Edit is clicked -->
-				<div id="RaceInfoEditModal" class="modal">
-					<div class="modal-content">
-						<div class="modal-header">
-							<span class="close">&times;</span>
-							<h2></h2>
-						</div>
-						<div class="modal-body" id="editRaceDialog">
-							<table>
-								<tr>
-									<td>Organization Name:</td>
-									<td>
-										<input type="text" name="orgName" id="orgName" value="">
-									</td>
-								</tr>
-								<tr>
-									<td>Organization Type:</td>
-									<td>
-										<select id="OrgTypeSelect"></select>
-									</td>
-								</tr>
-								<tr>
-									<td>Ranks to include:</td>
-									<td id="orgRankInclude"></td>
-								</tr>
-								<tr>
-									<td>Number of Heats:</td>
-									<td><input type="text" name="raceHeats" id="raceHeats" value=""></td>
-								</tr>
-								<tr>
-									<td>Scoring method:</td>
-									<td>
-										<select id="raceScoreMethod">
-											<option value="timed">Fastest Time</option>
-											<option value="points">Point Elimination</option>
-										</select>
-									</td>
-								</tr>
-								<tr>
-									<td>Race Coordinator:</td>
-									<td>
-										<input type="text" name="raceCoord" id="raceCoord" value="">
-									</td>
-								</tr>
-								<tr>
-									<td>Race Date:</td>
-									<td>
-										<input type="text" name="raceDate" id="raceDate" value="">
-									</td>
-								</tr>
-							</table>
-						</div><!--editRaceDialog & modal-body-->
-						<div class="modal-footer">
-							<button type="button">Save</button>
-							<button type="button">Cancel</button>
-						</div>
-					</div><!--modal content-->
+			<div id="RaceInfoDisplay"></div>
 
-				</div><!--raceInfoEdit modal-->
-			</div><!--raceInfo-->
+			<div id="RaceSideDialog" class="sideDialog">
+				<div style="display: flex; justify-content: space-between">
+					  <h2></h2><span class="close">&times;</span>
+  				</div>
+					<div id="RaceDialogContent" >
+						<table>
+							<tr>
+								<td>Organization Name:</td>
+								<td>
+									<input type="text" name="orgName" id="orgName" value="">
+								</td>
+							</tr>
+							<tr>
+								<td>Organization Type:</td>
+								<td>
+									<select id="OrgTypeSelect"></select>
+								</td>
+							</tr>
+							<tr>
+								<td>Ranks to include:</td>
+								<td id="orgRankInclude"></td>
+							</tr>
+							<tr>
+								<td>Number of Heats:</td>
+								<td><input type="text" name="raceHeats" id="raceHeats" value=""></td>
+							</tr>
+							<tr>
+								<td>Scoring method:</td>
+								<td>
+									<select id="raceScoreMethod">
+										<option value="timed">Fastest Time</option>
+										<option value="points">Point Elimination</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td>Race Coordinator:</td>
+								<td>
+									<input type="text" name="raceCoord" id="raceCoord" value="">
+								</td>
+							</tr>
+							<tr>
+								<td>Race Date:</td>
+								<td>
+									<input type="text" name="raceDate" id="raceDate" value="">
+								</td>
+							</tr>
+						</table>
+					</div>
+			</div><!--RaceSideDialog-->
 
 			<div id="RacerInfo"></div>
 		</div>
