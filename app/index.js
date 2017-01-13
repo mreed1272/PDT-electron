@@ -158,7 +158,7 @@ function editRaceDialog(type) {
     var raceCoordInput = document.getElementById("raceCoord");
     var raceDateInput = document.getElementById("raceDate");
 
-    console.log(orgTypeInput);
+    //console.log(orgTypeInput);
 
     switch (type) {
 
