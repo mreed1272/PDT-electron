@@ -50,8 +50,8 @@
 		<div class="tabcontent" id="mainT">
 
 			<div id="RaceInfo">
-				<button id="new-race" type="button" onclick="newRace()">New Race</button>
-				<button id="edit-race" type="button" onclick="editRace()">Edit Race</button>
+				<button id="new-race" type="button" onclick="editRaceDialog('new')">New Race</button>
+				<button id="edit-race" type="button" onclick="editRaceDialog('edit')">Edit Race</button>
 				<button id="load-race" type="button" onclick="loadRace()">Load Race</button>
 				<button id="save-race" type="button" onclick="saveRace()">Save Race</button>
 			</div>
@@ -60,7 +60,7 @@
 
 			<div id="RaceSideDialog" class="sideDialog">
 				<div style="display: flex; justify-content: space-between">
-					  <h2></h2><span class="close">&times;</span>
+					  <h2></h2><span class="close" onclick="editRaceDialog('cancel')">&times;</span>
   				</div>
 					<div id="RaceDialogContent" >
 						<table>
@@ -73,7 +73,7 @@
 							<tr>
 								<td>Organization Type:</td>
 								<td>
-									<select id="OrgTypeSelect"></select>
+									<select id="OrgTypeSelect" onchange="loadRanks(this.value)"></select>
 								</td>
 							</tr>
 							<tr>
@@ -106,10 +106,12 @@
 								</td>
 							</tr>
 						</table>
+						<button type="button" id="editRaceButton"></button>
+						<button type="button" id="cancelButton" onclick="editRaceDialog('cancel')">Cancel</button>
 					</div>
 			</div><!--RaceSideDialog-->
 
-			<div id="RacerInfo"></div>
+			<div id="RacerInfo">No racers entered.</div>
 		</div>
 		<!--End Tab Content - Main Tab Body-->
 

@@ -19,18 +19,11 @@ var runNum = 1;
 var lastRunTimes = [];
 var racerStats = [];
 var raceInformation = [];
-var ranks = [];
 var racerStatsFile = "";
 var optionsPDT = [];
 
 
 
-
-/*window.onclick = (event) => {
-    if (event.target == document.getElementById("RaceInfoEditModal")) {
-        document.getElementById("RaceInfoEditModal").style.display = "none";
-    }
-}*/
 
 function onBodyLoad() {
     document.getElementById("mainT").style.display = "block";
@@ -38,13 +31,6 @@ function onBodyLoad() {
 
     loadOptions();
     initSerial();
-
-    /*window.onclick = (event) => {
-        if (event.target == document.getElementById("RaceInfoEditModal")) {
-            document.getElementById("RaceInfoEditModal").style.display = "none";
-        }
-    }*/
-
 }
 
 function openTabContent(evt, tabName) {
@@ -70,8 +56,10 @@ function openTabContent(evt, tabName) {
 
 function loadSelect(selectID, optValueArr, selectItem, optTextArr) {
     var selElem = document.getElementById(selectID);
-    //var option = document.createElement("option");
-    //console.log(`Value of optTextArr is ${optTextArr}`);
+    if (selElem.options.length > 0) {
+        removeSelectOptions(selElem);
+    };
+
     for (var i = 0; i < optValueArr.length; i++) {
         var option = document.createElement("option");
         if (optTextArr !== undefined) {
@@ -81,7 +69,7 @@ function loadSelect(selectID, optValueArr, selectItem, optTextArr) {
         };
         option.value = optValueArr[i];
         selElem.add(option, i);
-        if (optValueArr[i].value == selectItem) {
+        if (optValueArr[i] == selectItem) {
             selElem.selectedIndex = i;
         }
     }
@@ -155,60 +143,108 @@ function saveRace() {
     console.log("Try to save race information to file");
 }
 
-function editRace() {
-    //not sure if this function is needed
-    console.log("Edit the race information");
-    var editSideDialog = document.getElementById("RaceSideDialog");
-
-    var closeSpan = document.getElementsByClassName("close")[0];
-    
-    
-    //editDialog.style.display = "block";
-    editSideDialog.style.width = "700px";
-
-    closeSpan.onclick = () => {
-        editSideDialog.style.width = "0";
-        return false;
-    };
-}
-
-function newRace() {
+function editRaceDialog(type) {
     console.log("Prompt for race information");
     var editSideDialog = document.getElementById("RaceSideDialog");
     var headerDialog = editSideDialog.getElementsByTagName("h2")[0];
-
     var closeSpan = document.getElementsByClassName("close")[0];
-    
-    headerDialog.innerHTML = "New Race";
-    
-    //editDialog.style.display = "block";
+    var dialogButton = document.getElementById("editRaceButton");
+
+    var orgNameInput = document.getElementById("orgName");
+    var orgTypeInput = document.getElementById("OrgTypeSelect");
+    var rankCheckBox = document.getElementById("orgRankInclude").getElementsByTagName("input");
+    var raceHeatsInput = document.getElementById("raceHeats");
+    var raceScoreInput = document.getElementById("raceScoreMethod");
+    var raceCoordInput = document.getElementById("raceCoord");
+    var raceDateInput = document.getElementById("raceDate");
+
+    console.log(orgTypeInput);
+
+    switch (type) {
+
+        case "new":
+            headerDialog.innerHTML = "New Race";
+            dialogButton.innerHTML = "OK";
+            break;
+
+        case "edit":
+            headerDialog.innerHTML = "Edit Race";
+            dialogButton.innerHTML = "Update";
+            break;
+
+        case "update":
+
+            break;
+
+        case "cancel":
+            //empty the form and set back to defaults
+            orgNameInput.value = "";
+            orgTypeInput.value = "Cub Scout";
+            loadRanks("Cub Scout");
+            raceHeatsInput.value = "";
+            raceScoreInput.value = "timed";
+            raceCoordInput.value = "";
+            raceDateInput.value = "";
+            editSideDialog.style.width = "0";
+            return -1;
+
+    }
+
     editSideDialog.style.width = "700px";
 
-    closeSpan.onclick = () => {
+    /*closeSpan.onclick = () => {
         editSideDialog.style.width = "0";
         return false;
-    };
+    };*/
 }
+
+
 
 function loadOptions() {
     console.log("Loading the options/variable file");
     //load the config json file
     var tmpData = fs.readFileSync(`${__dirname}/config/default-config.json`);
     optionsPDT = JSON.parse(tmpData);
-    //console.log(optionsPDT);
-
+    var tmpRankValue = optionsPDT.OrgType[checkKeyValue(optionsPDT.OrgType, "name", "Cub Scout")].rank_value;
+    var tmpRankTxt = optionsPDT.OrgType[checkKeyValue(optionsPDT.OrgType, "name", "Cub Scout")].rank_text;
     //load default options for cub scout organization
-    loadSelect("RacerRank", optionsPDT.OrgType[checkKeyValue(optionsPDT.OrgType, "name", "Cub Scout")].rank_value, "Tiger", optionsPDT.OrgType[checkKeyValue(optionsPDT.OrgType, "name", "Cub Scout")].rank_text);
-    loadSelect("OrgTypeSelect",getKeyValues(optionsPDT.OrgType, "name"),"Cub Scout");
+    loadSelect("RacerRank", tmpRankValue, "Tiger", tmpRankTxt);
+    loadSelect("OrgTypeSelect", getKeyValues(optionsPDT.OrgType, "name"), "Cub Scout");
 
     // create checkboxes for ranks in Race Info dialog
-    var raceDialogRanks = document.getElementById("orgRankInclude");
-    var rankOut = "";
-    for (var i = 0; i < optionsPDT.OrgType[checkKeyValue(optionsPDT.OrgType, "name", "Cub Scout")].rank_text.length; i ++){
-    rankOut += `<label for="rank-${i}">${optionsPDT.OrgType[checkKeyValue(optionsPDT.OrgType, "name", "Cub Scout")].rank_text[i]}</label>`;
-    rankOut += `<input type="checkbox" id="rank-${i}" value="${optionsPDT.OrgType[checkKeyValue(optionsPDT.OrgType, "name", "Cub Scout")].rank_value[i]}">`;
+    createCheckList("orgRankInclude", "rank", tmpRankTxt, tmpRankValue);
+
+}
+
+function loadRanks(orgTypeTxt) {
+    var rankValues = optionsPDT.OrgType[checkKeyValue(optionsPDT.OrgType, "name", orgTypeTxt)].rank_value;
+    var rankText = optionsPDT.OrgType[checkKeyValue(optionsPDT.OrgType, "name", orgTypeTxt)].rank_text;
+
+    if (orgTypeTxt = "Cub Scout") {
+        loadSelect("RacerRank", rankValues, "Tiger", rankText);
+    } else {
+        loadSelect("RacerRank", rankValues, rankValue[0], rankText);
+    };
+
+    createCheckList("orgRankInclude", "rank", rankText, rankValues);
+}
+
+function createCheckList(divID, checkID, labelArr, checkValueArr) {
+    var checkOutTxt = "";
+    var divElement = document.getElementById(divID);
+
+    for (var i = 0; i < labelArr.length; i++) {
+        checkOutTxt += `<label for="${checkID}-${i}">${labelArr[i]}</label>`;
+        checkOutTxt += `<input type="checkbox" id="${checkID}-${i}" value="${checkValueArr[i]}">`;
     }
-    raceDialogRanks.innerHTML = rankOut;
+
+    divElement.innerHTML = checkOutTxt;
+}
+
+function removeSelectOptions(obj) {
+    while (obj.options.length) {
+        obj.remove(0);
+    }
 }
 
 function getKeyValues(objArr, key) {
