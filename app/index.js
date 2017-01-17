@@ -21,11 +21,14 @@ var racerStats = [];
 var raceInformation = [];
 var racerStatsFile = "";
 var optionsPDT = [];
+var rankValuePDT = [];
+var rankTextPDT = [];
 
 
 
 
 function onBodyLoad() {
+    document.getElementById("RaceSideDialog").style.width = 0;
     document.getElementById("mainT").style.display = "block";
     document.getElementById("RacerInfo").style.display = "none";
 
@@ -143,8 +146,25 @@ function saveRace() {
     console.log("Try to save race information to file");
 }
 
+function checkRaceDialog(type) {
+    var editSideDialog = document.getElementById("RaceSideDialog");
+    //console.log(editSideDialog.style.width);
+    if (editSideDialog.style.width !== "0px") {
+        //console.log(`Setting dialog width to 0.`);
+        editSideDialog.style.width = "0px";
+        setTimeout(() => {
+            //console.log(`Doing a timeout before calling function`);
+            editRaceDialog(type)
+        }, 700);
+    } else {
+        editRaceDialog(type);
+    }
+
+
+}
+
 function editRaceDialog(type) {
-    console.log("Prompt for race information");
+    //console.log("Prompt for race information");
     var editSideDialog = document.getElementById("RaceSideDialog");
     var headerDialog = editSideDialog.getElementsByTagName("h2")[0];
     var closeSpan = document.getElementsByClassName("close")[0];
@@ -157,6 +177,10 @@ function editRaceDialog(type) {
     var raceScoreInput = document.getElementById("raceScoreMethod");
     var raceCoordInput = document.getElementById("raceCoord");
     var raceDateInput = document.getElementById("raceDate");
+
+    /*if (editSideDialog.style.width !== 0) {
+        editSideDialog.style.width = 0;
+    }*/
 
     //console.log(orgTypeInput);
 
@@ -173,7 +197,19 @@ function editRaceDialog(type) {
             break;
 
         case "update":
+            var tmpRankCheck = document.getElementById("orgRankInclude").getElementsByTagName("input");
+            var tmpIsChecked = false;
 
+            for (var i = 0; i < tmpRankCheck.length; i++) {
+                if (tmpRankCheck[i].checked === true) { 
+                    tmpIsChecked = true;
+                    break;
+                }
+            }
+            if (orgNameInput.value === "" || raceHeatsInput.value === "" || raceCoordInput.value === "" || raceDateInput === "" || tmpIsChecked === false) {
+                alert(`Please make sure none of the fields are empty and that at least one rank is checked.`);
+                return;
+            }
             break;
 
         case "cancel":
@@ -205,28 +241,28 @@ function loadOptions() {
     //load the config json file
     var tmpData = fs.readFileSync(`${__dirname}/config/default-config.json`);
     optionsPDT = JSON.parse(tmpData);
-    var tmpRankValue = optionsPDT.OrgType[checkKeyValue(optionsPDT.OrgType, "name", "Cub Scout")].rank_value;
-    var tmpRankTxt = optionsPDT.OrgType[checkKeyValue(optionsPDT.OrgType, "name", "Cub Scout")].rank_text;
+    rankValuePDT = optionsPDT.OrgType[checkKeyValue(optionsPDT.OrgType, "name", "Cub Scout")].rank_value;
+    rankTextPDT = optionsPDT.OrgType[checkKeyValue(optionsPDT.OrgType, "name", "Cub Scout")].rank_text;
     //load default options for cub scout organization
-    loadSelect("RacerRank", tmpRankValue, "Tiger", tmpRankTxt);
+    loadSelect("RacerRank", rankValuePDT, "Tiger", rankTextPDT);
     loadSelect("OrgTypeSelect", getKeyValues(optionsPDT.OrgType, "name"), "Cub Scout");
 
     // create checkboxes for ranks in Race Info dialog
-    createCheckList("orgRankInclude", "rank", tmpRankTxt, tmpRankValue);
+    createCheckList("orgRankInclude", "rank", rankTextPDT, rankValuePDT);
 
 }
 
 function loadRanks(orgTypeTxt) {
-    var rankValues = optionsPDT.OrgType[checkKeyValue(optionsPDT.OrgType, "name", orgTypeTxt)].rank_value;
-    var rankText = optionsPDT.OrgType[checkKeyValue(optionsPDT.OrgType, "name", orgTypeTxt)].rank_text;
+    var rankValuePDT = optionsPDT.OrgType[checkKeyValue(optionsPDT.OrgType, "name", orgTypeTxt)].rank_value;
+    var rankTextPDT = optionsPDT.OrgType[checkKeyValue(optionsPDT.OrgType, "name", orgTypeTxt)].rank_text;
 
     if (orgTypeTxt = "Cub Scout") {
-        loadSelect("RacerRank", rankValues, "Tiger", rankText);
+        loadSelect("RacerRank", rankValuePDT, "Tiger", rankTextPDT);
     } else {
-        loadSelect("RacerRank", rankValues, rankValue[0], rankText);
+        loadSelect("RacerRank", rankValuePDT, rankValue[0], rankTextPDT);
     };
 
-    createCheckList("orgRankInclude", "rank", rankText, rankValues);
+    createCheckList("orgRankInclude", "rank", rankTextPDT, rankValuePDT);
 }
 
 function createCheckList(divID, checkID, labelArr, checkValueArr) {
@@ -267,4 +303,9 @@ function checkKeyValue(arrayObj, key, value) {
         }
     }
     return -1;
+}
+
+function isEmpty(obj) {
+   for (var x in obj) { if (obj.hasOwnProperty(x))  return false; }
+   return true;
 }
