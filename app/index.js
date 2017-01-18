@@ -163,6 +163,12 @@ function checkRaceDialog(type) {
 
 }
 
+function clickMenuTab(tabNum) {
+    var tabMenu = document.getElementById("tabbedItems").getElementsByTagName("ul")[0].getElementsByTagName("li")
+
+    tabMenu[tabNum].click();
+}
+
 function editRaceDialog(type) {
     //console.log("Prompt for race information");
     var editSideDialog = document.getElementById("RaceSideDialog");
@@ -177,40 +183,75 @@ function editRaceDialog(type) {
     var raceScoreInput = document.getElementById("raceScoreMethod");
     var raceCoordInput = document.getElementById("raceCoord");
     var raceDateInput = document.getElementById("raceDate");
+    var racerInputTD = document.getElementById("racerFileInput");
 
-    /*if (editSideDialog.style.width !== 0) {
-        editSideDialog.style.width = 0;
-    }*/
+    var rankCheck = document.getElementById("orgRankInclude").getElementsByTagName("input");
 
-    //console.log(orgTypeInput);
+    if (racerStatsFile === "") {
+        racerInputTD.innerHTML = `<button type="button" onclick='loadRacers()'>Select Racers File</button> <button type="button" onclick='clickMenuTab(2)'>Enter New Racers</button>`
+    } else {
+        racerInputTD.innerHTML = racerStatsFile.split('\\').pop().split('/').pop();
+    }
 
     switch (type) {
 
         case "new":
+            if (!isObjEmpty(raceInformation)){
+                return -1;
+            }
             headerDialog.innerHTML = "New Race";
             dialogButton.innerHTML = "OK";
             break;
 
         case "edit":
-            headerDialog.innerHTML = "Edit Race";
-            dialogButton.innerHTML = "Update";
+            if (isObjEmpty(raceInformation)) {
+                return -1;
+            } else {
+                headerDialog.innerHTML = "Edit Race";
+                dialogButton.innerHTML = "Update";
+
+            }
             break;
 
         case "update":
-            var tmpRankCheck = document.getElementById("orgRankInclude").getElementsByTagName("input");
             var tmpIsChecked = false;
+            var tmpRankCheckedIndex = [];
 
-            for (var i = 0; i < tmpRankCheck.length; i++) {
-                if (tmpRankCheck[i].checked === true) { 
+            for (var i = 0; i < rankCheck.length; i++) {
+                if (rankCheck[i].checked === true) {
                     tmpIsChecked = true;
-                    break;
-                }
-            }
+                    tmpRankCheckedIndex.push(i);
+                };
+            };
+
             if (orgNameInput.value === "" || raceHeatsInput.value === "" || raceCoordInput.value === "" || raceDateInput === "" || tmpIsChecked === false) {
                 alert(`Please make sure none of the fields are empty and that at least one rank is checked.`);
                 return;
-            }
-            break;
+            };
+
+            //load the information into the global variable
+            raceInformation["OrgName"] = orgNameInput.value;
+            raceInformation["OrgType"] = orgTypeInput.value;
+            raceInformation["RaceHeats"] = raceHeatsInput.value;
+            raceInformation["RaceScoring"] = raceScoreInput.value;
+            raceInformation["RaceCoordinator"] = raceCoordInput.value;
+            raceInformation["RaceDate"] = raceDateInput.value;
+            raceInformation["RacerStatsFile"] = racerStatsFile;
+            raceInformation["RacerRanks"] = tmpRankCheckedIndex;
+
+            //reset the form keeping the select values
+            orgNameInput.value = "";
+            orgTypeInput.value = raceInformation.OrgType;
+            loadRanks(raceInformation.OrgType);
+            raceHeatsInput.value = "";
+            raceScoreInput.value = raceInformation.RaceScoring;
+            raceCoordInput.value = "";
+            raceDateInput.value = "";
+            editSideDialog.style.width = "0";
+
+            updateRaceInfo();
+
+            return;
 
         case "cancel":
             //empty the form and set back to defaults
@@ -222,16 +263,20 @@ function editRaceDialog(type) {
             raceCoordInput.value = "";
             raceDateInput.value = "";
             editSideDialog.style.width = "0";
+            clearRacers();
+            clearObject(raceInformation);
+
             return -1;
 
     }
 
     editSideDialog.style.width = "700px";
 
-    /*closeSpan.onclick = () => {
-        editSideDialog.style.width = "0";
-        return false;
-    };*/
+
+}
+
+function updateRaceInfo(){
+    //update the div "RaceInfoDisplay"
 }
 
 
@@ -305,7 +350,15 @@ function checkKeyValue(arrayObj, key, value) {
     return -1;
 }
 
-function isEmpty(obj) {
-   for (var x in obj) { if (obj.hasOwnProperty(x))  return false; }
-   return true;
+function isObjEmpty(obj) {
+    for (var x in obj) { if (obj.hasOwnProperty(x)) return false; }
+    return true;
+}
+
+function clearObject(Obj) {
+  for (var j in Obj) {
+    if (Obj.hasOwnProperty( j )){
+      delete Obj[j];
+    };
+  }
 }

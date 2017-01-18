@@ -298,7 +298,8 @@ a:active {
 .sideDialog {
 	min-height: 60%;
 	/*width: 0px;*/
-	float: left;
+	/*float: left;*/
+	position: absolute;
 	z-index: 1;
 	background-color: #eee;
 	overflow-x: hidden;
