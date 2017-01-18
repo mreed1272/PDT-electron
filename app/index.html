@@ -55,12 +55,9 @@
 				<button id="load-race" type="button" onclick="loadRace()">Load Race</button>
 				<button id="save-race" type="button" onclick="saveRace()">Save Race</button>
 			</div>
-
-			<div id="RaceInfoDisplay"></div>
-
 			<div id="RaceSideDialog" class="sideDialog">
 				<div style="display: flex; justify-content: space-between">
-					  <h2></h2><span class="close" onclick="editRaceDialog('cancel')">&times;</span>
+					  <h2></h2><span class="close" onclick="editRaceDialog('close')">&times;</span>
   				</div>
 					<div id="RaceDialogContent" >
 						<table>
@@ -102,7 +99,7 @@
 							<tr>
 								<td>Race Date:</td>
 								<td>
-									<input type="text" name="raceDate" id="raceDate" value="">
+									<input type="date" name="raceDate" id="raceDate" value="">
 								</td>
 							</tr>
 							<tr>
@@ -114,6 +111,8 @@
 						<button type="button" id="cancelButton" onclick="editRaceDialog('cancel')">Cancel</button>
 					</div>
 			</div><!--RaceSideDialog-->
+
+			<div id="RaceInfoDisplay"></div>
 
 			<div id="RacerInfo">No racers entered.</div>
 		</div>

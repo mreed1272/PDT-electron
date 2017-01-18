@@ -332,3 +332,16 @@ a:active {
 .sideDialog [type="checkbox"] {
 	margin-right: 15px;
 }
+
+#RaceInfoDisplay {
+	padding-bottom: 10px;
+}
+
+#RaceInfoDisplay ul {
+	background-color: #eee;
+	box-shadow: 3px 3px 8px rgba(0,0,0,0.3);
+	padding: 10px 20px;
+	list-style: none;
+	margin: 0;
+	width: 55em;
+}

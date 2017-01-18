@@ -18,7 +18,7 @@ var currentSessionDate = new Date();
 var runNum = 1;
 var lastRunTimes = [];
 var racerStats = [];
-var raceInformation = [];
+var raceInformation = {};
 var racerStatsFile = "";
 var optionsPDT = [];
 var rankValuePDT = [];
@@ -140,10 +140,68 @@ function clearText(elemID, newTxt) {
 
 function loadRace() {
     console.log("Try to load race information from file");
+    //var racerFileDiv = document.getElementById("racer-data-file");
+    //var racerInputTD = document.getElementById("racerFileInput");
+    var currentWindowObj = remote.getCurrentWindow();
+    
+    dialog.showOpenDialog(currentWindowObj, {
+        title: 'Select Race Information file to open:',
+        filters: [
+            {
+                name: 'PDT race files',
+                extensions: ['pdt_race']
+            }
+        ]
+    }, (filenames) => {
+        if (!filenames) return;
+        if (filenames.length > 0) {
+            var tmpData = fs.readFileSync(filenames[0]);
+            // parse, format input txt and put into page
+            raceInformation = JSON.parse(tmpData);
+
+            console.log(raceInformation);
+
+            remote.app.addRecentDocument(filenames[0]);
+            //racerFileDiv.innerHTML = filenames[0].split('\\').pop().split('/').pop();
+            //racerInputTD.innerHTML = filenames[0].split('\\').pop().split('/').pop();
+            //racerStatsFile = filenames[0];
+            updateRaceInfo();
+        }
+    })
 }
 
 function saveRace() {
     console.log("Try to save race information to file");
+    //var racerFileDiv = document.getElementById("racer-data-file");
+    //var racerInputTD = document.getElementById("racerFileInput");
+
+    if (isObjEmpty(raceInformation)){
+        return -1;
+    };
+    var currentWindowObj = remote.getCurrentWindow();
+
+    dialog.showSaveDialog(currentWindowObj, {
+        title: 'Save Race . . .',
+        filters: [
+            {
+                name: "PDT race information files",
+                extensions: ['pdt_race']
+            }
+        ]
+    }, (filenames) => {
+        console.log(`Filename from save dialog: ${filenames}`);
+        if (!filenames) return;
+        if (filenames.length > 0) {
+            var contentJSON = JSON.stringify(raceInformation);
+            console.log(raceInformation);
+            console.log(contentJSON);
+            //save txt
+            fs.writeFileSync(filenames, contentJSON);
+            //racerFileDiv.innerHTML = filenames.split('\\').pop().split('/').pop();
+            //racerInputTD.innerHTML = filenames.split('\\').pop().split('/').pop();
+            //racerStatsFile = filenames;
+        }
+    })
 }
 
 function checkRaceDialog(type) {
@@ -196,7 +254,7 @@ function editRaceDialog(type) {
     switch (type) {
 
         case "new":
-            if (!isObjEmpty(raceInformation)){
+            if (!isObjEmpty(raceInformation)) {
                 return -1;
             }
             headerDialog.innerHTML = "New Race";
@@ -209,6 +267,17 @@ function editRaceDialog(type) {
             } else {
                 headerDialog.innerHTML = "Edit Race";
                 dialogButton.innerHTML = "Update";
+                //load the information from the object into the form
+                orgNameInput.value = raceInformation["OrgName"];
+                orgTypeInput.value = raceInformation["OrgType"];
+                raceHeatsInput.value = raceInformation["RaceHeats"];
+                raceScoreInput.value = raceInformation["RaceScoring"];
+                raceCoordInput.value = raceInformation["RaceCoordinator"];
+                raceDateInput.value = raceInformation["RaceDate"];
+                racerStatsFile = raceInformation["RacerStatsFile"];
+                for (var i = 0; i < raceInformation.RacerRanks.length; i++) {
+                    document.getElementById(`rank-${raceInformation.RacerRanks[i]}`).checked = true;
+                };
 
             }
             break;
@@ -239,7 +308,7 @@ function editRaceDialog(type) {
             raceInformation["RacerStatsFile"] = racerStatsFile;
             raceInformation["RacerRanks"] = tmpRankCheckedIndex;
 
-            //reset the form keeping the select values
+            //reset the form, keeping the select values
             orgNameInput.value = "";
             orgTypeInput.value = raceInformation.OrgType;
             loadRanks(raceInformation.OrgType);
@@ -268,6 +337,11 @@ function editRaceDialog(type) {
 
             return -1;
 
+        case "close":
+            editSideDialog.style.width = "0px";
+
+            return -1;
+
     }
 
     editSideDialog.style.width = "700px";
@@ -275,8 +349,40 @@ function editRaceDialog(type) {
 
 }
 
-function updateRaceInfo(){
+function updateRaceInfo() {
     //update the div "RaceInfoDisplay"
+    var raceInfoDiv = document.getElementById("RaceInfoDisplay");
+    var tmpOutStr = "";
+    var tmpRanksNames = [];
+    racerStatsFile = raceInformation.RacerStatsFile;
+    if (isObjEmpty(racerStats)){
+        //if not loaded, load the racer stats file
+        var tmpData = fs.readFileSync(racerStatsFile);
+        //parse the file and load into global variable
+        racerStats = JSON.parse(tmpData);
+        document.getElementById("racer-data-file").innerHTML = racerStatsFile.split('\\').pop().split('/').pop();
+        //document.getElementById("racerFileInput").innerHTML = racerStatsFile.split('\\').pop().split('/').pop();
+        updateRacerStatsList();
+    }
+
+    if (!isObjEmpty(raceInformation)) {
+        for (var i = 0; i < raceInformation.RacerRanks.length; i++) {
+            tmpRanksNames[i] = rankTextPDT[raceInformation.RacerRanks[i]];
+        };
+
+        tmpOutStr = `<ul>`;
+        tmpOutStr += `<li>Organization Name: <b>${raceInformation.OrgName}</b></li>`;
+        tmpOutStr += `<li>Organization Type: <b>${raceInformation.OrgType}</b></li>`;
+        tmpOutStr += `<li>Ranks Included in Race: <b>${tmpRanksNames.join()}</b></li>`;
+        tmpOutStr += `<li>Number of Heats: <b>${raceInformation.RaceHeats}</b></li>`;
+        tmpOutStr += `<li>Race Scoring Method: <b>${(raceInformation.RaceScoring === "timed" ? "Fastest Time" : "Point Elimination")}</b></li>`;
+        tmpOutStr += `<li>Race Coordinator: <b>${raceInformation.RaceCoordinator}</b></li>`;
+        tmpOutStr += `<li>Date of Race: <b>${raceInformation.RaceDate}</b></li>`;
+        tmpOutStr += `<li>Racer Information File: <b>${racerStatsFile.split('\\').pop().split('/').pop()}</b></li>`;
+        tmpOutStr += `</ul>`;
+    };
+
+    raceInfoDiv.innerHTML = tmpOutStr;
 }
 
 
@@ -356,9 +462,9 @@ function isObjEmpty(obj) {
 }
 
 function clearObject(Obj) {
-  for (var j in Obj) {
-    if (Obj.hasOwnProperty( j )){
-      delete Obj[j];
-    };
-  }
+    for (var j in Obj) {
+        if (Obj.hasOwnProperty(j)) {
+            delete Obj[j];
+        };
+    }
 }

@@ -140,6 +140,9 @@ function updateRacerStatsList() {
 }
 
 function saveRacers() {
+    if (isObjEmpty(racerStats)){
+        return -1;
+    }
     var racerFileDiv = document.getElementById("racer-data-file");
     var racerInputTD = document.getElementById("racerFileInput");
     var currentWindowObj = remote.getCurrentWindow();
