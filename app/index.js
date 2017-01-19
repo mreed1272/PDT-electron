@@ -23,6 +23,7 @@ var racerStatsFile = "";
 var optionsPDT = [];
 var rankValuePDT = [];
 var rankTextPDT = [];
+var raceInfoFile = "";
 
 
 
@@ -55,7 +56,6 @@ function openTabContent(evt, tabName) {
         document.getElementById("test-date").innerHTML = tempSessionDate;
     }
 }
-
 
 function loadSelect(selectID, optValueArr, selectItem, optTextArr) {
     var selElem = document.getElementById(selectID);
@@ -140,7 +140,7 @@ function clearText(elemID, newTxt) {
 
 function loadRace() {
     console.log("Try to load race information from file");
-    //var racerFileDiv = document.getElementById("racer-data-file");
+    var raceInfoFileDiv = document.getElementById("RaceInfoFile");
     //var racerInputTD = document.getElementById("racerFileInput");
     var currentWindowObj = remote.getCurrentWindow();
     
@@ -162,9 +162,9 @@ function loadRace() {
             console.log(raceInformation);
 
             remote.app.addRecentDocument(filenames[0]);
-            //racerFileDiv.innerHTML = filenames[0].split('\\').pop().split('/').pop();
+            raceInfoFileDiv.innerHTML = filenames[0].split('\\').pop().split('/').pop();
             //racerInputTD.innerHTML = filenames[0].split('\\').pop().split('/').pop();
-            //racerStatsFile = filenames[0];
+            raceInfoFile = filenames[0];
             updateRaceInfo();
         }
     })
@@ -172,7 +172,7 @@ function loadRace() {
 
 function saveRace() {
     console.log("Try to save race information to file");
-    //var racerFileDiv = document.getElementById("racer-data-file");
+    var raceInfoFileDiv = document.getElementById("RaceInfoFile");
     //var racerInputTD = document.getElementById("racerFileInput");
 
     if (isObjEmpty(raceInformation)){
@@ -197,9 +197,9 @@ function saveRace() {
             console.log(contentJSON);
             //save txt
             fs.writeFileSync(filenames, contentJSON);
-            //racerFileDiv.innerHTML = filenames.split('\\').pop().split('/').pop();
+            raceInfoFileDiv.innerHTML = filenames.split('\\').pop().split('/').pop();
             //racerInputTD.innerHTML = filenames.split('\\').pop().split('/').pop();
-            //racerStatsFile = filenames;
+            raceInfoFile = filenames;
         }
     })
 }
@@ -364,7 +364,7 @@ function updateRaceInfo() {
         //document.getElementById("racerFileInput").innerHTML = racerStatsFile.split('\\').pop().split('/').pop();
         updateRacerStatsList();
     }
-
+    console.log(rankTextPDT);
     if (!isObjEmpty(raceInformation)) {
         for (var i = 0; i < raceInformation.RacerRanks.length; i++) {
             tmpRanksNames[i] = rankTextPDT[raceInformation.RacerRanks[i]];
@@ -384,8 +384,6 @@ function updateRaceInfo() {
 
     raceInfoDiv.innerHTML = tmpOutStr;
 }
-
-
 
 function loadOptions() {
     console.log("Loading the options/variable file");
@@ -414,6 +412,8 @@ function loadRanks(orgTypeTxt) {
     };
 
     createCheckList("orgRankInclude", "rank", rankTextPDT, rankValuePDT);
+    //console.log(rankValuePDT);
+    //console.log(rankTextPDT);
 }
 
 function createCheckList(divID, checkID, labelArr, checkValueArr) {
