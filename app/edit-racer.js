@@ -9,20 +9,12 @@ function addRacer(type, oldCarNum) {
     var index = -1;
     var oldIndex = -1;
 
-    //console.log(`Old car number is ${oldCarNum}`);
-
     if (oldCarNum != undefined) {
         oldIndex = checkKeyValue(racerStats, "car", oldCarNum);
     }
+
     //let's check to see if car number already in use and save the index for later
-    /*for (var i = 0; i < racerStats.length; i++) {
-        if (racerStats[i].car === tmpCarNum.value) {
-            index = i;
-            break;
-        }
-    }*/
     index = checkKeyValue(racerStats, "car", tmpCarNum.value);
-    //console.log(`Index is ${index} and old index is ${oldIndex}`);
 
     //make sure none of the fields are empty
     if ((tmpCarNum.value == "" || tmpRacerName.value == "" || tmpCarWeight.value == "") && (type == "add" || type == "update")) {
@@ -99,6 +91,15 @@ function updateRacerStatsList() {
     var racerListDiv = document.getElementById("RacerStatsList");
     var tempOutStr = "";
     var tempOutTable = "<table id='mainRacerList'><tr><th>Car Number</th><th>Racer Name</th><th>Car Weight (oz)</th><th>Rank</th><th>Total Time (s)</th></tr>";
+    var tmpRankNames = [];
+    var rankIncluded = false;
+
+    //load array of included ranks for highlighting in tables
+    if (!isObjEmpty(raceInformation)) {
+        for (var i = 0; i < raceInformation.RacerRanks.length; i++) {
+            tmpRankNames[i] = rankValuePDT[raceInformation.RacerRanks[i]];
+        };
+    }
 
     if (racerStats.length != 0) {
         racerStats.sort(function (a, b) {
@@ -106,7 +107,24 @@ function updateRacerStatsList() {
         })
 
         for (var i = 0; i < racerStats.length; i++) {
-            tempOutStr += `<ul>`;
+            for (var j = 0; j < tmpRankNames.length; j++){
+                if (racerStats[i].rank === tmpRankNames[j]){
+                    rankIncluded = true;
+                    break;
+                } else {
+                    rankIncluded = false;
+                }
+            }
+            console.log(`RankIncluded value for ${i} entry in racerStats is ${rankIncluded}`);
+
+            if (rankIncluded){
+                tempOutStr += `<ul class='rank-included'>`;
+                tempOutTable += `<tr class='rank-included'><td>${racerStats[i].car}</td>`;
+            } else {
+                tempOutStr += `<ul>`;
+                tempOutTable += `<tr><td>${racerStats[i].car}</td>`;
+            }
+            
             tempOutStr += `<span onclick="editRacer(this.parentNode, 'edit')" class="faicon">&#xf040</span>`;
             tempOutStr += `<span onclick="editRacer(this.parentNode, 'delete')" class="faicon">&#xf014</span>`;
             tempOutStr += `<li>Car Number: ${racerStats[i].car}</li>`;
@@ -115,7 +133,7 @@ function updateRacerStatsList() {
             tempOutStr += `<li>Racer Rank: ${racerStats[i].rank}</li>`;
             tempOutStr += `</ul>`;
 
-            tempOutTable += `<tr><td>${racerStats[i].car}</td>`;
+            
             tempOutTable += `<td>${racerStats[i].racer_name}</td>`;
             tempOutTable += `<td>${racerStats[i].weight}</td>`;
             tempOutTable += `<td>${racerStats[i].rank}</td>`;
@@ -132,15 +150,20 @@ function updateRacerStatsList() {
     racerListDiv.innerHTML = tempOutStr;
     mainRacerListDiv.innerHTML = tempOutTable;
 
-    if (racerStats.length == 0){
+    if (racerStats.length == 0) {
         document.getElementById("RacerInfo").style.display = "none";
     } else if (racerStats.length != 0) {
         document.getElementById("RacerInfo").style.display = "block";
     }
+
+    if (!isObjEmpty(raceInformation) && racerStatsFile !== "") {
+        raceInformation.RacerStatsFile = racerStatsFile;
+        updateRaceInfo();
+    }
 }
 
 function saveRacers() {
-    if (isObjEmpty(racerStats)){
+    if (isObjEmpty(racerStats)) {
         return -1;
     }
     var racerFileDiv = document.getElementById("racer-data-file");
@@ -173,7 +196,7 @@ function loadRacers() {
     var racerFileDiv = document.getElementById("racer-data-file");
     var racerInputTD = document.getElementById("racerFileInput");
     var currentWindowObj = remote.getCurrentWindow();
-    
+
     dialog.showOpenDialog(currentWindowObj, {
         title: 'Select Racer Stats file to open:',
         filters: [
@@ -198,7 +221,7 @@ function loadRacers() {
     })
 }
 
-function clearRacers(){
+function clearRacers() {
     var racerFileDiv = document.getElementById("racer-data-file");
     var racerInputTD = document.getElementById("racerFileInput");
 

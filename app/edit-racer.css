@@ -38,6 +38,11 @@
     box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.5), 5px 5px 13px 1px rgba(0,0,0,0.3);
 }
 
+#RacerStatsList .rank-included {
+    color: rgb(206,17,38);
+    background-color: rgba(252, 209, 22,0.4);
+}
+
 .faicon {
     font-family: FontAwesome; 
     position: relative; 

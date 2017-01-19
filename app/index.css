@@ -231,6 +231,17 @@ a:active {
 	background-color: rgba(0,63,135,0.2);
 }
 
+#RacerInfo .rank-included {
+	color: rgb(206,17,38)
+}
+
+#RacerInfo .rank-included:nth-child(even) {
+	background-color: rgba(252,209,22,0.3)
+}
+
+#RacerInfo .rank-included:nth-child(odd) {
+	background-color: rgba(252,209,22,0.5)
+}
 .footer {
 	padding: 10px 5px 5px; 
     width: 100%; 

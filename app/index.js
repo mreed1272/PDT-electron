@@ -83,13 +83,10 @@ function initLanes(numLanes, ulId) {
     var liID = "";
     var liLane = null;
     var maskOut = "";
-    //console.log(ulId);
-    //console.log(selElem);
+
     for (var i = 1; i <= numLanes; i++) {
         liID = `${ulId}-lane${i}-Li`;
-        //console.log(liID);
         var spanID = `${ulId}-lane${i}`;
-        //console.log(spanID);
         liLane = document.createElement("li");
 
         liLane.id = liID;
@@ -97,7 +94,6 @@ function initLanes(numLanes, ulId) {
             liLane.className = "winner1";
         }
         liLane.innerHTML = `Lane ${i}: <span class="LEDdisplay" id="${spanID}">0.0000</span> s`;
-        //console.log(liLane);
         selElem.appendChild(liLane);
     }
     liID = `${ulId}-mask-Li`;
@@ -139,11 +135,9 @@ function clearText(elemID, newTxt) {
 }
 
 function loadRace() {
-    console.log("Try to load race information from file");
     var raceInfoFileDiv = document.getElementById("RaceInfoFile");
-    //var racerInputTD = document.getElementById("racerFileInput");
     var currentWindowObj = remote.getCurrentWindow();
-    
+
     dialog.showOpenDialog(currentWindowObj, {
         title: 'Select Race Information file to open:',
         filters: [
@@ -159,11 +153,8 @@ function loadRace() {
             // parse, format input txt and put into page
             raceInformation = JSON.parse(tmpData);
 
-            console.log(raceInformation);
-
             remote.app.addRecentDocument(filenames[0]);
             raceInfoFileDiv.innerHTML = filenames[0].split('\\').pop().split('/').pop();
-            //racerInputTD.innerHTML = filenames[0].split('\\').pop().split('/').pop();
             raceInfoFile = filenames[0];
             updateRaceInfo();
         }
@@ -171,13 +162,11 @@ function loadRace() {
 }
 
 function saveRace() {
-    console.log("Try to save race information to file");
-    var raceInfoFileDiv = document.getElementById("RaceInfoFile");
-    //var racerInputTD = document.getElementById("racerFileInput");
-
-    if (isObjEmpty(raceInformation)){
+    if (isObjEmpty(raceInformation)) {
         return -1;
     };
+
+    var raceInfoFileDiv = document.getElementById("RaceInfoFile");
     var currentWindowObj = remote.getCurrentWindow();
 
     dialog.showSaveDialog(currentWindowObj, {
@@ -189,16 +178,14 @@ function saveRace() {
             }
         ]
     }, (filenames) => {
-        console.log(`Filename from save dialog: ${filenames}`);
         if (!filenames) return;
         if (filenames.length > 0) {
             var contentJSON = JSON.stringify(raceInformation);
-            console.log(raceInformation);
-            console.log(contentJSON);
+
             //save txt
             fs.writeFileSync(filenames, contentJSON);
+
             raceInfoFileDiv.innerHTML = filenames.split('\\').pop().split('/').pop();
-            //racerInputTD.innerHTML = filenames.split('\\').pop().split('/').pop();
             raceInfoFile = filenames;
         }
     })
@@ -206,19 +193,15 @@ function saveRace() {
 
 function checkRaceDialog(type) {
     var editSideDialog = document.getElementById("RaceSideDialog");
-    //console.log(editSideDialog.style.width);
+
     if (editSideDialog.style.width !== "0px") {
-        //console.log(`Setting dialog width to 0.`);
         editSideDialog.style.width = "0px";
         setTimeout(() => {
-            //console.log(`Doing a timeout before calling function`);
             editRaceDialog(type)
         }, 700);
     } else {
         editRaceDialog(type);
     }
-
-
 }
 
 function clickMenuTab(tabNum) {
@@ -228,7 +211,6 @@ function clickMenuTab(tabNum) {
 }
 
 function editRaceDialog(type) {
-    //console.log("Prompt for race information");
     var editSideDialog = document.getElementById("RaceSideDialog");
     var headerDialog = editSideDialog.getElementsByTagName("h2")[0];
     var closeSpan = document.getElementsByClassName("close")[0];
@@ -245,7 +227,7 @@ function editRaceDialog(type) {
 
     var rankCheck = document.getElementById("orgRankInclude").getElementsByTagName("input");
 
-    if (racerStatsFile === "") {
+    if (racerStatsFile === "" || racerStatsFile === undefined) {
         racerInputTD.innerHTML = `<button type="button" onclick='loadRacers()'>Select Racers File</button> <button type="button" onclick='clickMenuTab(2)'>Enter New Racers</button>`
     } else {
         racerInputTD.innerHTML = racerStatsFile.split('\\').pop().split('/').pop();
@@ -255,7 +237,20 @@ function editRaceDialog(type) {
 
         case "new":
             if (!isObjEmpty(raceInformation)) {
-                return -1;
+                alert("Are you sure want to continue?  All existing race information will be reset.");
+                orgNameInput.value = "";
+                orgTypeInput.value = "Cub Scout";
+                loadRanks("Cub Scout");
+                raceHeatsInput.value = "";
+                raceScoreInput.value = "timed";
+                raceCoordInput.value = "";
+                raceDateInput.value = "";
+                editSideDialog.style.width = "0";
+                clearRacers();
+                clearObject(raceInformation);
+                updateRaceInfo();
+                raceInfoFile = "";
+                document.getElementById("RaceInfoFile").innerHTML = raceInfoFile.split('\\').pop().split('/').pop();
             }
             headerDialog.innerHTML = "New Race";
             dialogButton.innerHTML = "OK";
@@ -267,6 +262,7 @@ function editRaceDialog(type) {
             } else {
                 headerDialog.innerHTML = "Edit Race";
                 dialogButton.innerHTML = "Update";
+
                 //load the information from the object into the form
                 orgNameInput.value = raceInformation["OrgName"];
                 orgTypeInput.value = raceInformation["OrgType"];
@@ -319,6 +315,7 @@ function editRaceDialog(type) {
             editSideDialog.style.width = "0";
 
             updateRaceInfo();
+            updateRacerStatsList();
 
             return;
 
@@ -334,6 +331,10 @@ function editRaceDialog(type) {
             editSideDialog.style.width = "0";
             clearRacers();
             clearObject(raceInformation);
+            updateRaceInfo();
+            raceInfoFile = "";
+            document.getElementById("RaceInfoFile").innerHTML = raceInfoFile.split('\\').pop().split('/').pop();
+
 
             return -1;
 
@@ -350,27 +351,43 @@ function editRaceDialog(type) {
 }
 
 function updateRaceInfo() {
+    //console.log("Updating Race Info Display");
     //update the div "RaceInfoDisplay"
     var raceInfoDiv = document.getElementById("RaceInfoDisplay");
     var tmpOutStr = "";
     var tmpRanksNames = [];
+    var tmpRacerStatsName = "";
+
     racerStatsFile = raceInformation.RacerStatsFile;
-    if (isObjEmpty(racerStats)){
-        //if not loaded, load the racer stats file
-        var tmpData = fs.readFileSync(racerStatsFile);
-        //parse the file and load into global variable
-        racerStats = JSON.parse(tmpData);
-        document.getElementById("racer-data-file").innerHTML = racerStatsFile.split('\\').pop().split('/').pop();
-        //document.getElementById("racerFileInput").innerHTML = racerStatsFile.split('\\').pop().split('/').pop();
-        updateRacerStatsList();
+
+    //console.log(`racerStatsFile condition: ${(racerStatsFile !== undefined || racerStatsFile !== "" || racerStatsFile !== null)}`);
+
+    if (isObjEmpty(racerStats) && (racerStatsFile !== undefined && racerStatsFile !== "" && racerStatsFile !== null)) {
+        //if not loaded, load the racer stats file but first check to make sure the file exists 
+        if (!fs.existsSync(racerStatsFile)) {
+            alert(`The file ${racerStatsFile} cannot be found.`)
+        } else {
+            var tmpData = fs.readFileSync(racerStatsFile);
+            //parse the file and load into global variable
+            racerStats = JSON.parse(tmpData);
+            document.getElementById("racer-data-file").innerHTML = racerStatsFile.split('\\').pop().split('/').pop();
+            //document.getElementById("racerFileInput").innerHTML = racerStatsFile.split('\\').pop().split('/').pop();
+            updateRacerStatsList();
+        }
     }
-    console.log(rankTextPDT);
+
+    if (racerStatsFile !== undefined && racerStatsFile !== "" && racerStatsFile !== null) {
+        tmpRacerStatsName = racerStatsFile.split('\\').pop().split('/').pop();
+    }
+
     if (!isObjEmpty(raceInformation)) {
         for (var i = 0; i < raceInformation.RacerRanks.length; i++) {
             tmpRanksNames[i] = rankTextPDT[raceInformation.RacerRanks[i]];
         };
 
         tmpOutStr = `<ul>`;
+        tmpOutStr += `<span onclick="checkRaceDialog('edit')" class="faicon">&#xf040</span>`;
+        tmpOutStr += `<span onclick="checkRaceDialog('cancel')" class="faicon">&#xf014</span>`;
         tmpOutStr += `<li>Organization Name: <b>${raceInformation.OrgName}</b></li>`;
         tmpOutStr += `<li>Organization Type: <b>${raceInformation.OrgType}</b></li>`;
         tmpOutStr += `<li>Ranks Included in Race: <b>${tmpRanksNames.join()}</b></li>`;
@@ -378,16 +395,21 @@ function updateRaceInfo() {
         tmpOutStr += `<li>Race Scoring Method: <b>${(raceInformation.RaceScoring === "timed" ? "Fastest Time" : "Point Elimination")}</b></li>`;
         tmpOutStr += `<li>Race Coordinator: <b>${raceInformation.RaceCoordinator}</b></li>`;
         tmpOutStr += `<li>Date of Race: <b>${raceInformation.RaceDate}</b></li>`;
-        tmpOutStr += `<li>Racer Information File: <b>${racerStatsFile.split('\\').pop().split('/').pop()}</b></li>`;
+        tmpOutStr += `<li>Racer Information File: <b>${tmpRacerStatsName}</b></li>`;
         tmpOutStr += `</ul>`;
     };
 
     raceInfoDiv.innerHTML = tmpOutStr;
+    return true;
 }
 
 function loadOptions() {
     console.log("Loading the options/variable file");
     //load the config json file
+    if (!fs.existsSync(`${__dirname}/config/default-config.json`)) {
+        console.log("Cannot find the options/variable file");
+        return -1;
+    }
     var tmpData = fs.readFileSync(`${__dirname}/config/default-config.json`);
     optionsPDT = JSON.parse(tmpData);
     rankValuePDT = optionsPDT.OrgType[checkKeyValue(optionsPDT.OrgType, "name", "Cub Scout")].rank_value;
@@ -402,8 +424,8 @@ function loadOptions() {
 }
 
 function loadRanks(orgTypeTxt) {
-    var rankValuePDT = optionsPDT.OrgType[checkKeyValue(optionsPDT.OrgType, "name", orgTypeTxt)].rank_value;
-    var rankTextPDT = optionsPDT.OrgType[checkKeyValue(optionsPDT.OrgType, "name", orgTypeTxt)].rank_text;
+    rankValuePDT = optionsPDT.OrgType[checkKeyValue(optionsPDT.OrgType, "name", orgTypeTxt)].rank_value;
+    rankTextPDT = optionsPDT.OrgType[checkKeyValue(optionsPDT.OrgType, "name", orgTypeTxt)].rank_text;
 
     if (orgTypeTxt = "Cub Scout") {
         loadSelect("RacerRank", rankValuePDT, "Tiger", rankTextPDT);
@@ -412,8 +434,6 @@ function loadRanks(orgTypeTxt) {
     };
 
     createCheckList("orgRankInclude", "rank", rankTextPDT, rankValuePDT);
-    //console.log(rankValuePDT);
-    //console.log(rankTextPDT);
 }
 
 function createCheckList(divID, checkID, labelArr, checkValueArr) {
