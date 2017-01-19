@@ -5,6 +5,7 @@
     justify-content: flex-start;
     height: 100px;
     align-items: flex-start;
+    margin-bottom: 5px;
 } 
 
 .flex-contain span {
@@ -106,16 +107,7 @@
     margin-right: auto;
     height: calc(100vh - 245px);    
 }
-button {
-    margin-bottom: 5px;
-    box-shadow: 3px 3px 8px 0px rgba(0,0,0,0.3);
-    user-select: none;
-    cursor: pointer;
-}
-button:hover {
-    box-shadow: 6px 6px 9px 0px rgba(0,0,0,0.3);
-    transition: 0.3s;
-}
+
 #table-history-contain{
     width: 100%;
     background: #eee;

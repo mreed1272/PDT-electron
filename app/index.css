@@ -35,6 +35,33 @@ body {
     background-color: #afbecf;
     overflow-y: hidden;
 }
+
+button {
+    margin-bottom: 5px;
+    box-shadow: 3px 3px 8px 0px rgba(0,0,0,0.5);
+    /*user-select: none;*/
+    cursor: pointer;
+	border: none;
+	background-color: #003366;
+	padding: 5px 10px;
+	color: #fcd116;
+}
+button:hover {
+	box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.7), 9px 9px 12px 1px rgba(0,0,0,0.3);
+    transition: 0.3s;
+}
+button:active {
+	box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.7), 2px 2px 4px 1px rgba(0,0,0,0.3);
+    background-color: #fcd116;
+	color: #003366;
+	transition: background 0.3s ease-out 0.1s;
+	transition: color 0.1s ease-out;
+}
+button:focus {
+	/*background-color: #003366;*/
+	outline: none;
+}
+
 .tabsImg {
 	float: left;
 	margin: 10px 10px 0 0;
@@ -355,4 +382,13 @@ a:active {
 	list-style: none;
 	margin: 0;
 	width: 55em;
+}
+
+.fileBox {
+	display: inline-block;
+	background: #eee;
+	min-width: 20em;
+	box-shadow: 3px 3px 8px rgba(0,0,0,0.3);
+	margin: 0px 0px 10px 20px;
+	padding: 5px 10px;;
 }

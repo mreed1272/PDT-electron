@@ -159,6 +159,7 @@ function loadRace() {
             updateRaceInfo();
         }
     })
+    /*document.activeElement.blur();*/
 }
 
 function saveRace() {
@@ -189,6 +190,7 @@ function saveRace() {
             raceInfoFile = filenames;
         }
     })
+    /*document.activeElement.blur();*/
 }
 
 function checkRaceDialog(type) {
