@@ -115,7 +115,7 @@ function updateRacerStatsList() {
                     rankIncluded = false;
                 }
             }
-            console.log(`RankIncluded value for ${i} entry in racerStats is ${rankIncluded}`);
+            //console.log(`RankIncluded value for ${i} entry in racerStats is ${rankIncluded}`);
 
             if (rankIncluded){
                 tempOutStr += `<ul class='rank-included'>`;
@@ -179,7 +179,7 @@ function saveRacers() {
             }
         ]
     }, (filenames) => {
-        console.log(`Filename from save dialog: ${filenames}`);
+        //console.log(`Filename from save dialog: ${filenames}`);
         if (!filenames) return;
         if (filenames.length > 0) {
             var contentJSON = JSON.stringify(racerStats);

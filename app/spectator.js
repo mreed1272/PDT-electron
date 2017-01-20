@@ -560,7 +560,7 @@ function createRoundTable(L1, L2, L3, id) {
 
 function genRandomNumArray(entries, min, max) {
     // parameters
-    // how_many_number : how many numbers you want to generate. For example it is 5.
+    // entries : how many numbers you want to generate. For example it is 5.
     // min(inclusive) : minimum/low value of a range. it must be any positive integer but less than max. i.e 4
     // max(inclusive) : maximun value of a range. it must be any positive integer. i.e 50
     // return type: array

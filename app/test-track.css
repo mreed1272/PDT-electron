@@ -3,7 +3,7 @@
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    height: 100px;
+    /*height: 100px;*/
     align-items: flex-start;
     margin-bottom: 5px;
 } 
@@ -21,10 +21,9 @@
 
 #lane-times-contain {
     float: left;
-    /*width: 30%;*/
     margin-left: 20px;
     margin-right: auto;
-    height: calc(100vh - 245px);    
+    height: calc(100vh - 255px);    
 }
 .laneTimes {
     /*float: left;*/
@@ -86,10 +85,9 @@
 }
 #serial-display {
     float: left;
-    /*width: 25%;*/
     margin-left: 20px;
     margin-right: auto;
-    height: calc(100vh - 245px);
+    height: calc(100vh - 255px);
 }
 #serial-command {
     background: #eee;
@@ -105,7 +103,7 @@
     float: left;
     margin-left: 20px;
     margin-right: auto;
-    height: calc(100vh - 245px);    
+    height: calc(100vh - 255px);    
 }
 
 #table-history-contain{
