@@ -221,7 +221,7 @@ function editRaceDialog(type) {
     var orgNameInput = document.getElementById("orgName");
     var orgTypeInput = document.getElementById("OrgTypeSelect");
     var rankCheckBox = document.getElementById("orgRankInclude").getElementsByTagName("input");
-    var raceHeatsInput = document.getElementById("raceHeats");
+    var raceRoundsInput = document.getElementById("raceRounds");
     var raceScoreInput = document.getElementById("raceScoreMethod");
     var raceCoordInput = document.getElementById("raceCoord");
     var raceDateInput = document.getElementById("raceDate");
@@ -243,7 +243,7 @@ function editRaceDialog(type) {
                 orgNameInput.value = "";
                 orgTypeInput.value = "Cub Scout";
                 loadRanks("Cub Scout");
-                raceHeatsInput.value = "";
+                raceRoundsInput.value = "";
                 raceScoreInput.value = "timed";
                 raceCoordInput.value = "";
                 raceDateInput.value = "";
@@ -268,7 +268,7 @@ function editRaceDialog(type) {
                 //load the information from the object into the form
                 orgNameInput.value = raceInformation["OrgName"];
                 orgTypeInput.value = raceInformation["OrgType"];
-                raceHeatsInput.value = raceInformation["RaceHeats"];
+                raceRoundsInput.value = raceInformation["RaceRounds"];
                 raceScoreInput.value = raceInformation["RaceScoring"];
                 raceCoordInput.value = raceInformation["RaceCoordinator"];
                 raceDateInput.value = raceInformation["RaceDate"];
@@ -291,7 +291,7 @@ function editRaceDialog(type) {
                 };
             };
 
-            if (orgNameInput.value === "" || raceHeatsInput.value === "" || raceCoordInput.value === "" || raceDateInput === "" || tmpIsChecked === false) {
+            if (orgNameInput.value === "" || raceRoundsInput.value === "" || raceCoordInput.value === "" || raceDateInput === "" || tmpIsChecked === false) {
                 alert(`Please make sure none of the fields are empty and that at least one rank is checked.`);
                 return;
             };
@@ -299,7 +299,7 @@ function editRaceDialog(type) {
             //load the information into the global variable
             raceInformation["OrgName"] = orgNameInput.value;
             raceInformation["OrgType"] = orgTypeInput.value;
-            raceInformation["RaceHeats"] = raceHeatsInput.value;
+            raceInformation["RaceRounds"] = raceRoundsInput.value;
             raceInformation["RaceScoring"] = raceScoreInput.value;
             raceInformation["RaceCoordinator"] = raceCoordInput.value;
             raceInformation["RaceDate"] = raceDateInput.value;
@@ -310,7 +310,7 @@ function editRaceDialog(type) {
             orgNameInput.value = "";
             orgTypeInput.value = raceInformation.OrgType;
             loadRanks(raceInformation.OrgType);
-            raceHeatsInput.value = "";
+            raceRoundsInput.value = "";
             raceScoreInput.value = raceInformation.RaceScoring;
             raceCoordInput.value = "";
             raceDateInput.value = "";
@@ -326,7 +326,7 @@ function editRaceDialog(type) {
             orgNameInput.value = "";
             orgTypeInput.value = "Cub Scout";
             loadRanks("Cub Scout");
-            raceHeatsInput.value = "";
+            raceRoundsInput.value = "";
             raceScoreInput.value = "timed";
             raceCoordInput.value = "";
             raceDateInput.value = "";
@@ -393,7 +393,7 @@ function updateRaceInfo() {
         tmpOutStr += `<li>Organization Name: <b>${raceInformation.OrgName}</b></li>`;
         tmpOutStr += `<li>Organization Type: <b>${raceInformation.OrgType}</b></li>`;
         tmpOutStr += `<li>Ranks Included in Race: <b>${tmpRanksNames.join()}</b></li>`;
-        tmpOutStr += `<li>Number of Heats: <b>${raceInformation.RaceHeats}</b></li>`;
+        tmpOutStr += `<li>Number of Rounds: <b>${raceInformation.RaceRounds}</b></li>`;
         tmpOutStr += `<li>Race Scoring Method: <b>${(raceInformation.RaceScoring === "timed" ? "Fastest Time" : "Point Elimination")}</b></li>`;
         tmpOutStr += `<li>Race Coordinator: <b>${raceInformation.RaceCoordinator}</b></li>`;
         tmpOutStr += `<li>Date of Race: <b>${raceInformation.RaceDate}</b></li>`;
