@@ -1,0 +1,33 @@
+#race-current-heat{
+    width: 100%;
+    background: #eee;
+    box-shadow: 3px 3px 8px rgba(0,0,0,0.3);
+    margin-bottom: 20px;
+    padding: 10px 10px 5px 10px;
+}
+
+#racer-race-results{
+    float: left;
+    height: calc(100% - 150px);
+    background: #eee;
+    margin-left: 20px;
+    box-shadow: 3px 3px 8px rgba(0,0,0,0.3);
+    padding: 10px;
+}
+
+#current-round {
+    float: left;
+    height: calc(100% - 150px);
+    background: #eee;
+    margin-left: 20px;
+    box-shadow: 3px 3px 8px rgba(0,0,0,0.3);
+    padding: 10px;
+}
+
+#race-lane-results {
+    float: left;
+    height: calc(100% - 150px);
+    
+    margin-left: 20px;
+    /*box-shadow: 3px 3px 8px rgba(0,0,0,0.3);*/
+}

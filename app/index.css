@@ -114,7 +114,7 @@ a:active {
 .tabcontent {
 	border: 1px none; 
     border-color: #b09003;
-    padding: 20px 6px 6px 12px; 
+    padding: 20px 6px 6px 6px; 
     border-image: none; 
     font-size: 0.8em; 
     display: none;

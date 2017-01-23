@@ -35,6 +35,7 @@ function initSerial() {
             document.getElementById("serial-timer").style.visibility = "visible";
             if (!initLane) {
                 initLanes(numLanes, "tlane");
+                initLanes(numLanes, "race-lane");
                 initLane = true;
             }
             //populate lane listing under test track select id "test-lane-watch"
@@ -67,6 +68,7 @@ function setupArduino(availPorts) {
             document.getElementById("serial-timer").style.visibility = "visible";
             if (!initLane) {
                 initLanes(numLanes, "tlane");
+                initLanes(numLanes, "race-lane")
                 initLane = true;
                 //populate lane listing under test track select id "test-lane-watch"
                 var tmpArr = [];
