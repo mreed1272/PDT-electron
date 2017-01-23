@@ -230,6 +230,7 @@
 			<div id="racer-race-results">
 				<h2>Racers</h2>
 				<table id="racer-table">
+					<tr><th>Car<br/>#</th><th>Racer Name</th><th>Racer<br>Rank</th><th>Total<br/>Time (s)</th></tr>
 				</table>
 			</div>
 			<div id="current-round">
@@ -239,12 +240,13 @@
 				
 			</div>
 			<div id="race-lane-results">
-				<button id="race-clear-display" onclick="clearRaceDisplay()">Clear Display</button>
-				<ul class="laneTimes div-contain-shadow" id="race-lane">
+				<button id="race-clear-display" onclick="clearDisplay()">Clear Display</button>
+				<ul id="race-lane">
 				</ul>
+			
+				<button type="button" id="buttonSpecWinOpen" onclick="specWin('open');">Open Spectator Window</button>
+				<button type="button" id="buttonSpecWinClose" onclick="specWin('close');">Close Spectator Window</button>
 			</div>
-			<button type="button" id="buttonSpecWinOpen" onclick="specWin('open');">Open Spectator Window</button>
-			<button type="button" id="buttonSpecWinClose" onclick="specWin('close');">Close Spectator Window</button>
 		</div>
 		<!--End Tab Content - Run the Race-->
 

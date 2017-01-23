@@ -93,6 +93,7 @@ function updateRacerStatsList() {
     var tempOutTable = "<table id='mainRacerList'><tr><th>Car Number</th><th>Racer Name</th><th>Car Weight (oz)</th><th>Rank</th><th>Total Time (s)</th></tr>";
     var tmpRankNames = [];
     var rankIncluded = false;
+    includedRacers.length = 0;
 
     //load array of included ranks for highlighting in tables
     if (!isObjEmpty(raceInformation)) {
@@ -102,14 +103,14 @@ function updateRacerStatsList() {
     }
 
     if (racerStats.length != 0) {
-        racerStats.sort(function (a, b) {
-            return a.car - b.car;
-        })
+
+        racerStats.sort(function (a, b) { return a.car - b.car; });
 
         for (var i = 0; i < racerStats.length; i++) {
             for (var j = 0; j < tmpRankNames.length; j++){
                 if (racerStats[i].rank === tmpRankNames[j]){
                     rankIncluded = true;
+                    includedRacers.push(i);
                     break;
                 } else {
                     rankIncluded = false;

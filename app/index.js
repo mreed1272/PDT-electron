@@ -24,6 +24,7 @@ var optionsPDT = [];
 var rankValuePDT = [];
 var rankTextPDT = [];
 var raceInfoFile = "";
+var includedRacers = [];
 
 
 
@@ -150,6 +151,11 @@ function loadRace() {
         if (!filenames) return;
         if (filenames.length > 0) {
             var tmpData = fs.readFileSync(filenames[0]);
+
+            //clear race information if something curently loaded
+            if (!isObjEmpty(raceInformation)) {
+                checkRaceDialog('cancel');
+            }
             // parse, format input txt and put into page
             raceInformation = JSON.parse(tmpData);
 
@@ -374,18 +380,24 @@ function updateRaceInfo() {
             racerStats = JSON.parse(tmpData);
             document.getElementById("racer-data-file").innerHTML = racerStatsFile.split('\\').pop().split('/').pop();
             //document.getElementById("racerFileInput").innerHTML = racerStatsFile.split('\\').pop().split('/').pop();
+            //console.log("updating RacerStats List")
             updateRacerStatsList();
+
         }
     }
 
     if (racerStatsFile !== undefined && racerStatsFile !== "" && racerStatsFile !== null) {
         tmpRacerStatsName = racerStatsFile.split('\\').pop().split('/').pop();
+
     }
 
     if (!isObjEmpty(raceInformation)) {
         for (var i = 0; i < raceInformation.RacerRanks.length; i++) {
             tmpRanksNames[i] = rankTextPDT[raceInformation.RacerRanks[i]];
         };
+
+        updateRaceTable();
+
 
         tmpOutStr = `<ul>`;
         tmpOutStr += `<span onclick="checkRaceDialog('edit')" class="faicon">&#xf040</span>`;

@@ -223,6 +223,7 @@ a:active {
 #RacerInfo th {
 	border-bottom: 2px solid rgb(0,63,135);
 	padding-right: 10px;
+	vertical-align: bottom;
 }
 
 #RacerInfo td {
