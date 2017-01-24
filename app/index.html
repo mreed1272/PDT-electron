@@ -225,7 +225,19 @@
 			<div id="race-current-heat">
 				<button type="button" style="width: 7em;">Start<br/>Race</button>
 				<!--<button type="button">Restart<br/>Race</button>-->
-				<div id="heat-lane-assigments"></div>
+				<div id="heat-lane-assignments">
+					<table>
+						<tr>
+							<th colspan="2">Lane 1</th><th colspan="2">Lane 2</th><th colspan="2">Lane 3</th>
+						</tr>
+						<tr>
+							<th>Car #</th><th>Racer</th><th>Car #</th><th>Racer</th><th>Car #</th><th>Racer</th>
+						</tr>
+						<tr>
+							<td>?</td><td>?</td><td>?</td><td>?</td><td>?</td><td>?</td>
+						</tr>
+					</table>
+				</div>
 			</div>
 			<div id="racer-race-results">
 				<h2>Racers</h2>
@@ -236,6 +248,10 @@
 			<div id="current-round">
 				<h2>Round Lineup</h2>
 				<table id="round-lineup-table">
+					<tr><th rowspan=2>Heat #</th><th colspan=2>Lane 1</th><th colspan=2>Lane 2</th><th colspan=2>Lane 3</th></tr>
+					<tr><th>Car #</th><th>Heat Time</th><th>Car #</th><th>Heat Time</th><th>Car #</th><th>Heat Time</th></tr>
+					<tr><td>1</td><td>3</td><td>0</td><td>4</td><td>0</td><td>1</td><td>0</td></tr>
+					<tr><td>2</td><td>5</td><td>0</td><td>7</td><td>0</td><td>2</td><td>0</td></tr>
 				</table>
 				
 			</div>
@@ -244,8 +260,8 @@
 				<ul id="race-lane">
 				</ul>
 			
-				<button type="button" id="buttonSpecWinOpen" onclick="specWin('open');">Open Spectator Window</button>
-				<button type="button" id="buttonSpecWinClose" onclick="specWin('close');">Close Spectator Window</button>
+				<button type="button" id="buttonSpecWinOpen" onclick="specWin('open');">Open Spectator<br/>Window</button>
+				<button type="button" id="buttonSpecWinClose" onclick="specWin('close');">Close Spectator<br/>Window</button>
 			</div>
 		</div>
 		<!--End Tab Content - Run the Race-->

@@ -1,9 +1,37 @@
 #race-current-heat{
+    display: flex;
+    flex: 0 0 auto;
+    justify-content: space-between;
     width: 100%;
     background: #eee;
     box-shadow: 3px 3px 8px rgba(0,0,0,0.3);
     margin-bottom: 20px;
     padding: 10px 10px 5px 10px;
+}
+
+#heat-lane-assignments {
+    display: flex;
+    flex: 1 0 auto;
+    justify-content: center;
+}
+
+#heat-lane-assignments table {
+    width: 60%;
+    border-collapse: collapse;
+}
+#heat-lane-assignments th {
+    border: 1px solid rgb(0,0,0);
+}
+#heat-lane-assignments td {
+    border: 1px solid rgb(0,0,0);
+}
+#heat-lane-assignments td:nth-child(odd) {
+    width: 4em;
+    text-align: center;
+}
+#heat-lane-assignments tr:nth-child(1), #heat-lane-assignments tr:nth-child(2) {
+    background: rgba(0,63,135,1.0);
+    color: rgba(252,209,22,1.0);
 }
 
 #racer-race-results{
@@ -13,6 +41,7 @@
     margin-left: 20px;
     box-shadow: 3px 3px 8px rgba(0,0,0,0.3);
     padding: 10px;
+    font-size: 0.9em;
 }
 #racer-race-results table {
 	border-collapse: collapse;
@@ -52,6 +81,32 @@
     margin-left: 20px;
     box-shadow: 3px 3px 8px rgba(0,0,0,0.3);
     padding: 10px;
+    font-size: 0.9em;
+}
+#current-round table {
+    border-collapse: collapse;
+    border: 1px solid black;
+    width: 550px;
+}
+
+#current-round th {
+    background: #003f87;
+    color: #fcd116;
+    border: 1px solid black;
+    text-align: center;
+    vertical-align: bottom;
+}
+#current-round td {
+    border: 1px solid black;
+}
+#current-round tr:nth-child(even) {
+    background-color: rgba(0,63,135,0.2)
+}
+#current-round td:nth-child(1) {
+    text-align: center;
+}
+#current-round td:nth-child(even) {
+    text-align: center;
 }
 
 #race-lane-results {
@@ -61,9 +116,9 @@
 }
 
 #race-lane {
-    font-size: 1.4em;
+    font-size: 1.0em;
     list-style: none;
-    width: 350px;
+    width: 225px;
     margin: 0px 0px 10px 0px;
     padding: 0;
     background-color: #eee;
@@ -73,7 +128,7 @@
 #race-lane li {
     border: 1px solid #003366;
     background-color: rgba(0,51,102,0.4);
-    padding-left: 10px;
+    padding-left: 5px;
     margin-left: 0;
     text-align: left;
     /*float: left;*/
@@ -81,7 +136,7 @@
 #race-lane li.laneMask {
     background: none;
     border: none;
-    font-size: 0.7em;
+    /*font-size: 0.8em;*/
 }
 #race-lane li.winner1{
     border: 2px ridge #ce1126;
@@ -90,33 +145,33 @@
 #race-lane li.winner1::after {
     font-family: FontAwesome;
     content: "1st  \f091";
-    padding-left: 30px;
+    padding-left: 10px;
     font-size: 1.2em;
-    padding-right: 10px;
-    padding-top: 10px;
+    padding-right: 5px;
+    padding-top: 5px;
     color: #ce1126;
     font-weight: bold;
 }
 #race-lane li.winner2::after {
     content: "2nd";
-    padding-left: 30px;
+    padding-left: 10px;
     font-size: 1.2em;
-    padding-right: 10px;
-    padding-top: 10px;
+    padding-right: 5px;
+    padding-top: 5px;
 }
 #race-lane li.winner3::after {
     content: "3rd";
-    padding-left: 30px;
+    padding-left: 10px;
     font-size: 1.2em;
-    padding-right: 10px;
-    padding-top: 10px;
+    padding-right: 5px;
+    padding-top: 5px;
 }
 #race-lane .LEDdisplay {
     font-family: LEDfont;
     color: #ce1126;
     background-color: black;
-    font-size: 2.4em;
+    font-size: 2.0em;
     border: 1px solid #333;
-    margin: 2px 0px 2px 10px;
+    margin: 2px 0px 2px 2px;
 }
 
