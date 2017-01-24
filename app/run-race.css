@@ -24,6 +24,7 @@
 }
 #heat-lane-assignments td {
     border: 1px solid rgb(0,0,0);
+    line-height: 1.5;
 }
 #heat-lane-assignments td:nth-child(odd) {
     width: 4em;
@@ -82,6 +83,14 @@
     box-shadow: 3px 3px 8px rgba(0,0,0,0.3);
     padding: 10px;
     font-size: 0.9em;
+}
+#current-round .flex-title {
+    display: flex;
+    justify-content: space-between;
+}
+#current-round h2 {
+    margin-right: 20px;
+    min-width: 10em;
 }
 #current-round table {
     border-collapse: collapse;
