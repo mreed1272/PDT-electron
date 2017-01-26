@@ -10,71 +10,71 @@ var splashWindow = null;
 //global.fileToOpen = null;
 
 app.on('ready', () => {
-    let displays = electron.screen.getAllDisplays();
-    let externalDisplay = displays.find((display) => {
-        return display.bounds.x !== 0 || display.bounds.y !== 0;
-    })
-    //console.log(externalDisplay);
+  let displays = electron.screen.getAllDisplays();
+  let externalDisplay = displays.find((display) => {
+    return display.bounds.x !== 0 || display.bounds.y !== 0;
+  })
+  //console.log(externalDisplay);
 
-    mainWindow = new BrowserWindow({
-        width: 1280,
-        height: 720,
-        frame: true,
-        x: 25,
-        y: 25,
-        show: false,
-        icon: `${__dirname}/app/images/PDT-main.png`
-        //transparent: true
-    });
-    mainWindow.loadURL(`file://${__dirname}/app/index.html`);
+  mainWindow = new BrowserWindow({
+    width: 1280,
+    height: 720,
+    frame: true,
+    x: 25,
+    y: 25,
+    show: false,
+    icon: `${__dirname}/app/images/PDT-main.png`
+    //transparent: true
+  });
+  mainWindow.loadURL(`file://${__dirname}/app/index.html`);
 
-    mainWindow.openDevTools();
+  mainWindow.openDevTools();
 
-    if (externalDisplay) {
-        spectatorWindow = new BrowserWindow({
-            width: externalDisplay.bounds.width,
-            height: externalDisplay.bounds.height,
-            frame: true,
-            show: false,
-            skipTaskbar: true,
-            icon: `${__dirname}/app/images/PDT-main.png`,
-            x: externalDisplay.bounds.x,
-            y: externalDisplay.bounds.y
-            //transparent: true
-        });
-    } else {
-        spectatorWindow = new BrowserWindow({
-            width: 1024,
-            height: 768,
-            frame: true,
-            show: false,
-            skipTaskbar: true,
-            icon: `${__dirname}/app/images/PDT-main.png`,
-            //transparent: true
-        });
-    };
-    spectatorWindow.loadURL(`file://${__dirname}/app/spectator.html`);
+  if (externalDisplay) {
+    spectatorWindow = new BrowserWindow({
+      width: externalDisplay.bounds.width,
+      height: externalDisplay.bounds.height,
+      frame: true,
+      show: false,
+      skipTaskbar: true,
+      icon: `${__dirname}/app/images/PDT-main.png`,
+      x: externalDisplay.bounds.x,
+      y: externalDisplay.bounds.y
+      //transparent: true
+    });
+  } else {
+    spectatorWindow = new BrowserWindow({
+      width: 1024,
+      height: 768,
+      frame: true,
+      show: false,
+      skipTaskbar: true,
+      icon: `${__dirname}/app/images/PDT-main.png`,
+      //transparent: true
+    });
+  };
+  spectatorWindow.loadURL(`file://${__dirname}/app/spectator.html`);
 
-    /*mainWindow.on('maximize', ()=> {
-        mainWindow.webContents.send('maximized');
-    });
-    
-    mainWindow.on('unmaximize', () => {
-        mainWindow.webContents.send('restored')
-    });*/
-    mainWindow.on('closed', () => {
-        console.log("Main window closed - quitting app");
-        mainWindow = null;
-        app.quit();
-    });
-    spectatorWindow.on('closed', () => {
-        console.log("User clicked on close for spectator window - clear the reference.")
-        spectatorWindow = null;
-    });
+  /*mainWindow.on('maximize', ()=> {
+      mainWindow.webContents.send('maximized');
+  });
+  
+  mainWindow.on('unmaximize', () => {
+      mainWindow.webContents.send('restored')
+  });*/
+  mainWindow.on('closed', () => {
+    console.log("Main window closed - quitting app");
+    mainWindow = null;
+    app.quit();
+  });
+  spectatorWindow.on('closed', () => {
+    console.log("User clicked on close for spectator window - clear the reference.")
+    spectatorWindow = null;
+  });
 
-    mainWindow.once('ready-to-show', () => {
-        mainWindow.show();
-    });
+  mainWindow.once('ready-to-show', () => {
+    mainWindow.show();
+  });
 });
 
 /*app.on('open-file', (event, filePath)=> {
@@ -87,63 +87,63 @@ app.on('ready', () => {
 });
 */
 ipcMain.on('spectator-window', (event, command) => {
-    //console.log(spectatorWindow);
-    if (spectatorWindow != null) {
-        switch (command) {
-            case "open":
-                spectatorWindow.show();
-                break;
+  //console.log(spectatorWindow);
+  if (spectatorWindow != null) {
+    switch (command) {
+      case "open":
+        spectatorWindow.show();
+        break;
 
-            case "close":
-                spectatorWindow.hide();
-        }
-    } else if (spectatorWindow === null) {
-        let displays = electron.screen.getAllDisplays();
-        let externalDisplay = displays.find((display) => {
-            return display.bounds.x !== 0 || display.bounds.y !== 0;
-        })
+      case "close":
+        spectatorWindow.hide();
+    }
+  } else if (spectatorWindow === null) {
+    let displays = electron.screen.getAllDisplays();
+    let externalDisplay = displays.find((display) => {
+      return display.bounds.x !== 0 || display.bounds.y !== 0;
+    })
 
-        if (externalDisplay) {
-            spectatorWindow = new BrowserWindow({
-                width: externalDisplay.bounds.width,
-                height: externalDisplay.bounds.height,
-                frame: true,
-                show: false,
-                skipTaskbar: true,
-                icon: `${__dirname}/app/images/PDT-main.png`,
-                x: externalDisplay.bounds.x,
-                y: externalDisplay.bounds.y
-                //transparent: true
-            });
-        } else {
-            spectatorWindow = new BrowserWindow({
-                width: 1024,
-                height: 768,
-                frame: true,
-                show: false,
-                skipTaskbar: true,
-                icon: `${__dirname}/app/images/PDT-main.png`,
-                //transparent: true
-            });
-        };
-        spectatorWindow.loadURL(`file://${__dirname}/app/spectator.html`);
-
-        spectatorWindow.once('ready-to-show', () => {
-            if (command === "open") {
-                spectatorWindow.show();
-            }
-        })
-
-        spectatorWindow.on('closed', () => {
-            console.log("User clicked on close for spectator window - clear the reference.")
-            spectatorWindow = null;
-        });
-
+    if (externalDisplay) {
+      spectatorWindow = new BrowserWindow({
+        width: externalDisplay.bounds.width,
+        height: externalDisplay.bounds.height,
+        frame: true,
+        show: false,
+        skipTaskbar: true,
+        icon: `${__dirname}/app/images/PDT-main.png`,
+        x: externalDisplay.bounds.x,
+        y: externalDisplay.bounds.y
+        //transparent: true
+      });
+    } else {
+      spectatorWindow = new BrowserWindow({
+        width: 1024,
+        height: 768,
+        frame: true,
+        show: false,
+        skipTaskbar: true,
+        icon: `${__dirname}/app/images/PDT-main.png`,
+        //transparent: true
+      });
     };
+    spectatorWindow.loadURL(`file://${__dirname}/app/spectator.html`);
+
+    spectatorWindow.once('ready-to-show', () => {
+      if (command === "open") {
+        spectatorWindow.show();
+      }
+    })
+
+    spectatorWindow.on('closed', () => {
+      console.log("User clicked on close for spectator window - clear the reference.")
+      spectatorWindow = null;
+    });
+
+  };
 
 });
 
 app.on('window-all-closed', () => {
-    console.log("All windows closed -> quitting app")
-    app.quit();
+  console.log("All windows closed -> quitting app")
+  app.quit();
 });
