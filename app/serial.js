@@ -40,10 +40,12 @@ function initSerial() {
       }
       //populate lane listing under test track select id "test-lane-watch"
       var tmpArr = [];
-      for (var i = 0; i < numLanes; i++) {
+      //tmpArr[0] = "all"
+      for (var i = 0; i <= numLanes; i++) {
         tmpArr[i] = i + 1;
       }
-      loadSelect("test-lane-watch", tmpArr, 1);
+      
+      loadSelect("test-lane-watch", tmpArr, 0);
 
     };
   });
@@ -72,10 +74,11 @@ function setupArduino(availPorts) {
         initLane = true;
         //populate lane listing under test track select id "test-lane-watch"
         var tmpArr = [];
+        //tmpArr[0] = "all"
         for (var i = 0; i < numLanes; i++) {
           tmpArr[i] = i + 1;
         }
-        loadSelect("test-lane-watch", tmpArr, 1);
+        loadSelect("test-lane-watch", tmpArr, 0);
       }
       return false;
     };

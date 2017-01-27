@@ -67,7 +67,9 @@ function openTabContent(evt, tabName) {
 function loadSelect(selectID, optValueArr, selectItem, optTextArr) {
   var selElem = document.getElementById(selectID);
   if (selElem.options.length > 0) {
-    removeSelectOptions(selElem);
+    if (selectID !== "test-lane-watch") {
+      removeSelectOptions(selElem);
+    }
   };
 
   for (var i = 0; i < optValueArr.length; i++) {
@@ -109,7 +111,7 @@ function initLanes(numLanes, ulId) {
   liLane.className = "laneMask";
   maskOut = "Mask Lanes: <br/>";
   for (var i = 1; i <= numLanes; i++) {
-    maskOut += ` Lane ${i} <input type="checkbox" id="mask${i}" value="${i}" onchange="setMask()"> `;
+    maskOut += ` Lane ${i} <input type="checkbox" id="${ulId}-mask${i}" value="${i}" onchange="setMask('${ulId}')"> `;
     if (numLanes > 4 && i > ((numLanes / 2) - 0.5) && i <= ((numLanes / 2) + 0.5)) {
       maskOut += "<br/>";
     }

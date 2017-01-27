@@ -29,10 +29,61 @@ function updateRaceTable() {
 
   racerTmpTable.innerHTML = trOut;
 
+  
+
 }
+function updateCurrentHeat (racerArray,nLanes) {
+  var heatTable = document.getElementById("heat-lane-assignments").getElementsByTagName("table");
+  var tableOut = "";
+  var headerTxt1 = `<th colspan="${nLanes*2}">Current Heat Lineup</th>`;
+  var headerTxt2 = "";
+  var headerTxt3base = "<th>Car #</th><th>Racer</th>";
+  var headerTxt3 = "";
+
+  //create the correct # of lanes in the table
+  for (var i = 1; i <= nLanes; i++){
+    headerTxt2 += `<th colspan="2">Lane ${i}</th>`
+    headerTxt3 += headerTxt3base;
+  }
+
+  tableOut += `<tr>${headerTxt1}</tr>`;
+  tableOut += `<tr>${headerTxt2}</tr>`;
+  tableOut += `<tr>${headerTxt3}</tr>`;
+
+  //console.log(tableOut);
+
+  if (typeof racerArray == undefined || racerArray == null || racerArray.length == 0){
+    heatTable[0].innerHTML = tableOut;
+    //console.log(heatTable[0]);
+    return -1;
+  }
+  tableOut += `<tr>`;
+  for (var i = 0; i < racerArray.length; i++) {
+    tableOut += `<td>${racerArray[i].car}</td><td>${racerArray[i].racer_name}</td>`;
+  }
+  tableOut += `</tr>`;
+  //console.log(tableOut);
+  //console.log(heatTable);
+
+  heatTable[0].innerHTML = tableOut;
+  return 1;
+
+}
+
 function setupRace() {
   currentHeatNum = 1;
   currentRnd = 1;
+  
+  var mainButtons = document.getElementById("mainT").getElementsByTagName("button");
+  disableButtons(mainButtons);
+
+  var testButtons = document.getElementById("testTrackT").getElementsByTagName("button");
+  disableButtons(testButtons);
+  disableButtons([document.getElementById("send-serial")]);
+
+  var editButtons = document.getElementById("editRacersT").getElementsByTagName("button");
+  disableButtons(editButtons);
+
 
   //load an array with just the included racerStats
 
@@ -45,7 +96,7 @@ function setupRace() {
   }
 
   laneLineup = generateRound(includedRacers.length, numLanes, currentRnd, raceRacers);
-  console.log(laneLineup);
+  //console.log(laneLineup);
   //createRoundTable(Lane1, Lane2, Lane3, "CurrentRound");
 
   //setDisplay(currentHeatNum, Lane1, Lane2, Lane3, "Lane1C", "Lane2C", "Lane3C");
@@ -70,7 +121,7 @@ function generateRound(nRacers, nLanes, RndNo, racerArray, laneArray) {
   //if it is the first round, then we have to do some initial setup
   if (RndNo == 1) {
     var order = genRandomNumArray((NumHeats * nLanes), 0, (nRacers + Blank - 1));
-    console.log(order);
+    //console.log(order);
     var j = 0;
 
     for (var i = 0; i < nLanes; i++) {
@@ -104,8 +155,8 @@ function generateRound(nRacers, nLanes, RndNo, racerArray, laneArray) {
         laneArray[i] = laneArray[i + 1].slice();
       };
     }
-    //now let's do the sorting but first we need to create a temporary array with times;
 
+    //now let's do the sorting but first we need to create a temporary array with times;
     var sortLane = [];
     for (var i = 0; i < nLanes; i++) {
       sortLane[i] = [];
@@ -118,56 +169,20 @@ function generateRound(nRacers, nLanes, RndNo, racerArray, laneArray) {
       };
 
     }
-    
+    // now do the sorting
     for (var i = 0; i < nLanes; i++) {
       sortLane[i].sort(function (a, b) {
         return a.Time - b.Time;
       })
     }
-    console.log(sortLane);
-    /*var SortLane1 = [];
-    var SortLane2 = [];
-    var SortLane3 = [];
-    for (var i = 0; i < Lane1.length; i++) {
-      if (racerArray[Lane1[i]] != null) {
-        SortLane1.push({ Record: Lane1[i], Time: racerArray[Lane1[i]].total_time });
-      } else {
-        SortLane1.push({ Record: Lane1[i], Time: 1000 });
-      };
-    };
-    bubbleSort(SortLane1, 'Time');
-
-    for (var i = 0; i < Lane1.length; i++) {
-      Lane1[i] = SortLane1[i].Record;
-    };
-
-    for (var i = 0; i < Lane2.length; i++) {
-      if (TigerArray[Lane2[i]] != null) {
-        SortLane2.push({ Record: Lane2[i], Time: TigerArray[Lane2[i]].TimeT });
-      } else {
-        SortLane2.push({ Record: Lane2[i], Time: 1000 });
-      };
-    };
-    bubbleSort(SortLane2, 'Time');
-
-    for (var i = 0; i < Lane2.length; i++) {
-      Lane2[i] = SortLane2[i].Record;
-    };
-
-    for (var i = 0; i < Lane3.length; i++) {
-      if (TigerArray[Lane3[i]] != null) {
-        SortLane3.push({ Record: Lane3[i], Time: TigerArray[Lane3[i]].TimeT });
-      } else {
-        SortLane3.push({ Record: Lane3[i], Time: 1000 });
-      };
-    };
-    bubbleSort(SortLane3, 'Time');
-
-    for (var i = 0; i < Lane3.length; i++) {
-      Lane3[i] = SortLane3[i].Record;
-    };*/
-  };
-  return true;
+    //now put the sorted order back into laneArray
+    for (var i = 0; i < nLanes; i++){
+      for (var j = 0; j < laneArray[i].length; j++){
+        laneArray[i][j] = sortLane[i][j].Record;
+      }
+    }
+    return laneArray;
+  }
 };
 
 function genRandomNumArray(entries, min, max) {
@@ -194,3 +209,9 @@ function genRandomNumArray(entries, min, max) {
   }
   return random_number;
 };
+
+function disableButtons(buttonArr){
+  for (var i = 0; i < buttonArr.length; i++){
+    buttonArr[i].disabled === false ? buttonArr[i].disabled = true : buttonArr[i].disabled = false;
+  }
+}

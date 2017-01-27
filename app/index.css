@@ -61,7 +61,12 @@ button:focus {
 	/*background-color: #003366;*/
 	outline: none;
 }
-
+button:disabled{
+	background-color: rgba(0,51,102,0.2);
+	color: grey;
+	cursor: not-allowed;
+	pointer-events: none;
+}
 .tabsImg {
 	float: left;
 	margin: 10px 10px 0 0;

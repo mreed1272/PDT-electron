@@ -1,7 +1,7 @@
 
-function updateLaneDisplay() {
+function updateLaneDisplay(ulID) {
     for (var i = 0; i < laneMask.length; i++) {
-        var tempLaneId = `tlane-lane${i + 1}-Li`;
+        var tempLaneId = `${ulID}-lane${i + 1}-Li`;
         //console.log(`temp lane Id: ${tempLaneId}`);
         switch (laneMask[i]) {
             case 1:
@@ -94,28 +94,28 @@ function loadHistory() {
 }
 
 function setLane(laneNum) {
-    console.log(`setLane argument: ${laneNum}`);
+    //console.log(`setLane argument: ${laneNum}`);
     if (laneNum == 0) {
         // uncheck all the checkboxes
         for (var i = 0; i < numLanes; i++) {
-            document.getElementById(`mask${i + 1}`).checked = false;
+            document.getElementById(`tlane-mask${i + 1}`).checked = false;
         }
     } else if (laneNum > 0) {
         //first let's check all lane mask checkboxes
         for (var i = 0; i < numLanes; i++) {
-            document.getElementById(`mask${i + 1}`).checked = true;
+            document.getElementById(`tlane-mask${i + 1}`).checked = true;
             //laneMask[i] = 1;
         }
         //now uncheck the one that we need to watch
-        document.getElementById(`mask${laneNum}`).checked = false;
+        document.getElementById(`tlane-mask${laneNum}`).checked = false;
     }
-    setMask();
+    setMask("tlane");
 }
 
-function setMask() {
+function setMask(ulID) {
     //check to see if a lane is checked and then mask it
     for (var i = 0; i < numLanes; i++) {
-        if (document.getElementById(`mask${i + 1}`).checked) {
+        if (document.getElementById(`${ulID}-mask${i + 1}`).checked) {
             laneMask[i] = 1;
 
         } else {
@@ -123,7 +123,7 @@ function setMask() {
         };
     };
     console.log(`LaneMask - ${laneMask}`);
-    updateLaneDisplay();
+    updateLaneDisplay(ulID);
     writeToArduino("U");
     for (var i = 0; i < laneMask.length; i++) {
         if (laneMask[i] === 1) {
