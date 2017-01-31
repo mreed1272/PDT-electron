@@ -234,6 +234,9 @@ function clearRacers() {
 }
 
 function editRacer(objCollection, type) {
+  if (isRacing) {
+    return -1;
+  }
   //var editDialog = document.getElementById("RacerStatsMod");
   var modButton = document.getElementById("buttonAddRacer");
   var liList = objCollection.getElementsByTagName("LI");

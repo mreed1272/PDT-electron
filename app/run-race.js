@@ -4,6 +4,7 @@ var currentRnd = 0;
 var roundResults = [];
 var NumHeats = 0;
 var raceRacers = [];
+var isRacing = false;
 
 function specWin(command) {
   //console.log(`Sending to main command: ${command}`);
@@ -63,6 +64,7 @@ function updateCurrentHeat (racerArray,nLanes) {
 function setupRace() {
   currentHeatNum = 1;
   currentRnd = 1;
+  isRacing = true;
   
   var mainButtons = document.getElementById("mainT").getElementsByTagName("button");
   disableButtons(mainButtons);

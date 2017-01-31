@@ -214,6 +214,9 @@ function saveRace() {
 }
 
 function checkRaceDialog(type) {
+  if (isRacing){
+    return -1;
+  }
   var editSideDialog = document.getElementById("RaceSideDialog");
 
   if (editSideDialog.style.width !== "0px") {
@@ -233,6 +236,9 @@ function clickMenuTab(tabNum) {
 }
 
 function editRaceDialog(type) {
+  if (isRacing){
+    return -1;
+  }
   var editSideDialog = document.getElementById("RaceSideDialog");
   var headerDialog = editSideDialog.getElementsByTagName("h2")[0];
   var closeSpan = document.getElementsByClassName("close")[0];
