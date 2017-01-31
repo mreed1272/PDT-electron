@@ -11,17 +11,16 @@ function initSerial() {
     if (comPorts.length != 0) {
       comPorts.length = 0;
     }
-    //var serPorts = [];
+
     if (err) { console.log(err); return; };
 
     comPorts = ports.map(function (port) {
       return port.comName
     });
-    //outStr = comPorts.join();
+
     console.log(comPorts);
     loadSelect("serial-port-list", comPorts, "");
 
-    //document.getElementById('port-names').innerHTML = `${outStr}<br/>`;
     if (ports.length !== 0) {
       setupArduino(ports);
     } else {
@@ -34,17 +33,16 @@ function initSerial() {
       document.getElementById("serial-timer").innerHTML = "No Serial Ports";
       document.getElementById("serial-timer").style.visibility = "visible";
       if (!initLane) {
-        initLanes(numLanes, "tlane");
-        initLanes(numLanes, "race-lane");
+        initLanes(numLanes, "tlane", true);
+        initLanes(numLanes, "race-lane", false);
         initLane = true;
       }
       //populate lane listing under test track select id "test-lane-watch"
       var tmpArr = [];
-      //tmpArr[0] = "all"
       for (var i = 0; i <= numLanes; i++) {
         tmpArr[i] = i + 1;
       }
-      
+
       loadSelect("test-lane-watch", tmpArr, 0);
 
     };
@@ -69,8 +67,8 @@ function setupArduino(availPorts) {
       document.getElementById("serial-timer").innerHTML = "No Timer Connected";
       document.getElementById("serial-timer").style.visibility = "visible";
       if (!initLane) {
-        initLanes(numLanes, "tlane");
-        initLanes(numLanes, "race-lane")
+        initLanes(numLanes, "tlane", true);
+        initLanes(numLanes, "race-lane", false)
         initLane = true;
         //populate lane listing under test track select id "test-lane-watch"
         var tmpArr = [];
@@ -86,12 +84,11 @@ function setupArduino(availPorts) {
 
   PDT.on('data', function (data) {
     var outStr = `${data}<br/>`;
-    //console.log(`Serial data: ${data} \t Previous data: ${lastSerialResponse}`);
+
     if (data.trim() == "K" && lastSerialResponse == "P") {
       writeToArduino("V");
       writeToArduino("N");
       writeToArduino("G");
-      //initArduino = true;
     }
     var serialDiv = document.getElementById('serial-output');
     serialDiv.innerHTML += outStr;
@@ -111,7 +108,7 @@ function writeToArduino(str) {
             console.log(err);
           };
         })
-      }, 200);
+      }, 250);
     };
     lastSerialCommand = str;
   } else {
@@ -126,7 +123,7 @@ function sendSerialForm() {
 }
 
 function checkSerialData(data) {
-  //console.log(data.charAt(0));
+
   switch (data.charAt(0)) {
     case "K":
       console.log("Timer ready");
@@ -155,7 +152,6 @@ function checkSerialData(data) {
       if (/M(\d)/.test(lastSerialCommand)) {
         var maskedLane = RegExp.$1;
         laneMask[maskedLane - 1] = 1;
-        //updateLaneDisplay();
         console.log(`Masked Lanes done: ${laneMask}`);
       };
       if (lastSerialCommand == "U") {
@@ -164,7 +160,6 @@ function checkSerialData(data) {
             laneMask[i] = 0;
           };
         };
-        //updateLaneDisplay();
         console.log(`All lanes unmasked: ${laneMask}`);
       };
       break;
@@ -191,17 +186,17 @@ function checkSerialData(data) {
         document.getElementById("lanes-timer").innerHTML = `${numLanes} Lanes`;
         if (!initLane) {
           initLanes(numLanes, "tlane");
+          initLanes(numLanes, "race-lane")
           initLane = true;
           //populate lane listing under test track select id "test-lane-watch"
           var tmpArr = [];
           for (var i = 0; i < numLanes; i++) {
             tmpArr[i] = i + 1;
           }
-          loadSelect("test-lane-watch", tmpArr, 1);
+          loadSelect("test-lane-watch", tmpArr, 0);
         };
       };
       //setup lane mask variable for # of lanes but only if not done already
-      //console.log(`laneMask is ${laneMask} and length is ${laneMask.length}`);
       if (laneMask.length == "0") {
         console.log("Initializing laneMask variable")
         for (var i = 0; i < numLanes; i++) {
@@ -216,35 +211,44 @@ function checkSerialData(data) {
       if (testRegEx) {
         var tempLaneNum = RegExp.$1;
         var tempLaneTime = RegExp.$2;
-        //console.log(`current tab-${currentTab}`);
+
         if (currentTab == "testTrackT") {
           var tempLaneId = `tlane-lane${tempLaneNum}`;
         } else {
-          var tempLaneId = `lane${tempLaneNum}`;
+          var tempLaneId = `race-lane-lane${tempLaneNum}`;
         }
         if (laneMask[tempLaneNum - 1] != 1) {
-          //console.log(`Update lane ${tempLaneNum} with time ${tempLaneTime}`);
           document.getElementById(tempLaneId).innerHTML = tempLaneTime;
           laneTimes.push({ lane: tempLaneNum, time: tempLaneTime });
         } else {
           laneTimes.push({ lane: tempLaneNum, time: 99 });
         };
         if (tempLaneNum == numLanes) {
-          //console.log(laneTimes);
           laneTimes.sort(function (a, b) {
             return a.time - b.time;
           });
           if (currentTab == "testTrackT") {
-            var winnerLane = [`tlane-lane${laneTimes[0].lane}-Li`, `tlane-lane${laneTimes[1].lane}-Li`, `tlane-lane${laneTimes[2].lane}-Li`];
+            if (numLanes > 2) {
+              var winnerLane = [`tlane-lane${laneTimes[0].lane}-Li`, `tlane-lane${laneTimes[1].lane}-Li`, `tlane-lane${laneTimes[2].lane}-Li`];
+            } else {
+              var winnerLane = [`tlane-lane${laneTimes[0].lane}-Li`, `tlane-lane${laneTimes[1].lane}-Li`];
+            }
           } else {
-            var winnerLane = [`lane${laneTimes[0].lane}-Li`, `lane${laneTimes[1].lane}Li`, `lane${laneTimes[2].lane}Li`];
+            if (numLanes > 2) {
+              var winnerLane = [`race-lane-lane${laneTimes[0].lane}-Li`, `race-lane-lane${laneTimes[1].lane}Li`, `race-lane-lane${laneTimes[2].lane}Li`];
+            } else {
+              var winnerLane = [`race-lane-lane${laneTimes[0].lane}-Li`, `race-lane-lane${laneTimes[1].lane}Li`,];
+            }
           }
 
           document.getElementById(winnerLane[0]).className = "winner1";
           document.getElementById(winnerLane[1]).className = "winner2";
-          document.getElementById(winnerLane[2]).className = "winner3";
-
-          updateHistoryTable(laneTimes);
+          if (numLanes > 2) {
+            document.getElementById(winnerLane[2]).className = "winner3";
+          }
+          if (currentTab == "testTrackT") {
+            updateHistoryTable(laneTimes);
+          }
         }
       };
       break;
@@ -254,5 +258,10 @@ function checkSerialData(data) {
 function resetArduino() {
   writeToArduino("R");
   clearDisplay();
-  setMask();
+  if (currentTab == "testTrackT") {
+    setMask("tlane");
+  }
+  if (currentTab == "runRaceT") {
+    setMask("race-lane");
+  }
 }

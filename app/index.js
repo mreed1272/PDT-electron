@@ -30,7 +30,7 @@ var lastRunTimes = [];
 
 var laneMask = [];
 var laneTimes = [];
-var numLanes = 2; //default to 2 lanes
+var numLanes = 5; //default to 2 lanes
 
 
 
@@ -87,7 +87,7 @@ function loadSelect(selectID, optValueArr, selectItem, optTextArr) {
   }
 }
 
-function initLanes(numLanes, ulId) {
+function initLanes(numLanes, ulId, showMask) {
   var selElem = document.getElementById(ulId);
   var liID = "";
   var liLane = null;
@@ -105,20 +105,26 @@ function initLanes(numLanes, ulId) {
     liLane.innerHTML = `Lane ${i}: <span class="LEDdisplay" id="${spanID}">0.0000</span> s`;
     selElem.appendChild(liLane);
   }
-  liID = `${ulId}-mask-Li`;
-  liLane = document.createElement("li");
-  liLane.id = liID;
-  liLane.className = "laneMask";
-  maskOut = "Mask Lanes: <br/>";
-  for (var i = 1; i <= numLanes; i++) {
-    maskOut += ` Lane ${i} <input type="checkbox" id="${ulId}-mask${i}" value="${i}" onchange="setMask('${ulId}')"> `;
-    if (numLanes > 4 && i > ((numLanes / 2) - 0.5) && i <= ((numLanes / 2) + 0.5)) {
-      maskOut += "<br/>";
+  
+    liID = `${ulId}-mask-Li`;
+    liLane = document.createElement("li");
+    liLane.id = liID;
+    if (showMask) {
+      liLane.className = "laneMask";
+    } else {
+      liLane.className = "hide laneMask";
     }
-  };
-  liLane.innerHTML = maskOut;
-  selElem.appendChild(liLane);
-
+    maskOut = "Mask Lanes: <br/>";
+    for (var i = 1; i <= numLanes; i++) {
+      maskOut += ` Lane ${i} <input type="checkbox" id="${ulId}-mask${i}" value="${i}" onchange="setMask('${ulId}')"> `;
+      if (numLanes > 4 && i > ((numLanes / 2) - 0.5) && i <= ((numLanes / 2) + 0.5)) {
+        maskOut += "<br/>";
+      }
+    };
+    liLane.innerHTML = maskOut;
+    selElem.appendChild(liLane);
+  
+    
   if (laneMask.length == "0") {
     console.log("Initializing laneMask variable")
     for (var i = 0; i < numLanes; i++) {

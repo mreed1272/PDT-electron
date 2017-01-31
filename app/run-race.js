@@ -1,6 +1,3 @@
-var Lane1 = [];
-var Lane2 = [];
-var Lane3 = [];
 var laneLineup = [];
 var currentHeatNum = 0;
 var currentRnd = 0;
@@ -20,7 +17,6 @@ function updateRaceTable() {
   trOut += "<tr><th>Car<br/>#</th><th>Racer Name</th><th>Racer<br/>Rank</th><th>Total<br/>Time (s)</th></tr>";
 
   for (var i = 0; i < includedRacers.length; i++) {
-
     trOut += `<tr><td>${racerStats[includedRacers[i]].car}</td>`;
     trOut += `<td>${racerStats[includedRacers[i]].racer_name}</td>`;
     trOut += `<td>${racerStats[includedRacers[i]].rank}</td>`;
@@ -28,10 +24,8 @@ function updateRaceTable() {
   }
 
   racerTmpTable.innerHTML = trOut;
-
-  
-
 }
+
 function updateCurrentHeat (racerArray,nLanes) {
   var heatTable = document.getElementById("heat-lane-assignments").getElementsByTagName("table");
   var tableOut = "";
@@ -50,24 +44,20 @@ function updateCurrentHeat (racerArray,nLanes) {
   tableOut += `<tr>${headerTxt2}</tr>`;
   tableOut += `<tr>${headerTxt3}</tr>`;
 
-  //console.log(tableOut);
-
   if (typeof racerArray == undefined || racerArray == null || racerArray.length == 0){
     heatTable[0].innerHTML = tableOut;
-    //console.log(heatTable[0]);
+    
     return -1;
   }
+
   tableOut += `<tr>`;
-  for (var i = 0; i < racerArray.length; i++) {
+  for (var i = 0; i < nLanes; i++) {
     tableOut += `<td>${racerArray[i].car}</td><td>${racerArray[i].racer_name}</td>`;
   }
   tableOut += `</tr>`;
-  //console.log(tableOut);
-  //console.log(heatTable);
-
+  
   heatTable[0].innerHTML = tableOut;
   return 1;
-
 }
 
 function setupRace() {

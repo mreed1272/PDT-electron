@@ -5,8 +5,9 @@
     width: 100%;
     background: #eee;
     box-shadow: 3px 3px 8px rgba(0,0,0,0.3);
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     padding: 10px 10px 5px 10px;
+    height: 100px;
 }
 
 #heat-lane-assignments {
@@ -30,22 +31,34 @@
     width: 4em;
     text-align: center;
 }
-#heat-lane-assignments tr:nth-child(1), #heat-lane-assignments tr:nth-child(2), #heat-lane-assignments tr:nth-child(3) {
+#heat-lane-assignments tr:nth-child(1) {
+    border-top: 0px none black;
+    border-left: 0px none black;
+    border-right: 0px none black;
+}
+#heat-lane-assignments th:nth-child(1) {
+    border-top: 0px none black;
+    border-left: 0px none black;
+    border-right: 0px none black;
+}
+#heat-lane-assignments tr:nth-child(2), #heat-lane-assignments tr:nth-child(3) {
     background: rgba(0,63,135,1.0);
     color: rgba(252,209,22,1.0);
 }
 
 #racer-race-results{
     float: left;
-    height: calc(100% - 100px);
+    height: calc(100% - 200px);
     background: #eee;
     margin-left: 20px;
     box-shadow: 3px 3px 8px rgba(0,0,0,0.3);
     padding: 10px;
     font-size: 0.9em;
+    width: 35%;
 }
 #racer-race-results table {
 	border-collapse: collapse;
+    width: 100%;
 }
 #racer-race-results th {
 	border-bottom: 2px solid rgb(0,63,135);
@@ -77,12 +90,13 @@
 
 #current-round {
     float: left;
-    height: calc(100% - 100px);
+    height: calc(100% - 200px);
     background: #eee;
     margin-left: 20px;
     box-shadow: 3px 3px 8px rgba(0,0,0,0.3);
     padding: 10px;
     font-size: 0.9em;
+    width: 60%;
 }
 #current-round .flex-title {
     display: flex;
@@ -95,7 +109,7 @@
 #current-round table {
     border-collapse: collapse;
     border: 1px solid black;
-    width: 550px;
+    width: 100%;
 }
 
 #current-round th {
@@ -119,15 +133,21 @@
 }
 
 #race-lane-results {
-    float: left;
-    height: calc(100% - 150px);
-    margin-left: 20px;
+    /*float: left;
+    height: calc(100% - 110px);*/
+    /*margin-left: 20px;*/
+    width: 100%;
+
 }
 
 #race-lane {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    align-items: center;
+    min-height: 40px;
     font-size: 1.0em;
     list-style: none;
-    width: 225px;
     margin: 0px 0px 10px 0px;
     padding: 0;
     background-color: #eee;
@@ -138,9 +158,9 @@
     border: 1px solid #003366;
     background-color: rgba(0,51,102,0.4);
     padding-left: 5px;
-    margin-left: 0;
+    margin-left: 5px;
     text-align: left;
-    /*float: left;*/
+    flex: 0 0 225px;
 }
 #race-lane li.laneMask {
     background: none;
