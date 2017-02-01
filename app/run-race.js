@@ -61,11 +61,15 @@ function updateCurrentHeat (racerArray,nLanes) {
   return 1;
 }
 
-function setupRace() {
-  currentHeatNum = 1;
-  currentRnd = 1;
-  isRacing = true;
-  
+function stopRace() {
+  isRacing = false;
+
+  //change the stop race button back to a start race button
+  var startButton = document.getElementById("start-race");
+  startButton.innerHTML = "Start Race";
+  startButton.setAttribute("onclick","setupRace()");
+
+  //re-enable all buttons in other tabs but the serial command send button
   var mainButtons = document.getElementById("mainT").getElementsByTagName("button");
   disableButtons(mainButtons);
 
@@ -75,6 +79,35 @@ function setupRace() {
 
   var editButtons = document.getElementById("editRacersT").getElementsByTagName("button");
   disableButtons(editButtons);
+  
+}
+
+function setupRace() {
+  if (isObjEmpty(raceInformation)){
+    alert("Please open/create a race file first before starting a race.");
+    return -1;
+  }
+
+  currentHeatNum = 1;
+  currentRnd = 1;
+  isRacing = true;
+  
+  //change the start race button to a stop race button
+  var startButton = document.getElementById("start-race");
+  startButton.innerHTML = "Stop Race";
+  startButton.setAttribute("onclick","stopRace()");
+
+  //disable all buttons in other tabs but the serial command send button
+  var mainButtons = document.getElementById("mainT").getElementsByTagName("button");
+  disableButtons(mainButtons);
+
+  var testButtons = document.getElementById("testTrackT").getElementsByTagName("button");
+  disableButtons(testButtons);
+  disableButtons([document.getElementById("send-serial")]);
+
+  var editButtons = document.getElementById("editRacersT").getElementsByTagName("button");
+  disableButtons(editButtons);
+  clearDisplay();
 
 
   //load an array with just the included racerStats
@@ -87,6 +120,7 @@ function setupRace() {
     }
   }
 
+  //generate the round and store in an array
   laneLineup = generateRound(includedRacers.length, numLanes, currentRnd, raceRacers);
   //console.log(laneLineup);
   //createRoundTable(Lane1, Lane2, Lane3, "CurrentRound");
@@ -97,6 +131,62 @@ function setupRace() {
   //hideTxt("Lane2Place");
   //hideTxt("Lane3Place");
 };
+
+function updateRoundTable (laneArray, racerArray, roundArray, RndNo, HeatNo, nLanes) {
+  /*
+  laneArray - nested array created by generateRound() with lane order by heat
+  racerArray - main array of objects with all of the main racer information including cumlative time, rank, car #, and name
+  roundArray - nested array to store results from each heat - each entry is an array with [Car,Time]n entries where n is the number of lanes
+  RndNo - current round number
+  HeatNo - current heat number
+  nLanes - number of lanes
+  */
+  var roundTxt = document.getElementById("current-round-number");
+  var heatTxt = document.getElementById("current-heat-number");
+  var roundTable = document.getElementById("round-lineup-table");
+  var headerTxt1a = "<tr><th rowspan=2>Heat #</th>";
+  var headerTxt1b = "";
+  var headerTxt1c = "</tr>";
+  var headerTxt2base = "<th>Car #</th><th>Heat Time</th>";
+  var headerTxt2 = ""
+
+  var tempOut = "";
+
+  //set the round and heat
+  roundTxt.innerHTML = RndNo;
+  heatTxt.innerHTML = HeatNo;
+
+  //build the table header
+  for (var i = 1; i <= nLanes; i++){
+    headerTxt1b += `<th colspan=2>Lane ${i}</th>`
+    headerTxt2 += headerTxt2base;
+  }
+  tempOut += headerTxt1a + headerTxt1b + headerTxt1c;
+  tempOut += `<tr>${headerTxt2}</tr>`;
+  
+  if (HeatNo === 1){
+    for(var i = 0; i < laneArray[0].length; i ++){  // i is the heat #
+      tempOut += "<tr>";
+      roundArray[i] = [];
+      for (var j = 0; j < nLanes; j++){             // j is the lane #
+        if (!isObjEmpty(racerArray[laneArray[j][i]])) {
+          tempOut += `<td>${(i + 1)}</td><td>${racerArray[laneArray[j][i]].car}</td><td>0.0000</td>`;
+          roundArray[i].push(racerArray[laneArray[j][i]].car);
+          roundArray[i].push(0);
+        } else {
+          tempOut += `<td>${(i + 1)}</td><td>No Racer</td><td> </td>`;
+          roundArray[i].push(0);
+          roundArray[i].push(0);
+        }
+      }
+      tempOut += "</tr>";
+    }
+  } else {
+
+  }
+
+  roundTable.innerHTML = tempOut;
+}
 
 function generateRound(nRacers, nLanes, RndNo, racerArray, laneArray) {
   var laneOrder = [];

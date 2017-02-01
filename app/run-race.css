@@ -1,7 +1,8 @@
 #race-current-heat{
     display: flex;
-    flex: 0 0 auto;
-    justify-content: space-between;
+    justify-content: space-around;
+    align-items: flex-start;
+    flex-flow: row nowrap;
     width: 100%;
     background: #eee;
     box-shadow: 3px 3px 8px rgba(0,0,0,0.3);
@@ -10,15 +11,25 @@
     height: 100px;
 }
 
-#heat-lane-assignments {
-    display: flex;
-    flex: 1 0 auto;
-    justify-content: center;
+#race-current-heat button {
+    flex: 0 0 auto;
+    /*margin-right: 5px;*/
 }
 
+#heat-lane-assignments {
+    display: flex;
+    flex-flow: row nowrap;
+    flex: 2 0 auto;
+    justify-content: center;
+    align-items: center;
+    padding-left: 10px;
+}
 #heat-lane-assignments table {
-    width: 70%;
+    width: 100%;
     border-collapse: collapse;
+}
+#heat-lane-assignments div {
+    width: 100%;
 }
 #heat-lane-assignments th {
     border: 1px solid rgb(0,0,0);

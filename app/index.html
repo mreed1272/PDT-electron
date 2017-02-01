@@ -223,16 +223,18 @@
 		<!--Tab Content - Run the Race-->
 		<div class="tabcontent" id="runRaceT">
 			<div id="race-current-heat">
-				<button type="button" style="width: 7em;" onclick="setupRace()">Start<br/>Race</button>
-				<!--<button type="button">Restart<br/>Race</button>-->
+				<div>
+					<button id="start-race" type="button" onclick="setupRace()">Start Race</button>
+					<button type="button">Save Race</button>
+				</div>
 				<div id="heat-lane-assignments">
-					<table>
-						
-					</table>
+					<div>
+						<table></table>
+					</div>
 				</div>
 			</div>
 			<div id="race-lane-results">
-				<button id="race-clear-display" onclick="clearDisplay()">Clear Display</button>
+				<button type="button" id="race-clear-display" onclick="clearDisplay()">Clear Display</button>
 				<button type="button" id="buttonSpecWinOpen" onclick="specWin('open');">Open Spectator Window</button>
 				<button type="button" id="buttonSpecWinClose" onclick="specWin('close');">Close Spectator Window</button>
 				<ul id="race-lane">
