@@ -27,7 +27,7 @@ function updateRaceTable() {
   racerTmpTable.innerHTML = trOut;
 }
 
-function updateCurrentHeat (racerArray,nLanes) {
+function updateCurrentHeat (racerArray, laneArray, nLanes, currentHeatNo) {
   var heatTable = document.getElementById("heat-lane-assignments").getElementsByTagName("table");
   var tableOut = "";
   var headerTxt1 = `<th colspan="${nLanes*2}">Current Heat Lineup</th>`;
@@ -53,7 +53,7 @@ function updateCurrentHeat (racerArray,nLanes) {
 
   tableOut += `<tr>`;
   for (var i = 0; i < nLanes; i++) {
-    tableOut += `<td>${racerArray[i].car}</td><td>${racerArray[i].racer_name}</td>`;
+    tableOut += `<td>${racerArray[laneArray[i][(currentHeatNo - 1)]].car}</td><td>${racerArray[laneArray[i][(currentHeatNo - 1)]].racer_name}</td>`;
   }
   tableOut += `</tr>`;
   
@@ -123,7 +123,7 @@ function setupRace() {
   //generate the round and store in an array
   laneLineup = generateRound(includedRacers.length, numLanes, currentRnd, raceRacers);
   //console.log(laneLineup);
-  //createRoundTable(Lane1, Lane2, Lane3, "CurrentRound");
+  roundResults = updateRoundTable(laneLineup, raceRacers, roundResults, currentRnd, currentHeatNum, numLanes);
 
   //setDisplay(currentHeatNum, Lane1, Lane2, Lane3, "Lane1C", "Lane2C", "Lane3C");
 
@@ -136,7 +136,7 @@ function updateRoundTable (laneArray, racerArray, roundArray, RndNo, HeatNo, nLa
   /*
   laneArray - nested array created by generateRound() with lane order by heat
   racerArray - main array of objects with all of the main racer information including cumlative time, rank, car #, and name
-  roundArray - nested array to store results from each heat - each entry is an array with [Car,Time]n entries where n is the number of lanes
+  roundArray - nested array to store results from each heat - each entry is an array with [Car,Time]<sub>n</sub> entries where n is the number of lanes
   RndNo - current round number
   HeatNo - current heat number
   nLanes - number of lanes
@@ -164,28 +164,30 @@ function updateRoundTable (laneArray, racerArray, roundArray, RndNo, HeatNo, nLa
   tempOut += headerTxt1a + headerTxt1b + headerTxt1c;
   tempOut += `<tr>${headerTxt2}</tr>`;
   
-  if (HeatNo === 1){
+  if (HeatNo === 1){  // initial setup 
     for(var i = 0; i < laneArray[0].length; i ++){  // i is the heat #
-      tempOut += "<tr>";
-      roundArray[i] = [];
+      tempOut += `<tr><td>${(i + 1)}</td>`;
+      roundArray[i] = [];                           // initialize the array to hold the results for each heat
       for (var j = 0; j < nLanes; j++){             // j is the lane #
         if (!isObjEmpty(racerArray[laneArray[j][i]])) {
-          tempOut += `<td>${(i + 1)}</td><td>${racerArray[laneArray[j][i]].car}</td><td>0.0000</td>`;
+          tempOut += `<td>${racerArray[laneArray[j][i]].car}</td><td>0.0000</td>`;
           roundArray[i].push(racerArray[laneArray[j][i]].car);
           roundArray[i].push(0);
         } else {
-          tempOut += `<td>${(i + 1)}</td><td>No Racer</td><td> </td>`;
+          tempOut += `<td>No Racer</td><td> </td>`;
           roundArray[i].push(0);
           roundArray[i].push(0);
         }
       }
       tempOut += "</tr>";
     }
-  } else {
+    updateCurrentHeat(racerArray, laneArray,nLanes,HeatNo);
+  } else {  //now deal with later heats
 
   }
 
   roundTable.innerHTML = tempOut;
+  return roundArray;
 }
 
 function generateRound(nRacers, nLanes, RndNo, racerArray, laneArray) {
@@ -296,4 +298,8 @@ function disableButtons(buttonArr){
   for (var i = 0; i < buttonArr.length; i++){
     buttonArr[i].disabled === false ? buttonArr[i].disabled = true : buttonArr[i].disabled = false;
   }
+}
+
+function postResults(raceTimes){
+  console.log(raceTimes);
 }

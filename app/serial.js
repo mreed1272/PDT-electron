@@ -249,6 +249,9 @@ function checkSerialData(data) {
           if (currentTab == "testTrackT") {
             updateHistoryTable(laneTimes);
           }
+          if (isRacing) {
+            postResults(laneTimes);
+          }
         }
       };
       break;

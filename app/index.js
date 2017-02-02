@@ -30,7 +30,7 @@ var lastRunTimes = [];
 
 var laneMask = [];
 var laneTimes = [];
-var numLanes = 5; //default to 2 lanes
+var numLanes = 2; //default to 2 lanes
 
 
 
