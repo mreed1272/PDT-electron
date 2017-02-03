@@ -92,6 +92,11 @@ function setupRace() {
   currentRnd = 1;
   isRacing = true;
 
+  var heatButton = document.getElementById("heat-button");
+  var redoHeatButton = document.getElementById("redo-heat");
+
+  disableButtons([heatButton,redoHeatButton]);
+
   //change the start race button to a stop race button
   var startButton = document.getElementById("start-race");
   startButton.innerHTML = "Stop Race";
@@ -185,14 +190,14 @@ function updateRoundTable(laneArray, racerArray, roundArray, RndNo, HeatNo, nLan
   } else {  //now deal with later heats
     for (var i = 0; i < laneArray[0].length; i++) {  // i is the heat #
       tempOut += `<tr><td>${(i + 1)}</td>`;
-      
-      for (var j = 0; j < nLanes*2; j = j + 2) {             // j is the lane #
+
+      for (var j = 0; j < nLanes * 2; j = j + 2) {             // j is the lane #
         if (roundArray[i][j] !== 0) {
-          tempOut += `<td>${roundArray[i][j]}</td><td>${roundArray[i][j+1]}</td>`;
-          
+          tempOut += `<td>${roundArray[i][j]}</td><td>${roundArray[i][j + 1]}</td>`;
+
         } else {
           tempOut += `<td>No Racer</td><td>-</td>`;
-          
+
         }
       }
       tempOut += "</tr>";
@@ -315,4 +320,53 @@ function disableButtons(buttonArr) {
 
 function postResults(raceTimes) {
   console.log(raceTimes);
+}
+
+function simHeat(nLanes) {
+  for (var i = 0; i < nLanes; i++) {
+    var rndTime = ((Math.random() * 3) + 1).toFixed(4);
+
+    if (currentTab == "testTrackT") {
+      var tempLaneId = `tlane-lane${i + 1}`;
+    } else {
+      var tempLaneId = `race-lane-lane${i + 1}`;
+    }
+
+    if (laneMask[i] != 1) {
+      document.getElementById(tempLaneId).innerHTML = rndTime;
+      laneTimes[i] = { lane: (i + 1), time: rndTime };
+    } else {
+      laneTimes[i] = { lane: (i + 1), time: 99 };
+    }
+  }
+
+  laneTimes.sort(function (a, b) {
+    return a.time - b.time;
+  })
+
+  if (currentTab == "testTrackT") {
+    if (nLanes > 2) {
+      var winnerLane = [`tlane-lane${laneTimes[0].lane}-Li`, `tlane-lane${laneTimes[1].lane}-Li`, `tlane-lane${laneTimes[2].lane}-Li`];
+    } else {
+      var winnerLane = [`tlane-lane${laneTimes[0].lane}-Li`, `tlane-lane${laneTimes[1].lane}-Li`];
+    }
+  } else {
+    if (nLanes > 2) {
+      var winnerLane = [`race-lane-lane${laneTimes[0].lane}-Li`, `race-lane-lane${laneTimes[1].lane}-Li`, `race-lane-lane${laneTimes[2].lane}-Li`];
+    } else {
+      var winnerLane = [`race-lane-lane${laneTimes[0].lane}-Li`, `race-lane-lane${laneTimes[1].lane}-Li`,];
+    }
+  }
+  //console.log(winnerLane);
+  document.getElementById(winnerLane[0]).className = "winner1";
+  document.getElementById(winnerLane[1]).className = "winner2";
+  if (nLanes > 2) {
+    document.getElementById(winnerLane[2]).className = "winner3";
+  }
+  if (currentTab == "testTrackT") {
+    updateHistoryTable(laneTimes);
+  }
+  if (isRacing) {
+    postResults(laneTimes);
+  }
 }

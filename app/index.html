@@ -224,8 +224,8 @@
 		<div class="tabcontent" id="runRaceT">
 			<div id="race-current-heat">
 				<div id="race-divButtons-1">
-					<button id="start-race" type="button" onclick="setupRace()">Start Race</button>
-					<button type="button">Save Race</button>
+					<button type="button" id="start-race"  onclick="setupRace()">Start Race</button>
+					<button type="button" id="save-race" onclick="">Save Race</button>
 					<button type="button" id="buttonSpecWinOpen" onclick="specWin('open');">Open Spectator Window</button>
 					<button type="button" id="buttonSpecWinClose" onclick="specWin('close');">Close Spectator Window</button>
 				</div>
@@ -237,6 +237,10 @@
 			</div>
 			<div id="race-lane-results">
 				<button type="button" id="race-clear-display" onclick="clearDisplay()">Clear Display</button>
+				<div class="buttons-flex-contain">
+					<button type="button" id="heat-button" disabled>Accept Heat Results</button>
+					<button type="button" id="redo-heat" disabled>Redo Heat</button>
+				</div>
 				<ul id="race-lane">
 				</ul>
 			</div>

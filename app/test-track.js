@@ -159,7 +159,7 @@ function updateHistoryTable(runObj) {
     hTable.innerHTML += outStr;
 
     lastRunTimes = JSON.parse(JSON.stringify(runObj));
-    console.log(lastRunTimes);
-    console.log(runObj);
+    //console.log(lastRunTimes);
+    //console.log(runObj);
     runNum++;
 }

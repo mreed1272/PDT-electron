@@ -158,10 +158,34 @@
 
 }
 
+#race-lane-results .buttons-flex-contain {
+    width: calc(100% - 100px);
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+#race-lane-results .buttons-flex-contain button{
+    margin-right: 5px;
+    min-width: 150px;
+}
+#race-lane-results .buttons-flex-contain #heat-button{
+    margin-left: calc(((100% + 100px) / 2) - 250px);
+}
+#race-lane-results .buttons-flex-contain #redo-heat{
+    margin-right: auto;
+}
+#race-lane-results #race-clear-display {
+    float: left;
+    min-width: 100px;
+}
 #race-lane {
     display: flex;
     flex-flow: row wrap;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
     min-height: 40px;
     font-size: 1.0em;
