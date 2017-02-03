@@ -238,8 +238,8 @@
 			<div id="race-lane-results">
 				<button type="button" id="race-clear-display" onclick="clearDisplay()">Clear Display</button>
 				<div class="buttons-flex-contain">
-					<button type="button" id="heat-button" disabled>Accept Heat Results</button>
-					<button type="button" id="redo-heat" disabled>Redo Heat</button>
+					<button type="button" id="heat-button" disabled onclick="raceUpdate('accept')">Accept Heat Results</button>
+					<button type="button" id="redo-heat" disabled onclick="raceUpdate('redo')">Redo Heat</button>
 				</div>
 				<ul id="race-lane">
 				</ul>

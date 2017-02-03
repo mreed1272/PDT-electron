@@ -415,7 +415,7 @@ function updateRaceInfo() {
     for (var i = 0; i < raceInformation.RacerRanks.length; i++) {
       tmpRanksNames[i] = rankTextPDT[raceInformation.RacerRanks[i]];
     };
-
+    raceRacers.length = 0;
     updateRaceTable();
 
 
