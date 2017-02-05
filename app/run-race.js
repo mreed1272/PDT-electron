@@ -64,7 +64,11 @@ function updateCurrentHeat(racerArray, laneArray, nLanes, currentHeatNo) {
 
   tableOut += `<tr>`;
   for (var i = 0; i < nLanes; i++) {
-    tableOut += `<td>${racerArray[laneArray[i][(currentHeatNo - 1)]].car}</td><td>${racerArray[laneArray[i][(currentHeatNo - 1)]].racer_name}</td>`;
+    if (!isObjEmpty(racerArray[laneArray[i][(currentHeatNo - 1)]])) {
+      tableOut += `<td>${racerArray[laneArray[i][(currentHeatNo - 1)]].car}</td><td>${racerArray[laneArray[i][(currentHeatNo - 1)]].racer_name}</td>`;
+    } else {
+      tableOut += `<td>&mdash;</td><td>No Racer</td>`;
+    }
   }
   tableOut += `</tr>`;
 
@@ -96,6 +100,9 @@ function stopRace() {
   var editButtons = document.getElementById("editRacersT").getElementsByTagName("button");
   disableButtons(editButtons);
 
+  clearDisplay();
+  clearObject(raceRacers);
+  updateRaceTable();
 }
 
 function setupRace() {
@@ -129,9 +136,6 @@ function setupRace() {
   var editButtons = document.getElementById("editRacersT").getElementsByTagName("button");
   disableButtons(editButtons);
   clearDisplay();
-
-
-
 
   //generate the round and store in an array
   laneLineup = generateRound(includedRacers.length, numLanes, currentRnd, raceRacers);
@@ -216,6 +220,8 @@ function generateRound(nRacers, nLanes, RndNo, racerArray, laneArray) {
   var laneOrder = [];
   var Remainder = (nRacers * 1) % (nLanes * 1);
 
+  //console.log(`remainder: ${Remainder}`);
+
   if (Remainder == 0) {
     var Blank = 0;
   } else {
@@ -223,23 +229,26 @@ function generateRound(nRacers, nLanes, RndNo, racerArray, laneArray) {
   };
 
   NumHeats = ((nRacers * 1) + (Blank * 1)) / (nLanes * 1);
-
+  //console.log(`Blank variable: ${Blank}, number of heats ${NumHeats}`);
   //if it is the first round, then we have to do some initial setup
   if (RndNo == 1) {
     var order = genRandomNumArray((NumHeats * nLanes), 0, (nRacers + Blank - 1));
-    //console.log(order);
+    //console.log(`Order ${order.join()}`);
     var j = 0;
 
     for (var i = 0; i < nLanes; i++) {
       laneOrder[i] = [];
     }
 
-    for (var i = 0; i < order.length; i = i + nLanes) {
+    for (var i = 0; i < order.length; i = i + nLanes * 1) {
+      //console.log(`variable i in loop is ${i}`)
       for (var x = 0; x < nLanes; x++) {
+        //console.log(`x var is ${x}, var j is ${j}, order index is ${i + x}`)
         laneOrder[x][j] = order[i + x]
       }
       j++;
     }
+    //console.log(laneOrder);
     return laneOrder;
   } else {
     //after first round, we need to swap lanes so each racers races on each lane, then we need
@@ -329,6 +338,7 @@ function raceUpdate(type) {
       for (var i = 0; i < numLanes; i++) {
         roundResults[currentHeatNum - 1][(((laneTimes[i].lane - 1) * 2) + 1)] = laneTimes[i].time * 1;
         raceRacers[laneLineup[laneTimes[i].lane - 1][currentHeatNum - 1]].total_time += laneTimes[i].time * 1;
+        raceRacers[laneLineup[laneTimes[i].lane - 1][currentHeatNum - 1]][`heat${currentHeatNum}`] = laneTimes[i].time * 1
       }
       updateRaceTable();
 
@@ -336,6 +346,7 @@ function raceUpdate(type) {
 
     case "redo":
       clearDisplay();
+
       break;
 
     default:

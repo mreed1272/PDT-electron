@@ -182,7 +182,7 @@ function checkSerialData(data) {
     case "n":
       console.log("Update number of lanes");
       if (/numl=(\d)/.test(data)) {
-        numLanes = RegExp.$1;
+        numLanes = RegExp.$1*1;
         document.getElementById("lanes-timer").innerHTML = `${numLanes} Lanes`;
         if (!initLane) {
           initLanes(numLanes, "tlane");
@@ -209,8 +209,8 @@ function checkSerialData(data) {
     default:
       var testRegEx = /(\d) - (\d+\.\d*)/.test(data);
       if (testRegEx) {
-        var tempLaneNum = RegExp.$1;
-        var tempLaneTime = RegExp.$2;
+        var tempLaneNum = RegExp.$1*1;
+        var tempLaneTime = RegExp.$2*1;
 
         if (currentTab == "testTrackT") {
           var tempLaneId = `tlane-lane${tempLaneNum}`;
@@ -235,9 +235,9 @@ function checkSerialData(data) {
             }
           } else {
             if (numLanes > 2) {
-              var winnerLane = [`race-lane-lane${laneTimes[0].lane}-Li`, `race-lane-lane${laneTimes[1].lane}Li`, `race-lane-lane${laneTimes[2].lane}Li`];
+              var winnerLane = [`race-lane-lane${laneTimes[0].lane}-Li`, `race-lane-lane${laneTimes[1].lane}-Li`, `race-lane-lane${laneTimes[2].lane}-Li`];
             } else {
-              var winnerLane = [`race-lane-lane${laneTimes[0].lane}-Li`, `race-lane-lane${laneTimes[1].lane}Li`,];
+              var winnerLane = [`race-lane-lane${laneTimes[0].lane}-Li`, `race-lane-lane${laneTimes[1].lane}-Li`,];
             }
           }
 
