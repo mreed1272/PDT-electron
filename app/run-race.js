@@ -1,4 +1,5 @@
 var laneLineup = [];
+var raceResults = [];
 var currentHeatNum = 0;
 var currentRnd = 0;
 var roundResults = [];
@@ -138,9 +139,10 @@ function setupRace() {
   clearDisplay();
 
   //generate the round and store in an array
-  laneLineup = generateRound(includedRacers.length, numLanes, currentRnd, raceRacers);
+  //laneLineup = 
+  generateRound(includedRacers.length, numLanes, currentRnd, raceRacers);
 
-  roundResults = updateRoundTable(laneLineup, raceRacers, roundResults, currentRnd, currentHeatNum, numLanes, true);
+  //roundResults = updateRoundTable(laneLineup, raceRacers, roundResults, currentRnd, currentHeatNum, numLanes, true);
 
 };
 
@@ -217,10 +219,8 @@ function updateRoundTable(laneArray, racerArray, roundArray, RndNo, HeatNo, nLan
 }
 
 function generateRound(nRacers, nLanes, RndNo, racerArray, laneArray) {
-  var laneOrder = [];
+  //var laneOrder = [];
   var Remainder = (nRacers * 1) % (nLanes * 1);
-
-  //console.log(`remainder: ${Remainder}`);
 
   if (Remainder == 0) {
     var Blank = 0;
@@ -229,33 +229,65 @@ function generateRound(nRacers, nLanes, RndNo, racerArray, laneArray) {
   };
 
   NumHeats = ((nRacers * 1) + (Blank * 1)) / (nLanes * 1);
-  //console.log(`Blank variable: ${Blank}, number of heats ${NumHeats}`);
+
   //if it is the first round, then we have to do some initial setup
   if (RndNo == 1) {
     var order = genRandomNumArray((NumHeats * nLanes), 0, (nRacers + Blank - 1));
-    //console.log(`Order ${order.join()}`);
-    var j = 0;
 
-    for (var i = 0; i < nLanes; i++) {
-      laneOrder[i] = [];
+    //make sure the array is empty
+    clearObject(raceResults);
+
+    //initialize the array
+    raceResults[RndNo * 1 - 1] = [];
+    for (var l = 0; l < nLanes; l++) { // # of lanes
+      raceResults[RndNo * 1 - 1][l] = [];
+      for (var h = 0; h < NumHeats; h++) { // # of heats
+        raceResults[RndNo * 1 - 1][l][h] = {};
+      }
     }
 
+    /*for (var i = 0; i < nLanes; i++) { // # of lanes
+      laneOrder[i] = [];
+      for (var h = 0; h < NumHeats; h++) { // # of heats
+        raceResults[RndNo * 1 - 1][h][i] = [];
+      }
+  }*/
+
+    //fill the array
+    var j = 0; // j is heat #
     for (var i = 0; i < order.length; i = i + nLanes * 1) {
-      //console.log(`variable i in loop is ${i}`)
-      for (var x = 0; x < nLanes; x++) {
-        //console.log(`x var is ${x}, var j is ${j}, order index is ${i + x}`)
-        laneOrder[x][j] = order[i + x]
+      for (var x = 0; x < nLanes; x++) {  // x is the lane #
+        //laneOrder[x][j] = order[i + x]
+        if (!isObjEmpty(racerArray[order[i + x]])) {
+          raceResults[RndNo * 1 - 1][x][j].car = racerArray[order[i + x]].car;
+          raceResults[RndNo * 1 - 1][x][j].racer_name = racerArray[order[i + x]].racer_name;
+          raceResults[RndNo * 1 - 1][x][j].total_time = racerArray[order[i + x]].total_time;
+          raceResults[RndNo * 1 - 1][x][j].heat_time = 0;
+          raceResults[RndNo * 1 - 1][x][j].heat_lane = x;
+          raceResults[RndNo * 1 - 1][x][j].race_index = order[i + x];
+          raceResults[RndNo * 1 - 1][x][j].main_index = checkKeyValue(racerStats, "car", raceRacers[order[i + x]].car);
+        } else {
+          raceResults[RndNo * 1 - 1][x][j].car = "-";
+          raceResults[RndNo * 1 - 1][x][j].racer_name = "No Racer";
+          raceResults[RndNo * 1 - 1][x][j].total_time = 0;
+          raceResults[RndNo * 1 - 1][x][j].heat_time = 0;
+          raceResults[RndNo * 1 - 1][x][j].heat_lane = x;
+          raceResults[RndNo * 1 - 1][x][j].race_index = 99;
+          raceResults[RndNo * 1 - 1][x][j].main_index = 99;
+        }
       }
       j++;
     }
-    //console.log(laneOrder);
-    return laneOrder;
+
+
+    //return laneOrder;
   } else {
     //after first round, we need to swap lanes so each racers races on each lane, then we need
     //to sort the lanes so that the fastest cars are at the top for the next round
-    var TempLane = [];
+    //var TempLane = [];
+    raceResults[RndNo - 1] = [];
     //if the lane array was not passed return with an error
-    if (laneArray === undefined) {
+    /*if (laneArray === undefined) {
       return false;
     }
 
@@ -269,10 +301,36 @@ function generateRound(nRacers, nLanes, RndNo, racerArray, laneArray) {
       } else {
         laneArray[i] = laneArray[i + 1].slice();
       };
+    }*/
+    // swap the lane arrays from the old round [RndNo-2] into the new round array [RndNo-1]
+    var l = 0;
+    for (var i = 0; i < nLanes; i++) {
+      if ((i + 1) == nLanes) {
+        l = 0;
+      } else {
+        var l = i+1;
+      }
+      raceResults[RndNo - 1][l] = JSON.parse(JSON.stringify(raceResults[RndNo - 2][i].slice()));
+    }
+    // now let's sort the new round array lanes by total_time
+    for (var l = 0; l < nLanes; l++) {
+      //console.log(raceResults[RndNo-1][l]);
+      raceResults[RndNo - 1][l].sort(function (a, b) {
+        return a.total_time - b.total_time;
+      })
+    }
+
+    // now reset the lane # and heat time for each car
+
+    for (var l = 0; l < nLanes; l ++){
+      for (var h = 0; h < NumHeats; h ++){
+        raceResults[RndNo-1][l][h].heat_lane = l;
+        raceResults[RndNo-1][l][h].heat_time = 0;
+      }
     }
 
     //now let's do the sorting but first we need to create a temporary array with times;
-    var sortLane = [];
+    /*var sortLane = [];
     for (var i = 0; i < nLanes; i++) {
       sortLane[i] = [];
       for (var j = 0; j < laneArray[i].length; j++) {
@@ -295,8 +353,8 @@ function generateRound(nRacers, nLanes, RndNo, racerArray, laneArray) {
       for (var j = 0; j < laneArray[i].length; j++) {
         laneArray[i][j] = sortLane[i][j].Record;
       }
-    }
-    return laneArray;
+    }*/
+    //return laneArray;
   }
 };
 
