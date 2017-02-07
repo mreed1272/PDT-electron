@@ -31,6 +31,7 @@ var lastRunTimes = [];
 var laneMask = [];
 var laneTimes = [];
 var numLanes = 2; //default to 2 lanes
+var numRounds = 0;
 
 
 
@@ -432,6 +433,8 @@ function updateRaceInfo() {
     tmpOutStr += `<li>Racer Information File: <b>${tmpRacerStatsName}</b></li>`;
     tmpOutStr += `</ul>`;
   };
+
+  numRounds = raceInformation.RaceRounds*1;
 
   raceInfoDiv.innerHTML = tmpOutStr;
   return true;

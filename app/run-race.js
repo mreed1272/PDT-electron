@@ -1,4 +1,3 @@
-var laneLineup = [];
 var raceResults = [];
 var currentHeatNum = 0;
 var currentRnd = 0;
@@ -27,7 +26,7 @@ function stopRace() {
   var redoHeatButton = document.getElementById("redo-heat");
   var saveResultsButton = document.getElementById("save-results");
 
-  disableButtons([heatButton, redoHeatButton, saveRaceButton]);
+  disableButtons([heatButton, redoHeatButton, saveResultsButton]);
 
 
   //re-enable all buttons in other tabs but the serial command send button
@@ -72,7 +71,10 @@ function setupRace() {
   var redoHeatButton = document.getElementById("redo-heat");
   var saveRaceButton = document.getElementById("save-results");
 
-  disableButtons([heatButton, redoHeatButton, saveRaceButton]);
+  heatButton.disabled = true;
+  redoHeatButton.disabled = true;
+
+  disableButtons([saveRaceButton]);
 
   //change the start race button to a stop race button
   var startButton = document.getElementById("start-race");
@@ -140,7 +142,7 @@ function generateRound(nRacers, nLanes, RndNo, racerArray) {
         if (!isObjEmpty(racerArray[order[i + x]])) {
           raceResults[RndNo * 1 - 1][x][j].car = racerArray[order[i + x]].car;
           raceResults[RndNo * 1 - 1][x][j].racer_name = racerArray[order[i + x]].racer_name;
-          raceResults[RndNo * 1 - 1][x][j].total_time = racerArray[order[i + x]].total_time;
+          //raceResults[RndNo * 1 - 1][x][j].total_time = racerArray[order[i + x]].total_time;
           raceResults[RndNo * 1 - 1][x][j].heat_time = 0;
           raceResults[RndNo * 1 - 1][x][j].heat_lane = x;
           raceResults[RndNo * 1 - 1][x][j].race_index = order[i + x];
@@ -148,7 +150,7 @@ function generateRound(nRacers, nLanes, RndNo, racerArray) {
         } else {
           raceResults[RndNo * 1 - 1][x][j].car = "-";
           raceResults[RndNo * 1 - 1][x][j].racer_name = "No Racer";
-          raceResults[RndNo * 1 - 1][x][j].total_time = 0;
+          //raceResults[RndNo * 1 - 1][x][j].total_time = 0;
           raceResults[RndNo * 1 - 1][x][j].heat_time = 0;
           raceResults[RndNo * 1 - 1][x][j].heat_lane = x;
           raceResults[RndNo * 1 - 1][x][j].race_index = 99;
@@ -252,10 +254,7 @@ function updateRacerTable() {
     }
   }
 
-  /* //let's sort the array by total_time
-   raceRacers.sort(function (a,b){
-     return a.total_time - b.total_time;
-   });*/
+  /* */
 
   trOut += "<tr><th>Car<br/>#</th><th>Racer Name</th><th>Racer<br/>Rank</th><th>Total<br/>Time (s)</th></tr>";
 
@@ -293,8 +292,19 @@ function updateCurrentHeat(resultsArr, RndNo, nLanes, currentHeatNo) {
     return -1;
   }
 
+  //lets make sure all the lanes masks are cleared
+  for (var l = 0; l < nLanes; l++){
+    document.getElementById(`race-lane-mask${l + 1}`).checked = false;
+  }
+  setMask("race-lane");
+
   tableOut += `<tr>`;
   for (var l = 0; l < nLanes; l++) {  // l is # of lanes
+    //set lane mask
+    if (resultsArr[RndNo - 1][l][currentHeatNo - 1].car == "-") {
+      document.getElementById(`race-lane-mask${l + 1}`).checked = true;
+      setMask("race-lane");
+    }
     tableOut += `<td>${resultsArr[RndNo - 1][l][currentHeatNo - 1].car}</td><td>${resultsArr[RndNo - 1][l][currentHeatNo - 1].racer_name}</td>`;
   }
   tableOut += `</tr>`;
@@ -312,11 +322,11 @@ function raceUpdate(type) {
 
   switch (type) {
     case "accept":
-      disableButtons([redoHeatButton]);
+      redoHeatButton.disabled = true;
       if (currentHeatNum !== NumHeats) {
         heatButton.innerHTML = "Next Heat";
         heatButton.setAttribute('onclick', "raceUpdate('next')");
-      } else if (currentRnd !== 3) {
+      } else if (currentRnd !== numRounds) {
         heatButton.innerHTML = "Next Round";
         heatButton.setAttribute('onclick', "raceUpdate('next')");
       } else {
@@ -324,9 +334,14 @@ function raceUpdate(type) {
         heatButton.setAttribute('onclick', "raceUpdate('finish')");
       }
 
+      // let's make sure laneTimes is in the correct order, so sort laneTimes by lane #
+      laneTimes.sort(function (a, b) {
+        return a.lane - b.lane;
+      })
+
       for (var l = 0; l < numLanes; l++) {
         raceResults[currentRnd - 1][l][currentHeatNum - 1].heat_time = laneTimes[l].time * 1;
-        raceResults[currentRnd - 1][l][currentHeatNum - 1].total_time += laneTimes[l].time * 1;
+        //raceResults[currentRnd - 1][l][currentHeatNum - 1].total_time += laneTimes[l].time * 1;
         if (raceResults[currentRnd - 1][l][currentHeatNum - 1].race_index != 99) {
           raceRacers[raceResults[currentRnd - 1][l][currentHeatNum - 1].race_index].total_time += laneTimes[l].time * 1;
         }
@@ -338,6 +353,8 @@ function raceUpdate(type) {
 
     case "redo":
       clearDisplay();
+      heatButton.disabled = true;
+      redoHeatButton.disabled = true;
       //resetArduino();
 
       break;
@@ -346,7 +363,7 @@ function raceUpdate(type) {
       clearDisplay();
       if (currentHeatNum !== NumHeats) {
         currentHeatNum++;
-      } else if (currentRnd !== 3) {
+      } else if (currentRnd !== numRounds) {
         currentHeatNum = 1;
         currentRnd++;
         generateRound(raceRacers.length, numLanes, currentRnd, raceRacers);
@@ -358,7 +375,9 @@ function raceUpdate(type) {
       updateRacerTable();
       updateRoundTable(raceResults, currentRnd, currentHeatNum, numLanes, NumHeats);
       updateCurrentHeat(raceResults, currentRnd, numLanes, currentHeatNum);
-      disableButtons([redoHeatButton]);
+      heatButton.disabled = true;
+      redoHeatButton.disabled = true;
+
       heatButton.innerHTML = "Accept Heat Results";
       heatButton.setAttribute('onclick', "raceUpdate('accept')");
 
@@ -366,10 +385,31 @@ function raceUpdate(type) {
 
     case "finish":
       clearDisplay();
+      isRacing = false;
+      //let's sort the array by total_time
+      raceRacers.sort(function (a, b) {
+        return a.total_time - b.total_time;
+      });
+      updateRacerTable();
       startButton.innerHTML = "Start Race"
-      startButton.setAttribute('onclick',"setupRace()");
-      disableButtons([redoHeatButton, saveResultsButton, startButton]);
+      startButton.setAttribute('onclick', "setupRace()");
 
+      heatButton.innerHTML = "Accept Heat Results";
+      heatButton.setAttribute('onclick', "raceUpdate('accept')");
+
+      heatButton.disabled = true;
+      saveResultsButton.disabled = false;
+      startButton.disabled = true;
+      var heatTable = document.getElementById("heat-lane-assignments").getElementsByTagName("table");
+      heatTable[0].innerHTML = "";
+
+      var roundTxt = document.getElementById("current-round-number");
+      var heatTxt = document.getElementById("current-heat-number");
+      var roundTable = document.getElementById("round-lineup-table");
+
+      roundTxt.innerHTML = "";
+      heatTxt.innerHTML = "";
+      roundTable.innerHTML = "";
 
       break;
 
@@ -410,6 +450,14 @@ function disableButtons(buttonArr) {
 }
 
 function postResults(raceTimes) {
+  var heatButton = document.getElementById("heat-button");
+  var redoHeatButton = document.getElementById("redo-heat");
+  var saveResultsButton = document.getElementById("save-results");
+  var startButton = document.getElementById("start-race");
+
+  heatButton.disabled = false;
+  redoHeatButton.disabled = false;
+
   //send results to spectator window
   console.log(raceTimes);
 }
@@ -461,4 +509,20 @@ function simHeat(nLanes) {
   if (isRacing) {
     postResults(laneTimes);
   }
+}
+
+function saveResults() {
+  var heatButton = document.getElementById("heat-button");
+  var redoHeatButton = document.getElementById("redo-heat");
+  var saveResultsButton = document.getElementById("save-results");
+  var startButton = document.getElementById("start-race");
+
+  console.log(raceRacers);
+  console.log(raceResults);
+  clearObject(raceResults);
+  clearObject(raceRacers);
+  updateRacerTable();
+
+  startButton.disabled = false;
+
 }
