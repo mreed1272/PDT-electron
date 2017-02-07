@@ -368,8 +368,8 @@ function raceUpdate(type) {
         currentRnd++;
         generateRound(raceRacers.length, numLanes, currentRnd, raceRacers);
       } else {
-        currentRnd = 1;
-        currentHeatNum = 1;
+        //currentRnd = 1;
+        //currentHeatNum = 1;
         return;
       }
       updateRacerTable();
