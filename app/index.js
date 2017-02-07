@@ -416,7 +416,7 @@ function updateRaceInfo() {
       tmpRanksNames[i] = rankTextPDT[raceInformation.RacerRanks[i]];
     };
     raceRacers.length = 0;
-    updateRaceTable();
+    updateRacerTable();
 
 
     tmpOutStr = `<ul>`;

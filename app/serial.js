@@ -53,34 +53,38 @@ function setupArduino(availPorts) {
 
   for (var i = 0; i < availPorts.length; i++) {
     var testStr = availPorts[i].manufacturer.toString();
+    console.log(`testing port: ${availPorts[i].comName}\n manufacturer: ${testStr}`);
     if (testStr.search(patt) >= 0) {
       document.getElementById("serial-timer").innerHTML = availPorts[i].comName;
       PDT = new SerialPort(availPorts[i].comName, { baudrate: 9600, parser: SerialPort.parsers.readline('\n') });
       initArduino = true;
-    } else {
-      console.log("No timer found")
-      var footerElem = document.getElementsByClassName("footer-item");
+      break;
+    }
+  }
+  if (!initArduino) {
+    console.log("No timer found")
+    var footerElem = document.getElementsByClassName("footer-item");
 
-      for (var i = 0; i < footerElem.length; i++) {
-        footerElem[i].style.visibility = "hidden";
+    for (var i = 0; i < footerElem.length; i++) {
+      footerElem[i].style.visibility = "hidden";
+    }
+    document.getElementById("serial-timer").innerHTML = "No Timer Connected";
+    document.getElementById("serial-timer").style.visibility = "visible";
+    if (!initLane) {
+      initLanes(numLanes, "tlane", true);
+      initLanes(numLanes, "race-lane", false)
+      initLane = true;
+      //populate lane listing under test track select id "test-lane-watch"
+      var tmpArr = [];
+      //tmpArr[0] = "all"
+      for (var i = 0; i < numLanes; i++) {
+        tmpArr[i] = i + 1;
       }
-      document.getElementById("serial-timer").innerHTML = "No Timer Connected";
-      document.getElementById("serial-timer").style.visibility = "visible";
-      if (!initLane) {
-        initLanes(numLanes, "tlane", true);
-        initLanes(numLanes, "race-lane", false)
-        initLane = true;
-        //populate lane listing under test track select id "test-lane-watch"
-        var tmpArr = [];
-        //tmpArr[0] = "all"
-        for (var i = 0; i < numLanes; i++) {
-          tmpArr[i] = i + 1;
-        }
-        loadSelect("test-lane-watch", tmpArr, 0);
-      }
-      return false;
-    };
-  };
+      loadSelect("test-lane-watch", tmpArr, 0);
+    }
+    return false;
+  }
+
 
   PDT.on('data', function (data) {
     var outStr = `${data}<br/>`;
@@ -96,6 +100,10 @@ function setupArduino(availPorts) {
     checkSerialData(data.trim());
     lastSerialResponse = data.trim();
   });
+
+  PDT.on('error', function(err){
+    console.log(`Error with com port: ${err.message}`);
+  })
 }
 
 function writeToArduino(str) {
@@ -182,7 +190,7 @@ function checkSerialData(data) {
     case "n":
       console.log("Update number of lanes");
       if (/numl=(\d)/.test(data)) {
-        numLanes = RegExp.$1*1;
+        numLanes = RegExp.$1 * 1;
         document.getElementById("lanes-timer").innerHTML = `${numLanes} Lanes`;
         if (!initLane) {
           initLanes(numLanes, "tlane");
@@ -209,8 +217,8 @@ function checkSerialData(data) {
     default:
       var testRegEx = /(\d) - (\d+\.\d*)/.test(data);
       if (testRegEx) {
-        var tempLaneNum = RegExp.$1*1;
-        var tempLaneTime = RegExp.$2*1;
+        var tempLaneNum = RegExp.$1 * 1;
+        var tempLaneTime = RegExp.$2 * 1;
 
         if (currentTab == "testTrackT") {
           var tempLaneId = `tlane-lane${tempLaneNum}`;

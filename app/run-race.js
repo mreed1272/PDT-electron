@@ -12,72 +12,10 @@ function specWin(command) {
   ipcRenderer.send('spectator-window', command);
 }
 
-function updateRaceTable() {
-  var trOut = "";
-  var racerTmpTable = document.getElementById("racer-table");
-
-  //load an array with just the included racerStats
-  if (isObjEmpty(raceRacers)) {
-    for (var i = 0; i < includedRacers.length; i++) {
-      raceRacers[i] = {};
-
-      for (var keys in racerStats[includedRacers[i]]) {
-        raceRacers[i][keys] = racerStats[includedRacers[i]][keys];
-      }
-    }
-  }
-
-  trOut += "<tr><th>Car<br/>#</th><th>Racer Name</th><th>Racer<br/>Rank</th><th>Total<br/>Time (s)</th></tr>";
-
-  for (var i = 0; i < raceRacers.length; i++) {
-    trOut += `<tr><td>${raceRacers[i].car}</td>`;
-    trOut += `<td>${raceRacers[i].racer_name}</td>`;
-    trOut += `<td>${raceRacers[i].rank}</td>`;
-    trOut += `<td>${raceRacers[i].total_time}</td></tr>`;
-  }
-
-  racerTmpTable.innerHTML = trOut;
-}
-
-function updateCurrentHeat(racerArray, laneArray, nLanes, currentHeatNo) {
-  var heatTable = document.getElementById("heat-lane-assignments").getElementsByTagName("table");
-  var tableOut = "";
-  var headerTxt1 = `<th colspan="${nLanes * 2}">Current Heat Lineup</th>`;
-  var headerTxt2 = "";
-  var headerTxt3base = "<th>Car #</th><th>Racer</th>";
-  var headerTxt3 = "";
-
-  //create the correct # of lanes in the table
-  for (var i = 1; i <= nLanes; i++) {
-    headerTxt2 += `<th colspan="2">Lane ${i}</th>`
-    headerTxt3 += headerTxt3base;
-  }
-
-  tableOut += `<tr>${headerTxt1}</tr>`;
-  tableOut += `<tr>${headerTxt2}</tr>`;
-  tableOut += `<tr>${headerTxt3}</tr>`;
-
-  if (typeof racerArray == undefined || racerArray == null || racerArray.length == 0) {
-    heatTable[0].innerHTML = tableOut;
-
-    return -1;
-  }
-
-  tableOut += `<tr>`;
-  for (var i = 0; i < nLanes; i++) {
-    if (!isObjEmpty(racerArray[laneArray[i][(currentHeatNo - 1)]])) {
-      tableOut += `<td>${racerArray[laneArray[i][(currentHeatNo - 1)]].car}</td><td>${racerArray[laneArray[i][(currentHeatNo - 1)]].racer_name}</td>`;
-    } else {
-      tableOut += `<td>&mdash;</td><td>No Racer</td>`;
-    }
-  }
-  tableOut += `</tr>`;
-
-  heatTable[0].innerHTML = tableOut;
-  return 1;
-}
-
 function stopRace() {
+  var resp = confirm("Are you sure you want to stop the race?  All results will be deleted.");
+  if (!resp) { return -1 };
+
   isRacing = false;
 
   //change the stop race button back to a start race button
@@ -87,8 +25,10 @@ function stopRace() {
 
   var heatButton = document.getElementById("heat-button");
   var redoHeatButton = document.getElementById("redo-heat");
+  var saveResultsButton = document.getElementById("save-results");
 
-  disableButtons([heatButton, redoHeatButton]);
+  disableButtons([heatButton, redoHeatButton, saveRaceButton]);
+
 
   //re-enable all buttons in other tabs but the serial command send button
   var mainButtons = document.getElementById("mainT").getElementsByTagName("button");
@@ -103,7 +43,19 @@ function stopRace() {
 
   clearDisplay();
   clearObject(raceRacers);
-  updateRaceTable();
+  clearObject(raceResults);
+  updateRacerTable();
+  var heatTable = document.getElementById("heat-lane-assignments").getElementsByTagName("table");
+  heatTable[0].innerHTML = "";
+
+  var roundTxt = document.getElementById("current-round-number");
+  var heatTxt = document.getElementById("current-heat-number");
+  var roundTable = document.getElementById("round-lineup-table");
+
+  roundTxt.innerHTML = "";
+  heatTxt.innerHTML = "";
+  roundTable.innerHTML = "";
+
 }
 
 function setupRace() {
@@ -118,8 +70,9 @@ function setupRace() {
 
   var heatButton = document.getElementById("heat-button");
   var redoHeatButton = document.getElementById("redo-heat");
+  var saveRaceButton = document.getElementById("save-results");
 
-  disableButtons([heatButton, redoHeatButton]);
+  disableButtons([heatButton, redoHeatButton, saveRaceButton]);
 
   //change the start race button to a stop race button
   var startButton = document.getElementById("start-race");
@@ -139,87 +92,21 @@ function setupRace() {
   clearDisplay();
 
   //generate the round and store in an array
-  //laneLineup = 
   generateRound(includedRacers.length, numLanes, currentRnd, raceRacers);
 
-  //roundResults = updateRoundTable(laneLineup, raceRacers, roundResults, currentRnd, currentHeatNum, numLanes, true);
+  updateRoundTable(raceResults, currentRnd, currentHeatNum, numLanes, NumHeats);
+  updateCurrentHeat(raceResults, currentRnd, numLanes, currentHeatNum);
 
-};
-
-function updateRoundTable(laneArray, racerArray, roundArray, RndNo, HeatNo, nLanes, initHeat) {
-  /*
-  laneArray - nested array created by generateRound() with lane order by heat
-  racerArray - main array of objects with all of the main racer information including cumlative time, rank, car #, and name
-  roundArray - nested array to store results from each heat - each entry is an array with [Car,Time]<sub>n</sub> entries where n is the number of lanes
-  RndNo - current round number
-  HeatNo - current heat number
-  nLanes - number of lanes
-  */
-  var roundTxt = document.getElementById("current-round-number");
-  var heatTxt = document.getElementById("current-heat-number");
-  var roundTable = document.getElementById("round-lineup-table");
-  var headerTxt1a = "<tr><th rowspan=2>Heat #</th>";
-  var headerTxt1b = "";
-  var headerTxt1c = "</tr>";
-  var headerTxt2base = "<th>Car #</th><th>Heat Time</th>";
-  var headerTxt2 = ""
-
-  var tempOut = "";
-
-  //set the round and heat
-  roundTxt.innerHTML = RndNo;
-  heatTxt.innerHTML = HeatNo;
-
-  //build the table header
-  for (var i = 1; i <= nLanes; i++) {
-    headerTxt1b += `<th colspan=2>Lane ${i}</th>`
-    headerTxt2 += headerTxt2base;
-  }
-  tempOut += headerTxt1a + headerTxt1b + headerTxt1c;
-  tempOut += `<tr>${headerTxt2}</tr>`;
-
-  if (initHeat === true) {  // initial setup 
-    for (var i = 0; i < laneArray[0].length; i++) {  // i is the heat #
-      tempOut += `<tr><td>${(i + 1)}</td>`;
-      roundArray[i] = [];                           // initialize the array to hold the results for each heat
-
-      for (var j = 0; j < nLanes; j++) {             // j is the lane #
-        if (!isObjEmpty(racerArray[laneArray[j][i]])) {
-          tempOut += `<td>${racerArray[laneArray[j][i]].car}</td><td>0.0000</td>`;
-          roundArray[i].push(racerArray[laneArray[j][i]].car * 1);
-          roundArray[i].push(0);
-        } else {
-          tempOut += `<td>No Racer</td><td> </td>`;
-          roundArray[i].push(0);
-          roundArray[i].push(0);
-        }
-      }
-      tempOut += "</tr>";
-    }
-    updateCurrentHeat(racerArray, laneArray, nLanes, HeatNo);
-  } else {  //now deal with later heats
-    for (var i = 0; i < laneArray[0].length; i++) {  // i is the heat #
-      tempOut += `<tr><td>${(i + 1)}</td>`;
-
-      for (var j = 0; j < nLanes * 2; j = j + 2) {             // j is the lane #
-        if (roundArray[i][j] !== 0) {
-          tempOut += `<td>${roundArray[i][j]}</td><td>${roundArray[i][j + 1]}</td>`;
-
-        } else {
-          tempOut += `<td>No Racer</td><td>-</td>`;
-
-        }
-      }
-      tempOut += "</tr>";
-    }
-  }
-
-  roundTable.innerHTML = tempOut;
-  return roundArray;
 }
 
-function generateRound(nRacers, nLanes, RndNo, racerArray, laneArray) {
-  //var laneOrder = [];
+function generateRound(nRacers, nLanes, RndNo, racerArray) {
+  /*
+  nRacers - number of racers in race
+  nLanes - number of lanes on track
+  RndNo - current round number
+  racerArray - array containing only the racers in the race - follows the same structure as racerStats
+  */
+
   var Remainder = (nRacers * 1) % (nLanes * 1);
 
   if (Remainder == 0) {
@@ -246,18 +133,10 @@ function generateRound(nRacers, nLanes, RndNo, racerArray, laneArray) {
       }
     }
 
-    /*for (var i = 0; i < nLanes; i++) { // # of lanes
-      laneOrder[i] = [];
-      for (var h = 0; h < NumHeats; h++) { // # of heats
-        raceResults[RndNo * 1 - 1][h][i] = [];
-      }
-  }*/
-
     //fill the array
     var j = 0; // j is heat #
     for (var i = 0; i < order.length; i = i + nLanes * 1) {
       for (var x = 0; x < nLanes; x++) {  // x is the lane #
-        //laneOrder[x][j] = order[i + x]
         if (!isObjEmpty(racerArray[order[i + x]])) {
           raceResults[RndNo * 1 - 1][x][j].car = racerArray[order[i + x]].car;
           raceResults[RndNo * 1 - 1][x][j].racer_name = racerArray[order[i + x]].racer_name;
@@ -278,85 +157,226 @@ function generateRound(nRacers, nLanes, RndNo, racerArray, laneArray) {
       }
       j++;
     }
-
-
-    //return laneOrder;
   } else {
     //after first round, we need to swap lanes so each racers races on each lane, then we need
     //to sort the lanes so that the fastest cars are at the top for the next round
-    //var TempLane = [];
     raceResults[RndNo - 1] = [];
-    //if the lane array was not passed return with an error
-    /*if (laneArray === undefined) {
-      return false;
-    }
 
-    //swap the lanes
-    for (var i = 0; i < laneArray.length; i++) {
-      if (i === 0) {
-        TempLane = laneArray[i].slice();
-        laneArray[i] = laneArray[i + 1].slice();
-      } else if (i === (laneArray.length - 1)) {
-        laneArray[i] = TempLane.slice();
-      } else {
-        laneArray[i] = laneArray[i + 1].slice();
-      };
-    }*/
     // swap the lane arrays from the old round [RndNo-2] into the new round array [RndNo-1]
     var l = 0;
     for (var i = 0; i < nLanes; i++) {
       if ((i + 1) == nLanes) {
         l = 0;
       } else {
-        var l = i+1;
+        var l = i + 1;
       }
       raceResults[RndNo - 1][l] = JSON.parse(JSON.stringify(raceResults[RndNo - 2][i].slice()));
     }
     // now let's sort the new round array lanes by total_time
     for (var l = 0; l < nLanes; l++) {
-      //console.log(raceResults[RndNo-1][l]);
       raceResults[RndNo - 1][l].sort(function (a, b) {
         return a.total_time - b.total_time;
       })
     }
 
     // now reset the lane # and heat time for each car
-
-    for (var l = 0; l < nLanes; l ++){
-      for (var h = 0; h < NumHeats; h ++){
-        raceResults[RndNo-1][l][h].heat_lane = l;
-        raceResults[RndNo-1][l][h].heat_time = 0;
+    for (var l = 0; l < nLanes; l++) {
+      for (var h = 0; h < NumHeats; h++) {
+        raceResults[RndNo - 1][l][h].heat_lane = l;
+        raceResults[RndNo - 1][l][h].heat_time = 0;
       }
     }
-
-    //now let's do the sorting but first we need to create a temporary array with times;
-    /*var sortLane = [];
-    for (var i = 0; i < nLanes; i++) {
-      sortLane[i] = [];
-      for (var j = 0; j < laneArray[i].length; j++) {
-        if (racerArray[laneArray[i][j]] != null) {
-          sortLane[i].push({ Record: laneArray[i][j], Time: racerArray[laneArray[i][j]].total_time });
-        } else {
-          sortLane[i].push({ Record: laneArray[i][j], Time: 1000.5 });
-        };
-      };
-
-    }
-    // now do the sorting
-    for (var i = 0; i < nLanes; i++) {
-      sortLane[i].sort(function (a, b) {
-        return a.Time - b.Time;
-      })
-    }
-    //now put the sorted order back into laneArray
-    for (var i = 0; i < nLanes; i++) {
-      for (var j = 0; j < laneArray[i].length; j++) {
-        laneArray[i][j] = sortLane[i][j].Record;
-      }
-    }*/
-    //return laneArray;
   }
-};
+}
+
+function updateRoundTable(resultsArr, RndNo, HeatNo, nLanes, numberHeats) {
+  /*
+  resultsArr - nested array created by generateRound() with [round][lane][heat] plus object with
+  {car, racer_name, total_time, heat_time, heat_lane, race_index, main_index}
+      - race_index is the index of the entry in raceRacers array
+      - main_index is the index of the entry in the racerStats array
+  RndNo - current round number
+  HeatNo - current heat number
+  nLanes - number of lanes
+  numberHeats - number of heats in round
+  */
+  var roundTxt = document.getElementById("current-round-number");
+  var heatTxt = document.getElementById("current-heat-number");
+  var roundTable = document.getElementById("round-lineup-table");
+  var headerTxt1a = "<tr><th rowspan=2>Heat #</th>";
+  var headerTxt1b = "";
+  var headerTxt1c = "</tr>";
+  var headerTxt2base = "<th>Car #</th><th>Heat Time</th>";
+  var headerTxt2 = ""
+
+  var tempOut = "";
+
+  //set the round and heat
+  roundTxt.innerHTML = RndNo;
+  heatTxt.innerHTML = HeatNo;
+
+  //build the table header
+  for (var i = 1; i <= nLanes; i++) {
+    headerTxt1b += `<th colspan=2>Lane ${i}</th>`
+    headerTxt2 += headerTxt2base;
+  }
+  tempOut += headerTxt1a + headerTxt1b + headerTxt1c;
+  tempOut += `<tr>${headerTxt2}</tr>`;
+
+  for (var h = 0; h < numberHeats * 1; h++) {  // h is the heat #
+    tempOut += `<tr><td>${(h + 1)}</td>`;
+    for (var l = 0; l < nLanes; l++) {             // l is the lane #
+      if (resultsArr[RndNo - 1][l][h].car !== "-") {
+        tempOut += `<td>${resultsArr[RndNo - 1][l][h].car}</td><td>${resultsArr[RndNo - 1][l][h].heat_time}</td>`;
+      } else {
+        tempOut += `<td>No Racer</td><td>-</td>`;
+      }
+    }
+    tempOut += "</tr>";
+  }
+  roundTable.innerHTML = tempOut;
+}
+
+function updateRacerTable() {
+  var trOut = "";
+  var racerTmpTable = document.getElementById("racer-table");
+
+  //load an array with just the included racerStats
+  if (isObjEmpty(raceRacers)) {
+    for (var i = 0; i < includedRacers.length; i++) {
+      raceRacers[i] = {};
+
+      for (var keys in racerStats[includedRacers[i]]) {
+        raceRacers[i][keys] = racerStats[includedRacers[i]][keys];
+      }
+    }
+  }
+
+  /* //let's sort the array by total_time
+   raceRacers.sort(function (a,b){
+     return a.total_time - b.total_time;
+   });*/
+
+  trOut += "<tr><th>Car<br/>#</th><th>Racer Name</th><th>Racer<br/>Rank</th><th>Total<br/>Time (s)</th></tr>";
+
+  for (var i = 0; i < raceRacers.length; i++) {
+    trOut += `<tr><td>${raceRacers[i].car}</td>`;
+    trOut += `<td>${raceRacers[i].racer_name}</td>`;
+    trOut += `<td>${raceRacers[i].rank}</td>`;
+    trOut += `<td>${(raceRacers[i].total_time).toFixed(4)}</td></tr>`;
+  }
+
+  racerTmpTable.innerHTML = trOut;
+}
+
+function updateCurrentHeat(resultsArr, RndNo, nLanes, currentHeatNo) {
+  var heatTable = document.getElementById("heat-lane-assignments").getElementsByTagName("table");
+  var tableOut = "";
+  var headerTxt1 = `<th colspan="${nLanes * 2}">Current Heat Lineup</th>`;
+  var headerTxt2 = "";
+  var headerTxt3base = "<th>Car #</th><th>Racer</th>";
+  var headerTxt3 = "";
+
+  //create the correct # of lanes in the table
+  for (var i = 1; i <= nLanes; i++) {
+    headerTxt2 += `<th colspan="2">Lane ${i}</th>`
+    headerTxt3 += headerTxt3base;
+  }
+
+  tableOut += `<tr>${headerTxt1}</tr>`;
+  tableOut += `<tr>${headerTxt2}</tr>`;
+  tableOut += `<tr>${headerTxt3}</tr>`;
+
+  if (typeof resultsArr == undefined || resultsArr == null || resultsArr.length == 0) {
+    heatTable[0].innerHTML = tableOut;
+
+    return -1;
+  }
+
+  tableOut += `<tr>`;
+  for (var l = 0; l < nLanes; l++) {  // l is # of lanes
+    tableOut += `<td>${resultsArr[RndNo - 1][l][currentHeatNo - 1].car}</td><td>${resultsArr[RndNo - 1][l][currentHeatNo - 1].racer_name}</td>`;
+  }
+  tableOut += `</tr>`;
+
+  heatTable[0].innerHTML = tableOut;
+  return 1;
+}
+
+function raceUpdate(type) {
+  var heatButton = document.getElementById("heat-button");
+  var redoHeatButton = document.getElementById("redo-heat");
+  var saveResultsButton = document.getElementById("save-results");
+  var startButton = document.getElementById("start-race");
+
+
+  switch (type) {
+    case "accept":
+      disableButtons([redoHeatButton]);
+      if (currentHeatNum !== NumHeats) {
+        heatButton.innerHTML = "Next Heat";
+        heatButton.setAttribute('onclick', "raceUpdate('next')");
+      } else if (currentRnd !== 3) {
+        heatButton.innerHTML = "Next Round";
+        heatButton.setAttribute('onclick', "raceUpdate('next')");
+      } else {
+        heatButton.innerHTML = "Finish";
+        heatButton.setAttribute('onclick', "raceUpdate('finish')");
+      }
+
+      for (var l = 0; l < numLanes; l++) {
+        raceResults[currentRnd - 1][l][currentHeatNum - 1].heat_time = laneTimes[l].time * 1;
+        raceResults[currentRnd - 1][l][currentHeatNum - 1].total_time += laneTimes[l].time * 1;
+        if (raceResults[currentRnd - 1][l][currentHeatNum - 1].race_index != 99) {
+          raceRacers[raceResults[currentRnd - 1][l][currentHeatNum - 1].race_index].total_time += laneTimes[l].time * 1;
+        }
+      }
+      updateRacerTable();
+      updateRoundTable(raceResults, currentRnd, currentHeatNum, numLanes, NumHeats);
+
+      break;
+
+    case "redo":
+      clearDisplay();
+      //resetArduino();
+
+      break;
+
+    case "next":
+      clearDisplay();
+      if (currentHeatNum !== NumHeats) {
+        currentHeatNum++;
+      } else if (currentRnd !== 3) {
+        currentHeatNum = 1;
+        currentRnd++;
+        generateRound(raceRacers.length, numLanes, currentRnd, raceRacers);
+      } else {
+        currentRnd = 1;
+        currentHeatNum = 1;
+        return;
+      }
+      updateRacerTable();
+      updateRoundTable(raceResults, currentRnd, currentHeatNum, numLanes, NumHeats);
+      updateCurrentHeat(raceResults, currentRnd, numLanes, currentHeatNum);
+      disableButtons([redoHeatButton]);
+      heatButton.innerHTML = "Accept Heat Results";
+      heatButton.setAttribute('onclick', "raceUpdate('accept')");
+
+      break;
+
+    case "finish":
+      clearDisplay();
+      startButton.innerHTML = "Start Race"
+      startButton.setAttribute('onclick',"setupRace()");
+      disableButtons([redoHeatButton, saveResultsButton, startButton]);
+
+
+      break;
+
+    default:
+      break;
+  }
+}
 
 function genRandomNumArray(entries, min, max) {
   // parameters
@@ -381,7 +401,7 @@ function genRandomNumArray(entries, min, max) {
     while (is_exist > -1);
   }
   return random_number;
-};
+}
 
 function disableButtons(buttonArr) {
   for (var i = 0; i < buttonArr.length; i++) {
@@ -389,30 +409,8 @@ function disableButtons(buttonArr) {
   }
 }
 
-function raceUpdate(type) {
-  //console.log(`race update type: ${type}`);
-  switch (type) {
-    case "accept":
-      for (var i = 0; i < numLanes; i++) {
-        roundResults[currentHeatNum - 1][(((laneTimes[i].lane - 1) * 2) + 1)] = laneTimes[i].time * 1;
-        raceRacers[laneLineup[laneTimes[i].lane - 1][currentHeatNum - 1]].total_time += laneTimes[i].time * 1;
-        raceRacers[laneLineup[laneTimes[i].lane - 1][currentHeatNum - 1]][`heat${currentHeatNum}`] = laneTimes[i].time * 1
-      }
-      updateRaceTable();
-
-      break;
-
-    case "redo":
-      clearDisplay();
-
-      break;
-
-    default:
-      break;
-  }
-}
-
 function postResults(raceTimes) {
+  //send results to spectator window
   console.log(raceTimes);
 }
 
@@ -428,7 +426,7 @@ function simHeat(nLanes) {
 
     if (laneMask[i] != 1) {
       document.getElementById(tempLaneId).innerHTML = rndTime;
-      laneTimes[i] = { lane: (i + 1), time: rndTime };
+      laneTimes[i] = { lane: (i + 1), time: rndTime * 1 };
     } else {
       laneTimes[i] = { lane: (i + 1), time: 99 };
     }
