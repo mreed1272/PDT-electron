@@ -2,6 +2,9 @@ const electron = require('electron');
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 const ipcMain = electron.ipcMain;
+const nativeImage = electron.nativeImage;
+
+let PDTimage = nativeImage.createFromPath(`${__dirname}/app/images/PDT-main.png`);
 
 var mainWindow = null;
 var spectatorWindow = null;
@@ -23,7 +26,7 @@ app.on('ready', () => {
     x: 25,
     y: 25,
     show: false,
-    icon: `${__dirname}/app/images/PDT-main.png`
+    icon: PDTimage
     //transparent: true
   });
   mainWindow.loadURL(`file://${__dirname}/app/index.html`);
@@ -37,7 +40,7 @@ app.on('ready', () => {
       frame: true,
       show: false,
       skipTaskbar: true,
-      icon: `${__dirname}/app/images/PDT-main.png`,
+      icon: PDTimage,
       x: externalDisplay.bounds.x,
       y: externalDisplay.bounds.y
       //transparent: true
@@ -49,7 +52,7 @@ app.on('ready', () => {
       frame: true,
       show: false,
       skipTaskbar: true,
-      icon: `${__dirname}/app/images/PDT-main.png`,
+      icon: PDTimage,
       //transparent: true
     });
   };

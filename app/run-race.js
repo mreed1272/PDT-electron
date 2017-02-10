@@ -59,7 +59,13 @@ function stopRace() {
 
 function setupRace() {
   if (isObjEmpty(raceInformation)) {
-    alert("Please open/create a race file first before starting a race.");
+    dialog.showMessageBox(remote.getCurrentWindow(), {
+      title: "Race File Missing",
+      type: "warning",
+      buttons: ["Ok"],
+      message: "Please open/create a race file first before starting a race."
+    })
+    clickMenuTab(0);
     return -1;
   }
 
@@ -96,7 +102,7 @@ function setupRace() {
   //generate the round and store in an array
   generateRound(includedRacers.length, numLanes, currentRnd, raceRacers);
 
-  updateRoundTable(raceResults, currentRnd, currentHeatNum, numLanes, NumHeats);
+  updateRoundTable(raceResults, currentRnd, currentHeatNum, numLanes, NumHeats, numRounds);
   updateCurrentHeat(raceResults, currentRnd, numLanes, currentHeatNum);
 
 }
@@ -191,7 +197,7 @@ function generateRound(nRacers, nLanes, RndNo, racerArray) {
   }
 }
 
-function updateRoundTable(resultsArr, RndNo, HeatNo, nLanes, numberHeats) {
+function updateRoundTable(resultsArr, RndNo, HeatNo, nLanes, numberHeats, numberRounds) {
   /*
   resultsArr - nested array created by generateRound() with [round][lane][heat] plus object with
   {car, racer_name, total_time, heat_time, heat_lane, race_index, main_index}
@@ -201,6 +207,7 @@ function updateRoundTable(resultsArr, RndNo, HeatNo, nLanes, numberHeats) {
   HeatNo - current heat number
   nLanes - number of lanes
   numberHeats - number of heats in round
+  numberROunds - number of rounds in race
   */
   var roundTxt = document.getElementById("current-round-number");
   var heatTxt = document.getElementById("current-heat-number");
@@ -214,8 +221,8 @@ function updateRoundTable(resultsArr, RndNo, HeatNo, nLanes, numberHeats) {
   var tempOut = "";
 
   //set the round and heat
-  roundTxt.innerHTML = RndNo;
-  heatTxt.innerHTML = HeatNo;
+  roundTxt.innerHTML = `${RndNo} / ${numberRounds}`;
+  heatTxt.innerHTML = `${HeatNo} / ${numberHeats}`;
 
   //build the table header
   for (var i = 1; i <= nLanes; i++) {
@@ -293,7 +300,7 @@ function updateCurrentHeat(resultsArr, RndNo, nLanes, currentHeatNo) {
   }
 
   //lets make sure all the lanes masks are cleared
-  for (var l = 0; l < nLanes; l++){
+  for (var l = 0; l < nLanes; l++) {
     document.getElementById(`race-lane-mask${l + 1}`).checked = false;
   }
   setMask("race-lane");
@@ -319,6 +326,8 @@ function raceUpdate(type) {
   var saveResultsButton = document.getElementById("save-results");
   var startButton = document.getElementById("start-race");
 
+  var currentWindowObj = remote.getCurrentWindow();
+
 
   switch (type) {
     case "accept":
@@ -330,8 +339,23 @@ function raceUpdate(type) {
         heatButton.innerHTML = "Next Round";
         heatButton.setAttribute('onclick', "raceUpdate('next')");
       } else {
-        heatButton.innerHTML = "Finish";
-        heatButton.setAttribute('onclick', "raceUpdate('finish')");
+        var response = dialog.showMessageBox(currentWindowObj, {
+          type: "question",
+          buttons: ["Yes, do a final race.", "No, just show the results."],
+          title: "Championship Round?",
+          message: `Do you want the top ${numLanes} finishers to race in a championship round?`,
+          icon: PDTimage
+        });
+        console.log(`Dialog response: ${response}`);
+        if (response == 1) {
+          heatButton.innerHTML = "Finish";
+          heatButton.setAttribute('onclick', "raceUpdate('finish')");
+        } else if (response == 0) {
+          heatButton.innerHTML = "Accept Final Results";
+          heatButton.setAttribute('onclick', "raceUpdate('final')");
+          createChampRound();
+          return;
+        }
       }
 
       // let's make sure laneTimes is in the correct order, so sort laneTimes by lane #
@@ -341,13 +365,12 @@ function raceUpdate(type) {
 
       for (var l = 0; l < numLanes; l++) {
         raceResults[currentRnd - 1][l][currentHeatNum - 1].heat_time = laneTimes[l].time * 1;
-        //raceResults[currentRnd - 1][l][currentHeatNum - 1].total_time += laneTimes[l].time * 1;
         if (raceResults[currentRnd - 1][l][currentHeatNum - 1].race_index != 99) {
           raceRacers[raceResults[currentRnd - 1][l][currentHeatNum - 1].race_index].total_time += laneTimes[l].time * 1;
         }
       }
       updateRacerTable();
-      updateRoundTable(raceResults, currentRnd, currentHeatNum, numLanes, NumHeats);
+      updateRoundTable(raceResults, currentRnd, currentHeatNum, numLanes, NumHeats, numRounds);
 
       break;
 
@@ -373,7 +396,7 @@ function raceUpdate(type) {
         return;
       }
       updateRacerTable();
-      updateRoundTable(raceResults, currentRnd, currentHeatNum, numLanes, NumHeats);
+      updateRoundTable(raceResults, currentRnd, currentHeatNum, numLanes, NumHeats, numRounds);
       updateCurrentHeat(raceResults, currentRnd, numLanes, currentHeatNum);
       heatButton.disabled = true;
       redoHeatButton.disabled = true;
@@ -391,6 +414,28 @@ function raceUpdate(type) {
         return a.total_time - b.total_time;
       });
       updateRacerTable();
+
+      var resultsDiv = document.getElementById("current-round");
+
+      var resultsTxt = "<h1>Winners</h1><ul>";
+      var placeTxt = ""
+
+      for (var i = 0; i < numLanes; i++) {
+        if (i == 0){
+          placeTxt = "1st";
+        } else if (i == 1) {
+          placeTxt = "2nd";
+        } else if (i ==2) {
+          placeTxt = "3rd";
+        } else {
+          placeTxt = `${i+1}th`;
+        }
+        resultsTxt += `<li>${placeTxt} Place - ${raceRacers[checkKeyValue(raceRacers, "car", raceTmpArr[i].car)].racer_name} (${raceTmpArr[i].heat_time}s)</li>`
+      }
+      resultsTxt = "</ul>";
+
+      resultsDiv.innerHTML = resultsTxt;
+
       startButton.innerHTML = "Start Race"
       startButton.setAttribute('onclick', "setupRace()");
 
@@ -413,9 +458,124 @@ function raceUpdate(type) {
 
       break;
 
+    case "final":
+
+      redoHeatButton.disabled = true;
+
+      // let's make sure laneTimes is in the correct order, so sort laneTimes by lane #
+      laneTimes.sort(function (a, b) {
+        return a.lane - b.lane;
+      })
+      //save results only into raceResults array push into a temp array to determine final winners
+      var raceTmpArr = [];
+      for (var l = 0; l < numLanes; l++) {
+        raceResults[numRounds][l][0].heat_time = laneTimes[l].time * 1;
+        raceTmpArr[l] = {};
+        raceTmpArr[l].car = raceResults[numRounds][l][0].car;
+        raceTmpArr[l].heat_time = raceResults[numRounds][l][0].heat_time;
+      }
+
+      //let's sort the arrays by total_time or heat_time
+      raceRacers.sort(function (a, b) {
+        return a.total_time - b.total_time;
+      });
+
+      raceTmpArr.sort(function (a, b) {
+        return a.heat_time - b.heat_time;
+      })
+      var resultsDiv = document.getElementById("current-round");
+
+      var resultsTxt = "<h1>Winners</h1><ul>";
+      var placeTxt = "";
+
+      for (var i = 0; i < raceTmpArr.length; i++) {
+        if (i == 0){
+          placeTxt = "1st";
+        } else if (i == 1) {
+          placeTxt = "2nd";
+        } else if (i ==2) {
+          placeTxt = "3rd";
+        } else {
+          placeTxt = `${i+1}th`;
+        }
+        console.log(`index for Car#${raceTmpArr[i].car} in raceRacer array is : ${checkKeyValue(raceRacers, "car", raceTmpArr[i].car)}`);
+
+        resultsTxt += `<li>${placeTxt} Place - ${raceRacers[checkKeyValue(raceRacers, "car", raceTmpArr[i].car)].racer_name} (${raceTmpArr[i].heat_time}s)</li>`;
+      }
+      resultsTxt += "</ul>";
+      console.log(resultsTxt);
+
+      resultsDiv.innerHTML = resultsTxt;
+
+      updateRacerTable();
+      clearDisplay();
+
+      startButton.innerHTML = "Start Race"
+      startButton.setAttribute('onclick', "setupRace()");
+
+      heatButton.innerHTML = "Accept Heat Results";
+      heatButton.setAttribute('onclick', "raceUpdate('accept')");
+
+      heatButton.disabled = true;
+      saveResultsButton.disabled = false;
+      startButton.disabled = true;
+      var heatTable = document.getElementById("heat-lane-assignments").getElementsByTagName("table");
+      heatTable[0].innerHTML = "";
+
+      break;
+
     default:
       break;
   }
+}
+
+function createChampRound() {
+  var heatButton = document.getElementById("heat-button");
+  var redoHeatButton = document.getElementById("redo-heat");
+  var saveResultsButton = document.getElementById("save-results");
+  var startButton = document.getElementById("start-race");
+
+  //first load final results to array
+
+  laneTimes.sort(function (a, b) {
+    return a.lane - b.lane;
+  })
+
+  for (var l = 0; l < numLanes; l++) {
+    raceResults[currentRnd - 1][l][currentHeatNum - 1].heat_time = laneTimes[l].time * 1;
+    if (raceResults[currentRnd - 1][l][currentHeatNum - 1].race_index != 99) {
+      raceRacers[raceResults[currentRnd - 1][l][currentHeatNum - 1].race_index].total_time += laneTimes[l].time * 1;
+    }
+  }
+
+  //next create temp array so we can see the top finishers
+  var raceTmpArr = JSON.parse(JSON.stringify(raceRacers));
+
+  //sort the temp array
+  raceTmpArr.sort(function (a, b) {
+    return a.total_time - b.total_time;
+  })
+
+  //now create new entry in raceResults for final round with one heat
+  raceResults[numRounds] = [];
+  for (var l = 0; l < numLanes; l++) {
+    raceResults[numRounds][l] = [];
+    raceResults[numRounds][l][0] = {};
+    raceResults[numRounds][l][0].car = raceTmpArr[l].car;
+    raceResults[numRounds][l][0].racer_name = raceTmpArr[l].racer_name;
+    raceResults[numRounds][l][0].heat_time = 0;
+    raceResults[numRounds][l][0].heat_lane = l;
+    raceResults[numRounds][l][0].race_index = checkKeyValue(raceRacers, "car", raceTmpArr[l].car);
+    raceResults[numRounds][l][0].main_index = checkKeyValue(racerStats, "car", raceTmpArr[l].car);
+  }
+
+  updateRacerTable();
+  updateRoundTable(raceResults, (numRounds + 1), 1, numLanes, 1, (numRounds + 1));
+  updateCurrentHeat(raceResults, (numRounds + 1), numLanes, 1);
+  clearDisplay();
+  heatButton.disabled = true;
+  redoHeatButton.disabled = true;
+
 }
 
 function genRandomNumArray(entries, min, max) {

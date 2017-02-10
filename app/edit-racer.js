@@ -18,7 +18,8 @@ function addRacer(type, oldCarNum) {
 
   //make sure none of the fields are empty
   if ((tmpCarNum.value == "" || tmpRacerName.value == "" || tmpCarWeight.value == "") && (type == "add" || type == "update")) {
-    alert(`Please make sure none of the fields are empty.`);
+    dialog.showErrorBox("Missing Information", `Please make sure none of the fields are empty.`);
+    //alert(`Please make sure none of the fields are empty.`);
     return;
   }
 
@@ -40,7 +41,8 @@ function addRacer(type, oldCarNum) {
 
     case "add":
       if (index >= 0) {
-        alert(`This car number (${tmpCarNum.value}) is already being used.  Please enter a new number.`);
+        dialog.showErrorBox("Duplicate Car Number", `This car number (${tmpCarNum.value}) is already being used.  Please enter a new number.`);
+        //alert(`This car number (${tmpCarNum.value}) is already being used.  Please enter a new number.`);
         tmpCarNum.focus();
         return;
       }
@@ -58,7 +60,8 @@ function addRacer(type, oldCarNum) {
           racerStats.splice(oldIndex, 1);
           racerStats.push({ car: tmpCarNum.value, racer_name: tmpRacerName.value, weight: tmpCarWeight.value, rank: tmpRacerRank.value, total_time: 0 });
         } else {
-          alert(`This car number (${tmpCarNum.value}) is already being used.  Please enter a new number.`);
+          dialog.showErrorBox("Duplicate Car Number", `This car number (${tmpCarNum.value}) is already being used.  Please enter a new number.`);
+          //alert(`This car number (${tmpCarNum.value}) is already being used.  Please enter a new number.`);
           tmpCarNum.focus();
           return;
         }

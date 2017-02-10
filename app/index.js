@@ -4,6 +4,9 @@ const dialog = electron.remote.dialog;
 const shell = electron.shell;
 const fs = require('fs');
 const ipcRenderer = electron.ipcRenderer;
+const nativeImage = electron.nativeImage;
+
+let PDTimage = `${__dirname}/images/PDT-main.png`;
 
 var racerStats = [];
 var racerStatsFile = "";
@@ -106,26 +109,26 @@ function initLanes(numLanes, ulId, showMask) {
     liLane.innerHTML = `Lane ${i}: <span class="LEDdisplay" id="${spanID}">0.0000</span> s`;
     selElem.appendChild(liLane);
   }
-  
-    liID = `${ulId}-mask-Li`;
-    liLane = document.createElement("li");
-    liLane.id = liID;
-    if (showMask) {
-      liLane.className = "laneMask";
-    } else {
-      liLane.className = "hide laneMask";
+
+  liID = `${ulId}-mask-Li`;
+  liLane = document.createElement("li");
+  liLane.id = liID;
+  if (showMask) {
+    liLane.className = "laneMask";
+  } else {
+    liLane.className = "hide laneMask";
+  }
+  maskOut = "Mask Lanes: <br/>";
+  for (var i = 1; i <= numLanes; i++) {
+    maskOut += ` Lane ${i} <input type="checkbox" id="${ulId}-mask${i}" value="${i}" onchange="setMask('${ulId}')"> `;
+    if (numLanes > 4 && i > ((numLanes / 2) - 0.5) && i <= ((numLanes / 2) + 0.5)) {
+      maskOut += "<br/>";
     }
-    maskOut = "Mask Lanes: <br/>";
-    for (var i = 1; i <= numLanes; i++) {
-      maskOut += ` Lane ${i} <input type="checkbox" id="${ulId}-mask${i}" value="${i}" onchange="setMask('${ulId}')"> `;
-      if (numLanes > 4 && i > ((numLanes / 2) - 0.5) && i <= ((numLanes / 2) + 0.5)) {
-        maskOut += "<br/>";
-      }
-    };
-    liLane.innerHTML = maskOut;
-    selElem.appendChild(liLane);
-  
-    
+  };
+  liLane.innerHTML = maskOut;
+  selElem.appendChild(liLane);
+
+
   if (laneMask.length == "0") {
     console.log("Initializing laneMask variable")
     for (var i = 0; i < numLanes; i++) {
@@ -215,7 +218,7 @@ function saveRace() {
 }
 
 function checkRaceDialog(type) {
-  if (isRacing){
+  if (isRacing) {
     return -1;
   }
   var editSideDialog = document.getElementById("RaceSideDialog");
@@ -237,7 +240,7 @@ function clickMenuTab(tabNum) {
 }
 
 function editRaceDialog(type) {
-  if (isRacing){
+  if (isRacing) {
     return -1;
   }
   var editSideDialog = document.getElementById("RaceSideDialog");
@@ -266,7 +269,16 @@ function editRaceDialog(type) {
 
     case "new":
       if (!isObjEmpty(raceInformation)) {
-        alert("Are you sure want to continue?  All existing race information will be reset.");
+        var response = dialog.showMessageBox(remote.getCurrentWindow(), {
+          title: "Discard Race?",
+          type: "warning",
+          buttons: ["Ok","Cancel"],
+          message: "Are you sure want to continue?  All existing race information will be reset."
+        })
+        //alert("Are you sure want to continue?  All existing race information will be reset.");
+        if (response == 1) {
+          return -1;
+        }
         orgNameInput.value = "";
         orgTypeInput.value = "Cub Scout";
         loadRanks("Cub Scout");
@@ -319,7 +331,8 @@ function editRaceDialog(type) {
       };
 
       if (orgNameInput.value === "" || raceRoundsInput.value === "" || raceCoordInput.value === "" || raceDateInput === "" || tmpIsChecked === false) {
-        alert(`Please make sure none of the fields are empty and that at least one rank is checked.`);
+        dialog.showErrorBox("Missing Information", `Please make sure none of the fields are empty and that at least one rank is checked.`);
+        //alert(`Please make sure none of the fields are empty and that at least one rank is checked.`);
         return;
       };
 
@@ -387,14 +400,18 @@ function updateRaceInfo() {
   var tmpRanksNames = [];
   var tmpRacerStatsName = "";
 
-  racerStatsFile = raceInformation.RacerStatsFile;
+  if (racerStatsFile !== raceInformation.RacerStatsFile){
+    clearObject(racerStats);
+    racerStatsFile = raceInformation.RacerStatsFile;
+  };
 
   //console.log(`racerStatsFile condition: ${(racerStatsFile !== undefined || racerStatsFile !== "" || racerStatsFile !== null)}`);
 
   if (isObjEmpty(racerStats) && (racerStatsFile !== undefined && racerStatsFile !== "" && racerStatsFile !== null)) {
     //if not loaded, load the racer stats file but first check to make sure the file exists 
     if (!fs.existsSync(racerStatsFile)) {
-      alert(`The file ${racerStatsFile} cannot be found.`)
+      dialog.showErrorBox("File Missing", `The file ${racerStatsFile} cannot be found.`)
+      //alert(`The file ${racerStatsFile} cannot be found.`)
     } else {
       var tmpData = fs.readFileSync(racerStatsFile);
       //parse the file and load into global variable
@@ -434,7 +451,7 @@ function updateRaceInfo() {
     tmpOutStr += `</ul>`;
   };
 
-  numRounds = raceInformation.RaceRounds*1;
+  numRounds = raceInformation.RaceRounds * 1;
 
   raceInfoDiv.innerHTML = tmpOutStr;
   return true;
