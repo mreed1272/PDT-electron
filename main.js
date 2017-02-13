@@ -10,6 +10,9 @@ var mainWindow = null;
 var spectatorWindow = null;
 var splashWindow = null;
 
+let mainContents = null;
+let specContents = null;
+
 //global.fileToOpen = null;
 
 app.on('ready', () => {
@@ -32,6 +35,8 @@ app.on('ready', () => {
   mainWindow.loadURL(`file://${__dirname}/app/index.html`);
 
   mainWindow.openDevTools();
+
+  mainContents = mainWindow.webContents;
 
   if (externalDisplay) {
     spectatorWindow = new BrowserWindow({
@@ -57,6 +62,7 @@ app.on('ready', () => {
     });
   };
   spectatorWindow.loadURL(`file://${__dirname}/app/spectator.html`);
+  specContents = spectatorWindow.webContents;
 
   /*mainWindow.on('maximize', ()=> {
       mainWindow.webContents.send('maximized');
@@ -73,6 +79,7 @@ app.on('ready', () => {
   spectatorWindow.on('closed', () => {
     console.log("User clicked on close for spectator window - clear the reference.")
     spectatorWindow = null;
+    specContents = null;
   });
 
   mainWindow.once('ready-to-show', () => {
@@ -130,6 +137,7 @@ ipcMain.on('spectator-window', (event, command) => {
       });
     };
     spectatorWindow.loadURL(`file://${__dirname}/app/spectator.html`);
+    specContents = spectatorWindow.webContents;
 
     spectatorWindow.once('ready-to-show', () => {
       if (command === "open") {
@@ -140,6 +148,7 @@ ipcMain.on('spectator-window', (event, command) => {
     spectatorWindow.on('closed', () => {
       console.log("User clicked on close for spectator window - clear the reference.")
       spectatorWindow = null;
+      specContents = null;
     });
 
   };

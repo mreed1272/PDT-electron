@@ -180,10 +180,10 @@ function generateRound(nRacers, nLanes, RndNo, racerArray) {
       }
       raceResults[RndNo - 1][l] = JSON.parse(JSON.stringify(raceResults[RndNo - 2][i].slice()));
     }
-    // now let's sort the new round array lanes by total_time
+    // now let's sort the new round array lanes by heat_time
     for (var l = 0; l < nLanes; l++) {
       raceResults[RndNo - 1][l].sort(function (a, b) {
-        return a.total_time - b.total_time;
+        return a.heat_time - b.heat_time;
       })
     }
 
