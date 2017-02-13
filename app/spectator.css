@@ -4,7 +4,7 @@ body {
 }
         
 h1 {
-    font-size: 40pt;
+    font-size: 2.5em;
     text-align: center;
 }
         
@@ -24,17 +24,18 @@ img {
     color: Blue;
     font-variant: small-caps;
     background-color: Gold;
-    border: 2px ridge DarkgoldenRod;
-    border-radius: 25px;
+    /*border: 2px ridge DarkgoldenRod;*/
+    border-radius: 5px;
+    box-shadow: 3px 3px 8px rgba(0,0,0,0.6);
     background: linear-gradient(Gold, DarkGoldenRod);
     text-shadow: 1px 1px 3px DarkRed;
     margin: 10px;
 }
         
 .results {
-    border: 1px solid DarkGoldenRod;
-    border-radius: 25px;
-    box-shadow: 0 7px 15px 0 grey, 0 10px 15px 0 DarkGrey;
+    /*border: 1px solid DarkGoldenRod;*/
+    /*border-radius: 5px;*/
+    box-shadow: 3px 3px 8px rgba(0,0,0,0.8), 6px 6px 16px 1px rgba(0,0,0,0.3);
 }
         
 .center {
@@ -43,20 +44,20 @@ img {
     top: 50%;
     width: 100%;*/
     margin: 0;
-    font-size: 24pt;
+    font-size: 1.5em;
     /*transform: translate(0, -30%);*/
 }
         
 .center.shadowText {
-    text-shadow: 2px 2px 5px Darkgrey;
+    text-shadow: 2px 2px 4px rgb(100,100,100);
 }
         
 .LanePlace {
     visibility: visible;
-    font-size: 30pt;
+    font-size: 1.7em;
     text-shadow: 2px 2px 5px GoldenRod;
     font-style: italic;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
         
 table#tableRound {
