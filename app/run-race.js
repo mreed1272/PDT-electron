@@ -430,9 +430,12 @@ function raceUpdate(type) {
         } else {
           placeTxt = `${i+1}th`;
         }
-        resultsTxt += `<li>${placeTxt} Place - ${raceRacers[i].racer_name} (${raceRacers[i].total_time}s)</li>`
+        resultsTxt += `<li>${placeTxt} Place - ${raceRacers[i].racer_name} (${(raceRacers[i].total_time).toFixed(4)}s)</li>`
       }
-      resultsTxt = "</ul>";
+      resultsTxt += "</ul>";
+
+      console.log(resultsTxt);
+      console.log(resultsDiv);
 
       resultsDiv.innerHTML = resultsTxt;
 
