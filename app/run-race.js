@@ -430,7 +430,7 @@ function raceUpdate(type) {
         } else {
           placeTxt = `${i+1}th`;
         }
-        resultsTxt += `<li>${placeTxt} Place - ${raceRacers[checkKeyValue(raceRacers, "car", raceTmpArr[i].car)].racer_name} (${raceTmpArr[i].heat_time}s)</li>`
+        resultsTxt += `<li>${placeTxt} Place - ${raceRacers[i].racer_name} (${raceRacers[i].total_time}s)</li>`
       }
       resultsTxt = "</ul>";
 
@@ -448,14 +448,14 @@ function raceUpdate(type) {
       var heatTable = document.getElementById("heat-lane-assignments").getElementsByTagName("table");
       heatTable[0].innerHTML = "";
 
-      var roundTxt = document.getElementById("current-round-number");
+      /*var roundTxt = document.getElementById("current-round-number");
       var heatTxt = document.getElementById("current-heat-number");
       var roundTable = document.getElementById("round-lineup-table");
 
       roundTxt.innerHTML = "";
       heatTxt.innerHTML = "";
       roundTable.innerHTML = "";
-
+*/
       break;
 
     case "final":
