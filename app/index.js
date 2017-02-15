@@ -183,7 +183,6 @@ function loadRace() {
       updateRaceInfo();
     }
   })
-  /*document.activeElement.blur();*/
 }
 
 function saveRace() {
@@ -272,7 +271,7 @@ function editRaceDialog(type) {
         var response = dialog.showMessageBox(remote.getCurrentWindow(), {
           title: "Discard Race?",
           type: "warning",
-          buttons: ["Ok","Cancel"],
+          buttons: ["Ok", "Cancel"],
           message: "Are you sure want to continue?  All existing race information will be reset."
         })
         //alert("Are you sure want to continue?  All existing race information will be reset.");
@@ -393,32 +392,30 @@ function editRaceDialog(type) {
 }
 
 function updateRaceInfo() {
-  //console.log("Updating Race Info Display");
   //update the div "RaceInfoDisplay"
   var raceInfoDiv = document.getElementById("RaceInfoDisplay");
+  var racerInfoDiv = document.getElementById("RacerInfo");
+
   var tmpOutStr = "";
+  var tempOutTable = "";;
+
   var tmpRanksNames = [];
   var tmpRacerStatsName = "";
 
-  if (racerStatsFile !== raceInformation.RacerStatsFile){
+  if (racerStatsFile !== raceInformation.RacerStatsFile) {
     clearObject(racerStats);
     racerStatsFile = raceInformation.RacerStatsFile;
   };
-
-  //console.log(`racerStatsFile condition: ${(racerStatsFile !== undefined || racerStatsFile !== "" || racerStatsFile !== null)}`);
 
   if (isObjEmpty(racerStats) && (racerStatsFile !== undefined && racerStatsFile !== "" && racerStatsFile !== null)) {
     //if not loaded, load the racer stats file but first check to make sure the file exists 
     if (!fs.existsSync(racerStatsFile)) {
       dialog.showErrorBox("File Missing", `The file ${racerStatsFile} cannot be found.`)
-      //alert(`The file ${racerStatsFile} cannot be found.`)
     } else {
       var tmpData = fs.readFileSync(racerStatsFile);
       //parse the file and load into global variable
       racerStats = JSON.parse(tmpData);
       document.getElementById("racer-data-file").innerHTML = racerStatsFile.split('\\').pop().split('/').pop();
-      //document.getElementById("racerFileInput").innerHTML = racerStatsFile.split('\\').pop().split('/').pop();
-      //console.log("updating RacerStats List")
       updateRacerStatsList();
 
     }
@@ -433,8 +430,34 @@ function updateRaceInfo() {
     for (var i = 0; i < raceInformation.RacerRanks.length; i++) {
       tmpRanksNames[i] = rankTextPDT[raceInformation.RacerRanks[i]];
     };
-    raceRacers.length = 0;
-    updateRacerTable();
+
+    if (raceInformation.hasOwnProperty("race_finished")) {
+      if (raceInformation.race_finished == true) {
+        raceDone = true;
+        raceRacers = JSON.parse(JSON.stringify(raceInformation.racer_table));
+        console.log(raceRacers);
+        updateRacerTable();
+        console.log(raceRacers);
+        tempOutTable = "<h2>Race Completed</h2>"
+        tempOutTable += "<table id='mainRacerList'><tr><th>Car Number</th><th>Racer Name</th><th>Car Weight (oz)</th><th>Rank</th><th>Total Time (s)</th></tr>"
+        for (var i = 0; i < raceRacers.length; i++) {
+          tempOutTable += `<tr><td>${raceRacers[i].car}</td>`;
+          tempOutTable += `<td>${raceRacers[i].racer_name}</td>`;
+          tempOutTable += `<td>${raceRacers[i].weight}</td>`;
+          tempOutTable += `<td>${raceRacers[i].rank}</td>`;
+          tempOutTable += `<td>${(raceRacers[i].total_time).toFixed(4)}</td></tr>`;
+        }
+
+        tempOutTable += "</table>";
+
+        racerInfoDiv.innerHTML = tempOutTable;
+      }
+    } else {
+      raceDone = false;
+      raceRacers.length = 0;
+      updateRacerTable();
+
+    }
 
 
     tmpOutStr = `<ul>`;
@@ -454,6 +477,7 @@ function updateRaceInfo() {
   numRounds = raceInformation.RaceRounds * 1;
 
   raceInfoDiv.innerHTML = tmpOutStr;
+  displayResults();
   return true;
 }
 

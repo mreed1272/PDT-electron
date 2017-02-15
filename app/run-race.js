@@ -5,6 +5,7 @@ var roundResults = [];
 var NumHeats = 0;
 var raceRacers = [];
 var isRacing = false;
+var raceDone = false;
 
 function specWin(command) {
   //console.log(`Sending to main command: ${command}`);
@@ -58,12 +59,12 @@ function stopRace() {
 }
 
 function setupRace() {
-  if (isObjEmpty(raceInformation)) {
+  if (isObjEmpty(raceInformation) || raceDone == true) {
     dialog.showMessageBox(remote.getCurrentWindow(), {
-      title: "Race File Missing",
+      title: "Race File Missing or Race Completed",
       type: "warning",
       buttons: ["Ok"],
-      message: "Please open/create a race file first before starting a race."
+      message: "Please open/create a new race file first before trying to start a race."
     })
     clickMenuTab(0);
     return -1;
@@ -80,7 +81,7 @@ function setupRace() {
   heatButton.disabled = true;
   redoHeatButton.disabled = true;
 
-  disableButtons([saveRaceButton]);
+  saveRaceButton.disabled = true;
 
   //change the start race button to a stop race button
   var startButton = document.getElementById("start-race");
@@ -409,6 +410,7 @@ function raceUpdate(type) {
     case "finish":
       clearDisplay();
       isRacing = false;
+      raceDone = true;
       //let's sort the array by total_time
       raceRacers.sort(function (a, b) {
         return a.total_time - b.total_time;
@@ -421,16 +423,16 @@ function raceUpdate(type) {
       var placeTxt = ""
 
       for (var i = 0; i < numLanes; i++) {
-        if (i == 0){
+        if (i == 0) {
           placeTxt = "1st";
         } else if (i == 1) {
           placeTxt = "2nd";
-        } else if (i ==2) {
+        } else if (i == 2) {
           placeTxt = "3rd";
         } else {
-          placeTxt = `${i+1}th`;
+          placeTxt = `${i + 1}th`;
         }
-        resultsTxt += `<li>${placeTxt} Place - ${raceRacers[i].racer_name} (${(raceRacers[i].total_time).toFixed(4)}s)</li>`
+        resultsTxt += `<li>${placeTxt} Place - ${raceRacers[i].racer_name} / Car #: ${raceRacers[i].car} (${(raceRacers[i].total_time).toFixed(4)}s)</li>`
       }
       resultsTxt += "</ul>";
 
@@ -451,18 +453,11 @@ function raceUpdate(type) {
       var heatTable = document.getElementById("heat-lane-assignments").getElementsByTagName("table");
       heatTable[0].innerHTML = "";
 
-      /*var roundTxt = document.getElementById("current-round-number");
-      var heatTxt = document.getElementById("current-heat-number");
-      var roundTable = document.getElementById("round-lineup-table");
-
-      roundTxt.innerHTML = "";
-      heatTxt.innerHTML = "";
-      roundTable.innerHTML = "";
-*/
       break;
 
     case "final":
-
+      isRacing = false;
+      raceDone = true;
       redoHeatButton.disabled = true;
 
       // let's make sure laneTimes is in the correct order, so sort laneTimes by lane #
@@ -492,21 +487,20 @@ function raceUpdate(type) {
       var placeTxt = "";
 
       for (var i = 0; i < raceTmpArr.length; i++) {
-        if (i == 0){
+        if (i == 0) {
           placeTxt = "1st";
         } else if (i == 1) {
           placeTxt = "2nd";
-        } else if (i ==2) {
+        } else if (i == 2) {
           placeTxt = "3rd";
         } else {
-          placeTxt = `${i+1}th`;
+          placeTxt = `${i + 1}th`;
         }
-        console.log(`index for Car#${raceTmpArr[i].car} in raceRacer array is : ${checkKeyValue(raceRacers, "car", raceTmpArr[i].car)}`);
 
-        resultsTxt += `<li>${placeTxt} Place - ${raceRacers[checkKeyValue(raceRacers, "car", raceTmpArr[i].car)].racer_name} (${raceTmpArr[i].heat_time}s)</li>`;
+        resultsTxt += `<li>${placeTxt} Place - ${raceRacers[checkKeyValue(raceRacers, "car", raceTmpArr[i].car)].racer_name} / Car #: ${raceTmpArr[i].car} (${(raceTmpArr[i].heat_time).toFixed(4)}s)</li>`;
       }
       resultsTxt += "</ul>";
-      console.log(resultsTxt);
+      //console.log(resultsTxt);
 
       resultsDiv.innerHTML = resultsTxt;
 
@@ -679,13 +673,135 @@ function saveResults() {
   var redoHeatButton = document.getElementById("redo-heat");
   var saveResultsButton = document.getElementById("save-results");
   var startButton = document.getElementById("start-race");
+  var resultsDiv = document.getElementById("current-round");
 
-  console.log(raceRacers);
-  console.log(raceResults);
-  clearObject(raceResults);
-  clearObject(raceRacers);
-  updateRacerTable();
+  raceInformation["heat_results"] = raceResults;
+  raceInformation["number_lanes"] = numLanes;
+  raceInformation["current_heat"] = currentHeatNum;
+  raceInformation["current_round"] = currentRnd;
+  raceInformation["number_heats"] = NumHeats;
+  raceInformation["race_finished"] = raceDone;
+  raceInformation["racer_table"] = raceRacers;
 
-  startButton.disabled = false;
+  if (raceInfoFile !== "") {
+    if (!fs.existsSync(raceInfoFile)) {
+      dialog.showErrorBox("File Missing", `The file ${raceInfoFile.split('\\').pop().split('/').pop()} cannot be found.`)
+    } else {
+      var contentJSON = JSON.stringify(raceInformation);
 
+      //save txt
+      fs.writeFileSync(raceInfoFile, contentJSON);
+      dialog.showMessageBox(remote.getCurrentWindow(), {
+        title: "Race File Saved",
+        type: "info",
+        buttons: ["Ok"],
+        message: `The file ${raceInfoFile} has been saved.`
+      })
+    }
+  }
+
+  if (raceDone == true) {
+    clearObject(raceResults);
+    clearObject(raceRacers);
+    updateRacerTable();
+    resultsDiv.innerHTML = "";
+
+    startButton.disabled = false;
+    //enable all buttons in other tabs 
+    var mainButtons = document.getElementById("mainT").getElementsByTagName("button");
+    disableButtons(mainButtons);
+
+    var testButtons = document.getElementById("testTrackT").getElementsByTagName("button");
+    disableButtons(testButtons);
+    disableButtons([document.getElementById("send-serial")]);
+
+    var editButtons = document.getElementById("editRacersT").getElementsByTagName("button");
+    disableButtons(editButtons);
+  }
 }
+
+function displayResults() {
+  var resultsDiv = document.getElementById("current-round");
+
+  if (!raceInformation.hasOwnProperty("race_finished")) {
+    resultsDiv.innerHTML = "";
+    return;
+  }
+  // generate output for each round and heat
+  var resultsDiv = document.getElementById("current-round");
+  var resultsTxtOut = "";
+
+  var headerTxt1a = "<tr><th rowspan=2>Heat #</th>";
+  var headerTxt1b = "";
+  var headerTxt1c = "</tr>";
+  var headerTxt2base = "<th>Car #</th><th>Heat Time</th>";
+  var headerTxt2 = "";
+
+
+  //let's load the data from the main file into a temp variable;
+
+  var resultsTmp = JSON.parse(JSON.stringify(raceInformation.heat_results));
+  console.log(resultsTmp);
+
+  //build the table header for each round
+  for (var i = 1; i <= raceInformation.number_lanes; i++) {
+    headerTxt1b += `<th colspan=2>Lane ${i}</th>`
+    headerTxt2 += headerTxt2base;
+  }
+  //now loop through the array and generate the output
+  for (var r = 0; r < resultsTmp.length; r++) {
+    resultsTxtOut += `<H2>Round: ${r + 1}</h2>`;
+    resultsTxtOut += `<table>${headerTxt1a}${headerTxt1b}${headerTxt1c}<tr>${headerTxt2}</tr>`
+
+    for (var h = 0; h < raceInformation.number_heats; h++) {
+      resultsTxtOut += `<tr><td>${(h + 1)}</td>`;
+
+      for (var l = 0; l < raceInformation.number_lanes; l++) {
+        if (resultsTmp[r][l][h].car !== "-") {
+          resultsTxtOut += `<td>${resultsTmp[r][l][h].car}</td><td>${resultsTmp[r][l][h].heat_time}</td>`;
+        } else {
+          resultsTxtOut += `<td>No Racer</td><td>-</td>`;
+        }
+
+      }
+      resultsTxtOut += "</tr>"
+    }
+    resultsTxtOut += `</table>`;
+  }
+
+  resultsDiv.innerHTML = resultsTxtOut;
+}
+
+/*var headerTxt1a = "<tr><th rowspan=2>Heat #</th>";
+  var headerTxt1b = "";
+  var headerTxt1c = "</tr>";
+  var headerTxt2base = "<th>Car #</th><th>Heat Time</th>";
+  var headerTxt2 = ""
+
+  var tempOut = "";
+
+  //set the round and heat
+  roundTxt.innerHTML = `${RndNo} / ${numberRounds}`;
+  heatTxt.innerHTML = `${HeatNo} / ${numberHeats}`;
+
+  //build the table header
+  for (var i = 1; i <= nLanes; i++) {
+    headerTxt1b += `<th colspan=2>Lane ${i}</th>`
+    headerTxt2 += headerTxt2base;
+  }
+  tempOut += headerTxt1a + headerTxt1b + headerTxt1c;
+  tempOut += `<tr>${headerTxt2}</tr>`;
+
+  for (var h = 0; h < numberHeats * 1; h++) {  // h is the heat #
+    tempOut += `<tr><td>${(h + 1)}</td>`;
+    for (var l = 0; l < nLanes; l++) {             // l is the lane #
+      if (resultsArr[RndNo - 1][l][h].car !== "-") {
+        tempOut += `<td>${resultsArr[RndNo - 1][l][h].car}</td><td>${resultsArr[RndNo - 1][l][h].heat_time}</td>`;
+      } else {
+        tempOut += `<td>No Racer</td><td>-</td>`;
+      }
+    }
+    tempOut += "</tr>";
+  }
+  roundTable.innerHTML = tempOut;
+}*/

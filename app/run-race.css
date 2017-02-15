@@ -115,6 +115,7 @@
     padding: 10px;
     font-size: 0.9em;
     width: 60%;
+    overflow-y: auto;
 }
 #current-round .flex-title {
     display: flex;
@@ -148,6 +149,13 @@
 }
 #current-round td:nth-child(even) {
     text-align: center;
+}
+#current-round ul {
+    list-style: none;
+    font-size: 1.75em;
+    font-variant: small-caps;
+    font-weight: bolder;
+    color: rgb(206,17,38);
 }
 
 #race-lane-results {
