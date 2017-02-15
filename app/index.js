@@ -103,9 +103,9 @@ function initLanes(numLanes, ulId, showMask) {
     liLane = document.createElement("li");
 
     liLane.id = liID;
-    if (!initArduino && i === 1) {
+    /*if (!initArduino && i === 1) {
       liLane.className = "winner1";
-    }
+    }*/
     liLane.innerHTML = `Lane ${i}: <span class="LEDdisplay" id="${spanID}">0.0000</span> s`;
     selElem.appendChild(liLane);
   }
