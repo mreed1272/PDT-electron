@@ -62,6 +62,7 @@ app.on('ready', () => {
     });
   };
   spectatorWindow.loadURL(`file://${__dirname}/app/spectator.html`);
+  spectatorWindow.openDevTools()
   specContents = spectatorWindow.webContents;
 
   /*mainWindow.on('maximize', ()=> {
@@ -137,6 +138,7 @@ ipcMain.on('spectator-window', (event, command) => {
       });
     };
     spectatorWindow.loadURL(`file://${__dirname}/app/spectator.html`);
+    spectatorWindow.openDevTools()
     specContents = spectatorWindow.webContents;
 
     spectatorWindow.once('ready-to-show', () => {
@@ -154,6 +156,13 @@ ipcMain.on('spectator-window', (event, command) => {
   };
 
 });
+
+ipcMain.on('race-information', (event, data) => {
+  
+  if (specContents !== null) {
+    specContents.send('race-information', data)
+  }
+})
 
 app.on('window-all-closed', () => {
   console.log("All windows closed -> quitting app")

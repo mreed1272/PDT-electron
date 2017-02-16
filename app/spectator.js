@@ -5,17 +5,44 @@ const dialog = electron.remote.dialog;
 //const fs = require('fs');
 const ipcRenderer = electron.ipcRenderer;
 
-var TigerArray = [];
+var racerArray = [];
 
-var Lanes = 3;
-var NumRacers = 0;
-var Lane1 = [];
-var Lane2 = [];
-var Lane3 = [];
-var currentHeatNum = "";
-var CurrentRnd = 0;
+var raceInfo = [];
+
+var numLanes = 0;
+var numRacers = 0;
+var numHeats = 0;
+var numRounds = 0;
+
+var currentHeatNum = 0;
+var currentRndNum = 0;
+
 var roundResults = [];
-var NumHeats = 0;
+
+var titleDiv = "";
+var roundNumDiv = "";
+var heatNumDiv = "";
+var currentHeatDiv = "";
+var currentRoundDiv = "";
+var leaderBoardDiv = "";
+
+function setVariables() {
+  titleDiv = document.getElementById("spec-title");
+  roundNumDiv = document.getElementById("RoundNo");
+  heatNumDiv = document.getElementById("HeatNo");
+  currentHeatDiv = document.getElementById("CurrentHeat");
+  currentRoundDiv = document.getElementById("CurrentRound");
+  leaderBoardDiv = document.getElementById("LeaderBoard");
+}
+
+ipcRenderer.on('race-information', (event, data) => {
+  raceInfo = data[0];
+  numLanes = data[1];
+  numRounds = data[0].RaceRounds;
+  if (raceInfo.OrgName != "") {
+    titleDiv.innerHTML = `${raceInfo.OrgName} Pinewood Derby Race`
+  }
+})
 
 function setupRace() {
   document.getElementById("Lane1Time").value = " ";

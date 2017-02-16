@@ -90,3 +90,8 @@ table#tableRound tr:nth-child(even) {
 table#tableRound tr:nth-child(odd) {
     background-color: #fff2cc;
 }
+
+.h2-columns {
+    columns: 2;
+    margin: 10px 100px 10px 100px;
+}

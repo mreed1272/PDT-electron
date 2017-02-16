@@ -149,7 +149,7 @@ function generateRound(nRacers, nLanes, RndNo, racerArray) {
         if (!isObjEmpty(racerArray[order[i + x]])) {
           raceResults[RndNo * 1 - 1][x][j].car = racerArray[order[i + x]].car;
           raceResults[RndNo * 1 - 1][x][j].racer_name = racerArray[order[i + x]].racer_name;
-          //raceResults[RndNo * 1 - 1][x][j].total_time = racerArray[order[i + x]].total_time;
+          raceResults[RndNo * 1 - 1][x][j].total_time = 0;
           raceResults[RndNo * 1 - 1][x][j].heat_time = 0;
           raceResults[RndNo * 1 - 1][x][j].heat_lane = x;
           raceResults[RndNo * 1 - 1][x][j].race_index = order[i + x];
@@ -157,7 +157,7 @@ function generateRound(nRacers, nLanes, RndNo, racerArray) {
         } else {
           raceResults[RndNo * 1 - 1][x][j].car = "-";
           raceResults[RndNo * 1 - 1][x][j].racer_name = "No Racer";
-          //raceResults[RndNo * 1 - 1][x][j].total_time = 0;
+          raceResults[RndNo * 1 - 1][x][j].total_time = 0;
           raceResults[RndNo * 1 - 1][x][j].heat_time = 0;
           raceResults[RndNo * 1 - 1][x][j].heat_lane = x;
           raceResults[RndNo * 1 - 1][x][j].race_index = 99;
@@ -181,10 +181,10 @@ function generateRound(nRacers, nLanes, RndNo, racerArray) {
       }
       raceResults[RndNo - 1][l] = JSON.parse(JSON.stringify(raceResults[RndNo - 2][i].slice()));
     }
-    // now let's sort the new round array lanes by heat_time
+    // now let's sort the new round array lanes by total_time
     for (var l = 0; l < nLanes; l++) {
       raceResults[RndNo - 1][l].sort(function (a, b) {
-        return a.heat_time - b.heat_time;
+        return a.total_time - b.total_time;
       })
     }
 
@@ -210,6 +210,17 @@ function updateRoundTable(resultsArr, RndNo, HeatNo, nLanes, numberHeats, number
   numberHeats - number of heats in round
   numberROunds - number of rounds in race
   */
+  var currentRoundDiv = document.getElementById("current-round");
+
+  if (document.getElementById("current-round-number") == null) {
+    var tmpTxt = "";
+    tmpTxt += "<div class='flex-title'>\n";
+    tmpTxt += "<h2>Round: <span id='current-round-number'></span></h2>\n";
+    tmpTxt += "<h2>Heat: <span id='current-heat-number'></span></h2>\n";
+    tmpTxt += "</div>\n";
+    tmpTxt += "<table id='round-lineup-table'></table>\n";
+    currentRoundDiv.innerHTML = tmpTxt;
+  }
   var roundTxt = document.getElementById("current-round-number");
   var heatTxt = document.getElementById("current-heat-number");
   var roundTable = document.getElementById("round-lineup-table");
@@ -347,7 +358,7 @@ function raceUpdate(type) {
           message: `Do you want the top ${numLanes} finishers to race in a championship round?`,
           icon: PDTimage
         });
-        console.log(`Dialog response: ${response}`);
+        //console.log(`Dialog response: ${response}`);
         if (response == 1) {
           heatButton.innerHTML = "Finish";
           heatButton.setAttribute('onclick', "raceUpdate('finish')");
@@ -366,6 +377,7 @@ function raceUpdate(type) {
 
       for (var l = 0; l < numLanes; l++) {
         raceResults[currentRnd - 1][l][currentHeatNum - 1].heat_time = laneTimes[l].time * 1;
+        raceResults[currentRnd - 1][l][currentHeatNum - 1].total_time += laneTimes[l].time * 1;
         if (raceResults[currentRnd - 1][l][currentHeatNum - 1].race_index != 99) {
           raceRacers[raceResults[currentRnd - 1][l][currentHeatNum - 1].race_index].total_time += laneTimes[l].time * 1;
         }
@@ -436,8 +448,8 @@ function raceUpdate(type) {
       }
       resultsTxt += "</ul>";
 
-      console.log(resultsTxt);
-      console.log(resultsDiv);
+      //console.log(resultsTxt);
+      //console.log(resultsDiv);
 
       resultsDiv.innerHTML = resultsTxt;
 
@@ -675,49 +687,78 @@ function saveResults() {
   var startButton = document.getElementById("start-race");
   var resultsDiv = document.getElementById("current-round");
 
-  raceInformation["heat_results"] = raceResults;
+  raceInformation["heat_results"] = JSON.parse(JSON.stringify(raceResults));
   raceInformation["number_lanes"] = numLanes;
   raceInformation["current_heat"] = currentHeatNum;
   raceInformation["current_round"] = currentRnd;
   raceInformation["number_heats"] = NumHeats;
   raceInformation["race_finished"] = raceDone;
-  raceInformation["racer_table"] = raceRacers;
+  raceInformation["racer_table"] = JSON.parse(JSON.stringify(raceRacers));
 
-  if (raceInfoFile !== "") {
-    if (!fs.existsSync(raceInfoFile)) {
-      dialog.showErrorBox("File Missing", `The file ${raceInfoFile.split('\\').pop().split('/').pop()} cannot be found.`)
-    } else {
+
+  startButton.disabled = false;
+  //enable all buttons in other tabs 
+  var mainButtons = document.getElementById("mainT").getElementsByTagName("button");
+  disableButtons(mainButtons);
+
+  var testButtons = document.getElementById("testTrackT").getElementsByTagName("button");
+  disableButtons(testButtons);
+  disableButtons([document.getElementById("send-serial")]);
+
+  var editButtons = document.getElementById("editRacersT").getElementsByTagName("button");
+  disableButtons(editButtons);
+
+
+  dialog.showSaveDialog(remote.getCurrentWindow(), {
+    title: 'Save Race . . .',
+    filters: [
+      {
+        name: "PDT race information files",
+        extensions: ['pdt_race']
+      }
+    ]
+  }, (filenames) => {
+    if (!filenames) return;
+    if (filenames.length > 0) {
       var contentJSON = JSON.stringify(raceInformation);
 
       //save txt
-      fs.writeFileSync(raceInfoFile, contentJSON);
+      fs.writeFileSync(filenames, contentJSON);
+
       dialog.showMessageBox(remote.getCurrentWindow(), {
         title: "Race File Saved",
         type: "info",
         buttons: ["Ok"],
-        message: `The file ${raceInfoFile} has been saved.`
+        message: `The file ${filenames.split('\\').pop().split('/').pop()} has been saved.`
       })
+      if (raceDone == true) {
+        clearObject(raceResults);
+        clearObject(raceRacers);
+        updateRacerTable();
+        resultsDiv.innerHTML = "";
+      }
+
     }
-  }
 
-  if (raceDone == true) {
-    clearObject(raceResults);
-    clearObject(raceRacers);
-    updateRacerTable();
-    resultsDiv.innerHTML = "";
+    /*if (raceInfoFile !== "") {
+      if (!fs.existsSync(raceInfoFile)) {
+        dialog.showErrorBox("File Missing", `The file ${raceInfoFile.split('\\').pop().split('/').pop()} cannot be found.`)
+      } else {
+        var contentJSON = JSON.stringify(raceInformation);
 
-    startButton.disabled = false;
-    //enable all buttons in other tabs 
-    var mainButtons = document.getElementById("mainT").getElementsByTagName("button");
-    disableButtons(mainButtons);
+        //save txt
+        fs.writeFileSync(raceInfoFile, contentJSON);
+        dialog.showMessageBox(remote.getCurrentWindow(), {
+          title: "Race File Saved",
+          type: "info",
+          buttons: ["Ok"],
+          message: `The file ${raceInfoFile} has been saved.`
+        })
+      }
+    }*/
 
-    var testButtons = document.getElementById("testTrackT").getElementsByTagName("button");
-    disableButtons(testButtons);
-    disableButtons([document.getElementById("send-serial")]);
 
-    var editButtons = document.getElementById("editRacersT").getElementsByTagName("button");
-    disableButtons(editButtons);
-  }
+  })
 }
 
 function displayResults() {
@@ -772,36 +813,3 @@ function displayResults() {
   resultsDiv.innerHTML = resultsTxtOut;
 }
 
-/*var headerTxt1a = "<tr><th rowspan=2>Heat #</th>";
-  var headerTxt1b = "";
-  var headerTxt1c = "</tr>";
-  var headerTxt2base = "<th>Car #</th><th>Heat Time</th>";
-  var headerTxt2 = ""
-
-  var tempOut = "";
-
-  //set the round and heat
-  roundTxt.innerHTML = `${RndNo} / ${numberRounds}`;
-  heatTxt.innerHTML = `${HeatNo} / ${numberHeats}`;
-
-  //build the table header
-  for (var i = 1; i <= nLanes; i++) {
-    headerTxt1b += `<th colspan=2>Lane ${i}</th>`
-    headerTxt2 += headerTxt2base;
-  }
-  tempOut += headerTxt1a + headerTxt1b + headerTxt1c;
-  tempOut += `<tr>${headerTxt2}</tr>`;
-
-  for (var h = 0; h < numberHeats * 1; h++) {  // h is the heat #
-    tempOut += `<tr><td>${(h + 1)}</td>`;
-    for (var l = 0; l < nLanes; l++) {             // l is the lane #
-      if (resultsArr[RndNo - 1][l][h].car !== "-") {
-        tempOut += `<td>${resultsArr[RndNo - 1][l][h].car}</td><td>${resultsArr[RndNo - 1][l][h].heat_time}</td>`;
-      } else {
-        tempOut += `<td>No Racer</td><td>-</td>`;
-      }
-    }
-    tempOut += "</tr>";
-  }
-  roundTable.innerHTML = tempOut;
-}*/

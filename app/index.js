@@ -181,6 +181,8 @@ function loadRace() {
       raceInfoFileDiv.innerHTML = filenames[0].split('\\').pop().split('/').pop();
       raceInfoFile = filenames[0];
       updateRaceInfo();
+      console.log("Sending communication to 'race-information' channel.");
+      ipcRenderer.send('race-information', [raceInformation,numLanes]);
     }
   })
 }
@@ -435,9 +437,9 @@ function updateRaceInfo() {
       if (raceInformation.race_finished == true) {
         raceDone = true;
         raceRacers = JSON.parse(JSON.stringify(raceInformation.racer_table));
-        console.log(raceRacers);
+        //console.log(raceRacers);
         updateRacerTable();
-        console.log(raceRacers);
+        //console.log(raceRacers);
         tempOutTable = "<h2>Race Completed</h2>"
         tempOutTable += "<table id='mainRacerList'><tr><th>Car Number</th><th>Racer Name</th><th>Car Weight (oz)</th><th>Rank</th><th>Total Time (s)</th></tr>"
         for (var i = 0; i < raceRacers.length; i++) {
