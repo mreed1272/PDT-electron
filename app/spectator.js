@@ -6,18 +6,15 @@ const dialog = electron.remote.dialog;
 const ipcRenderer = electron.ipcRenderer;
 
 var racerArray = [];
-
+var roundResults = [];
 var raceInfo = [];
 
 var numLanes = 0;
 var numRacers = 0;
 var numHeats = 0;
 var numRounds = 0;
-
 var currentHeatNum = 0;
 var currentRndNum = 0;
-
-var roundResults = [];
 
 var titleDiv = "";
 var roundNumDiv = "";
@@ -25,6 +22,15 @@ var heatNumDiv = "";
 var currentHeatDiv = "";
 var currentRoundDiv = "";
 var leaderBoardDiv = "";
+
+//let's create constants pointing to images for the ranks
+
+const defaultImg = `${__dirname}/images/PDT-main.png`;
+const tigerImg = `${__dirname}/images/tiger-trans.png`;
+const wolfImg = `${__dirname}/images/wolf-trans.png`;
+const bearImg = `${__dirname}/images/bear-trans.png`;
+const webelosImg = `${__dirname}/images/webelos-trans.png`;
+const aolImg = `${__dirname}/images/aol-trans.png`;
 
 function setVariables() {
   titleDiv = document.getElementById("spec-title");
@@ -43,6 +49,20 @@ ipcRenderer.on('race-information', (event, data) => {
     titleDiv.innerHTML = `${raceInfo.OrgName} Pinewood Derby Race`
   }
 })
+
+ipcRenderer.on('setup-race', (event, data) => {
+  racerArray = data[1];
+  currentRndNum = data[2];
+  currentHeatNum = data[3];
+  numHeats = data[4];
+  numRacers = racerArray.length;
+  roundResults = data[0];
+  setupDisplay();
+})
+
+function setupDisplay(){
+  //now to build the tables and windows
+}
 
 function setupRace() {
   document.getElementById("Lane1Time").value = " ";

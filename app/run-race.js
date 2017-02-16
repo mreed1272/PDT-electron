@@ -106,6 +106,7 @@ function setupRace() {
   updateRoundTable(raceResults, currentRnd, currentHeatNum, numLanes, NumHeats, numRounds);
   updateCurrentHeat(raceResults, currentRnd, numLanes, currentHeatNum);
 
+  ipcRenderer.send('setup-race', [raceResults,raceRacers,currentRnd,currentHeatNum,NumHeats]);
 }
 
 function generateRound(nRacers, nLanes, RndNo, racerArray) {

@@ -164,6 +164,13 @@ ipcMain.on('race-information', (event, data) => {
   }
 })
 
+ipcMain.on('setup-race', (event, data) => {
+  
+  if (specContents !== null) {
+    specContents.send('setup-race', data)
+  }
+})
+
 app.on('window-all-closed', () => {
   console.log("All windows closed -> quitting app")
   app.quit();
