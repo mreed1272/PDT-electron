@@ -480,6 +480,7 @@ function updateRaceInfo() {
 
   raceInfoDiv.innerHTML = tmpOutStr;
   displayResults();
+  ipcRenderer.send('race-information', [raceInformation,numLanes]);
   return true;
 }
 

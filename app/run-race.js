@@ -274,8 +274,6 @@ function updateRacerTable() {
     }
   }
 
-  /* */
-
   trOut += "<tr><th>Car<br/>#</th><th>Racer Name</th><th>Racer<br/>Rank</th><th>Total<br/>Time (s)</th></tr>";
 
   for (var i = 0; i < raceRacers.length; i++) {

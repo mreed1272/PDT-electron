@@ -9,7 +9,7 @@
   <script src="spectator.js"></script>
 </head>
 
-<body onload="setVariables();">
+<body onload="setVariables(); getInfo();">
 
   <h1 id="spec-title" class="title">Org Name Pinewood Derby Race</h1>
 
@@ -18,52 +18,12 @@
     <div id="HeatNo">Heat </div>
   </h2>
 
-  <div id="CurrentHeat">
-    <!--<table style="width: 100%; border-spacing: 10px;">
-      <tr>
-        <td class="results">
-          <div class="container">
-            <h2>Lane 1</h2>
-            <div class="LanePlace" id="Lane1Place">Place</div>
-            <img id="imgLane1C" src="images/pdt-main-256.png" height="150" width="150">
-            <div id="Lane1C" class="center shadowText">
-              Racer<br/> #
-              <br/> Total Time: 6.3245 min<br/> Car Weight: 3.00 oz
-            </div>
-          </div>
-        </td>
-        <td class="results">
-          <div class="container">
-            <h2>Lane 2</h2>
-            <div class="LanePlace" id="Lane2Place">Place</div>
-            <img id="imgLane2C" src="images/pdt-main-256.png" height="150" width="150">
-            <div id="Lane2C" class="center shadowText">
-              Racer<br/> #
-              <br/> Total Time: 6.4231 min<br/> Car Weight: 3.00 oz
-            </div>
-          </div>
-        </td>
-        <td class="results">
-          <div class="container">
-            <h2>Lane 3</h2>
-            <div class="LanePlace" id="Lane3Place">Place</div>
-            <img id="imgLane3C" src="images/pdt-main-256.png" height="150" width="150">
-            <div id="Lane3C" class="center shadowText">
-              Racer<br/> #
-              <br/> Total Time: 6.5421 min<br/> Car Weight: 3.00 oz
-            </div>
-          </div>
-        </td>
-      </tr>
-    </table>-->
+  <div id="CurrentHeat"></div>
+
+  <div class="flex-container-row">
+    <div id="CurrentRound"></div>
+    <div id="LeaderBoard"></div>
   </div>
-
-  
-
-  <div id="CurrentRound"></div>
-
-  <div id="LeaderBoard"></div>
-
 </body>
 
 </HTML>

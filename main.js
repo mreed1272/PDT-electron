@@ -13,6 +13,17 @@ var splashWindow = null;
 let mainContents = null;
 let specContents = null;
 
+var racerArray = [];
+var roundResults = [];
+var raceInfo = [];
+
+var numLanes = 0;
+var numRacers = 0;
+var numHeats = 0;
+var numRounds = 0;
+var currentHeatNum = 0;
+var currentRndNum = 0;
+
 //global.fileToOpen = null;
 
 app.on('ready', () => {
@@ -44,7 +55,7 @@ app.on('ready', () => {
       height: externalDisplay.bounds.height,
       frame: true,
       show: false,
-      skipTaskbar: true,
+      /*skipTaskbar: true,*/
       icon: PDTimage,
       x: externalDisplay.bounds.x,
       y: externalDisplay.bounds.y
@@ -56,7 +67,7 @@ app.on('ready', () => {
       height: 768,
       frame: true,
       show: false,
-      skipTaskbar: true,
+      /*skipTaskbar: true,*/
       icon: PDTimage,
       //transparent: true
     });
@@ -120,7 +131,7 @@ ipcMain.on('spectator-window', (event, command) => {
         height: externalDisplay.bounds.height,
         frame: true,
         show: false,
-        skipTaskbar: true,
+        /*skipTaskbar: true,*/
         icon: `${__dirname}/app/images/PDT-main.png`,
         x: externalDisplay.bounds.x,
         y: externalDisplay.bounds.y
@@ -132,7 +143,7 @@ ipcMain.on('spectator-window', (event, command) => {
         height: 768,
         frame: true,
         show: false,
-        skipTaskbar: true,
+        /*skipTaskbar: true,*/
         icon: `${__dirname}/app/images/PDT-main.png`,
         //transparent: true
       });
@@ -157,15 +168,44 @@ ipcMain.on('spectator-window', (event, command) => {
 
 });
 
+ipcMain.on('startup', (event) => {
+  var data = {};
+  if (!isObjEmpty(raceInfo)){
+    data["raceInfo"] = raceInfo;
+  }
+  if (!isObjEmpty(racerArray)){
+    data["racerArray"] = racerArray;
+  }
+  if (!isObjEmpty(roundResults)){
+    data["roundResults"] = roundResults;
+  }
+  if (numLanes > 0){ data["numLanes"] = numLanes};
+  if (numHeats > 0){ data["numHeats"] = numHeats};
+  if (currentHeatNum > 0){ data["currentHeatNum"] = currentHeatNum};
+  if (currentRndNum > 0){ data["currentRndNum"] = currentRndNum};
+
+  event.returnValue = data;
+
+})
+
 ipcMain.on('race-information', (event, data) => {
-  
+  raceInfo = data[0];
+  numLanes = data[1];
+  numRounds = data[0].RaceRounds;
+
   if (specContents !== null) {
     specContents.send('race-information', data)
   }
 })
 
 ipcMain.on('setup-race', (event, data) => {
-  
+  racerArray = data[1];
+  currentRndNum = data[2];
+  currentHeatNum = data[3];
+  numHeats = data[4];
+  numRacers = racerArray.length;
+  roundResults = data[0];
+
   if (specContents !== null) {
     specContents.send('setup-race', data)
   }
@@ -175,3 +215,8 @@ app.on('window-all-closed', () => {
   console.log("All windows closed -> quitting app")
   app.quit();
 });
+
+function isObjEmpty(obj) {
+  for (var x in obj) { if (obj.hasOwnProperty(x)) return false; }
+  return true;
+}
