@@ -88,6 +88,7 @@ function setupArduino(availPorts) {
 
   PDT.on('data', function (data) {
     var outStr = `${data}<br/>`;
+    console.log(`Serial data: ${data}`);
 
     if (data.trim() == "K" && lastSerialResponse == "P") {
       writeToArduino("V");
@@ -107,7 +108,7 @@ function setupArduino(availPorts) {
 }
 
 function writeToArduino(str) {
-  console.log(`Command string: ${str}`);
+  console.log(`Serial command string: ${str}`);
   if (initArduino) {
     if (PDT.isOpen) {
       setTimeout(() => {
@@ -137,18 +138,24 @@ function checkSerialData(data) {
       console.log("Timer ready");
       document.getElementById("status-timer").innerHTML = "Ready";
       document.getElementById("status-timer").className = "footer-item ready";
+      writeToArduino("G");
       break;
 
     case "B":
       console.log("Racing...");
       document.getElementById("status-timer").innerHTML = "Racing...";
       document.getElementById("status-timer").className = "footer-item racing";
+      document.getElementById("gate-timer").innerHTML = "Gate Open";
+      document.getElementById("gate-timer").className = "footer-item open";
       clearDisplay();
       break;
 
     case "P":
       console.log("Arduino power-up");
       document.getElementById("status-timer").innerHTML = "Powering up...";
+      writeToArduino("V");
+      writeToArduino("N");
+      writeToArduino("G");
       break;
 
     case ".":
@@ -226,7 +233,7 @@ function checkSerialData(data) {
           var tempLaneId = `race-lane-lane${tempLaneNum}`;
         }
         if (laneMask[tempLaneNum - 1] != 1) {
-          document.getElementById(tempLaneId).innerHTML = tempLaneTime;
+          document.getElementById(tempLaneId).innerHTML = tempLaneTime.toFixed(4);
           laneTimes.push({ lane: tempLaneNum, time: tempLaneTime });
         } else {
           laneTimes.push({ lane: tempLaneNum, time: 99 });
@@ -260,6 +267,7 @@ function checkSerialData(data) {
           if (isRacing) {
             postResults(laneTimes);
           }
+          writeToArduino("G");
         }
       };
       break;

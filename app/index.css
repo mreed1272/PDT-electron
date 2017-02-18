@@ -216,7 +216,7 @@ a:active {
 	background: #eee;
 	box-shadow: 3px 3px 6px rgba(0,0,0,0.3);
 	padding: 10px 20px;
-	height: calc(100% - 170px);
+	height: calc(100% - 220px);
 	overflow: auto;
 	width: 55em;
 }
