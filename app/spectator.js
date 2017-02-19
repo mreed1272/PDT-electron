@@ -98,7 +98,7 @@ function setupDisplay() {
     tempTxt += `<div class='flex-container-col'>`;
     tempTxt += `<h2>Lane ${l}</h2>`;
     tempTxt += `<div class='LanePlace' id='Lane${l}Place'>Place</div>`;
-    tempTxt += `<img id='imgLane-${l}' src='${defaultImg}' height='150' width='150'>`;
+    tempTxt += `<img id='imgLane-${l}' src='${defaultImg}' height='125' width='125'>`;
     tempTxt += `<div id='Racer-Lane-${l}' class='racerTxt'>Name <br/> Car #</div>`;
     tempTxt += `<ul><li id='Lane-Time-${l}' class='LEDDisplay'>0.0000</li></ul>`;
     tempTxt += `</div>`
@@ -115,14 +115,19 @@ function updateDisplay() {
   if (!isObjEmpty(racerArray) && !isObjEmpty(roundResults)) {
     for (l = 0; l < numLanes; l++) {
       var tempCar = roundResults[currentRndNum - 1][l][currentHeatNum - 1].car;
-      var tempIndex = IndexByKeyValue(racerArray, "car", tempCar);
-      var tempName = racerArray[tempIndex].racer_name;
-      var tempRank = racerArray[tempIndex].rank;
+      if (tempCar == "-") {
+        var tempName = "No Racer";
+        var tempRank = "none";
+      } else {
+        var tempIndex = IndexByKeyValue(racerArray, "car", tempCar);
+        var tempName = racerArray[tempIndex].racer_name;
+        var tempRank = racerArray[tempIndex].rank;
+      }
       var tempImg = document.getElementById(`imgLane-${l + 1}`);
       var tempDiv = document.getElementById(`Racer-Lane-${l + 1}`);
 
       tempDiv.innerHTML = `${tempName}<br/>${tempCar}`;
-      
+
       switch (tempRank) {
         case "Tiger":
           tempImg.src = tigerImg;

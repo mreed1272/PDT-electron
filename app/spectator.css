@@ -49,6 +49,7 @@ img {
 .h2-columns {
     display: flex;
     justify-content: space-around;
+    margin: 10px auto;
 }
 
 .flex-container-row {
@@ -75,6 +76,7 @@ img {
 
 .flex-container-col h2 {
     text-align: center;
+    margin: 5px;
 }
 
 .flex-container-col ul {
@@ -87,7 +89,7 @@ img {
     font-family: LEDfont;
     color: #ce1126;
     background-color: black;
-    font-size: 3.0em;
+    font-size: 2.0em;
     border: 1px solid #333;
     margin: 5px auto 5px auto;
     padding: 7px 5px 0px 5px;
@@ -95,22 +97,22 @@ img {
 
 .LanePlace {
     visibility: visible;
-    font-size: 1.7em;
+    font-size: 1.2em;
     text-shadow: 2px 2px 5px GoldenRod;
     font-style: italic;
-    margin-bottom: 5px;
+    margin: 5px;
     text-align: center;
 }
 
 .racerTxt {
     text-align: center;
     text-shadow: 2px 2px 4px rgb(100,100,100);
-    font-size: 1.7em;
+    font-size: 1.2em;
 }
 
 #CurrentRound {
     box-shadow: 3px 3px 8px rgba(0,0,0,0.7);
-    height: calc(100vh - 560px);
+    height: calc(100vh - 450px);
     width: 48%;
     margin-left: auto;
     margin-right: 10px;
@@ -147,7 +149,7 @@ img {
 
 #LeaderBoard {
     box-shadow: 3px 3px 8px rgba(0,0,0,0.7);
-    height: calc(100vh - 560px);
+    height: calc(100vh - 450px);
     width: 48%;
     margin-left: 10px;
     margin-right: auto;
