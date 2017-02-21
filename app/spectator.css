@@ -30,7 +30,9 @@ h1 {
 img {
     /*width: 100%;*/
     /*height: auto;*/
-    opacity: 0.8
+    opacity: 1.0;
+    width: 125px;
+    height: 125px;
 }
 
 .title {
@@ -112,7 +114,7 @@ img {
 
 #CurrentRound {
     box-shadow: 3px 3px 8px rgba(0,0,0,0.7);
-    height: calc(100vh - 450px);
+    height: 35vh;
     width: 48%;
     margin-left: auto;
     margin-right: 10px;
@@ -149,7 +151,7 @@ img {
 
 #LeaderBoard {
     box-shadow: 3px 3px 8px rgba(0,0,0,0.7);
-    height: calc(100vh - 450px);
+    height: 35vh;
     width: 48%;
     margin-left: 10px;
     margin-right: auto;
@@ -230,4 +232,8 @@ table#tableRound tr:nth-child(even) {
 table#tableRound tr:nth-child(odd) {
     background-color: #fff2cc;
 }
-
+.winner{
+    font-family: FontAwesome;
+    font-size: 2.0em;
+    color: rgb(206,17,38);
+}

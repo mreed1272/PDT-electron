@@ -53,7 +53,7 @@ app.on('ready', () => {
     spectatorWindow = new BrowserWindow({
       width: externalDisplay.bounds.width,
       height: externalDisplay.bounds.height,
-      frame: true,
+      frame: false,
       show: false,
       /*skipTaskbar: true,*/
       icon: PDTimage,
@@ -65,7 +65,7 @@ app.on('ready', () => {
     spectatorWindow = new BrowserWindow({
       width: 1024,
       height: 768,
-      frame: true,
+      frame: false,
       show: false,
       /*skipTaskbar: true,*/
       icon: PDTimage,
@@ -99,15 +99,6 @@ app.on('ready', () => {
   });
 });
 
-/*app.on('open-file', (event, filePath)=> {
-    event.preventDefault();
-    fileToOpen = filePath;
-
-    if(mainWindow){
-        mainWindow.send('open-file', filePath);
-    };
-});
-*/
 ipcMain.on('spectator-window', (event, command) => {
   //console.log(spectatorWindow);
   if (spectatorWindow != null) {
@@ -129,7 +120,7 @@ ipcMain.on('spectator-window', (event, command) => {
       spectatorWindow = new BrowserWindow({
         width: externalDisplay.bounds.width,
         height: externalDisplay.bounds.height,
-        frame: true,
+        frame: false,
         show: false,
         /*skipTaskbar: true,*/
         icon: `${__dirname}/app/images/PDT-main.png`,
@@ -141,7 +132,7 @@ ipcMain.on('spectator-window', (event, command) => {
       spectatorWindow = new BrowserWindow({
         width: 1024,
         height: 768,
-        frame: true,
+        frame: false,
         show: false,
         /*skipTaskbar: true,*/
         icon: `${__dirname}/app/images/PDT-main.png`,
@@ -208,6 +199,42 @@ ipcMain.on('setup-race', (event, data) => {
 
   if (specContents !== null) {
     specContents.send('setup-race', data)
+  }
+})
+
+ipcMain.on('stop-race', (event, data) => {
+  roundResults = data[0];
+  racerArray = data[1];
+  
+  if (specContents !== null) {
+    specContents.send('stop-race', data)
+  }
+})
+
+ipcMain.on('post-results', (event,data) => {
+  
+  if (specContents !== null) {
+    specContents.send('post-results', data)
+  }
+});
+
+ipcMain.on('redo', (event) => {
+  
+  if (specContents !== null) {
+    specContents.send('redo');
+  }
+})
+
+ipcMain.on('update-information', (event,data) => {
+  racerArray = data[1];
+  currentRndNum = data[2];
+  currentHeatNum = data[3];
+  numHeats = data[4];
+  numRacers = racerArray.length;
+  roundResults = data[0];
+  
+  if (specContents !== null) {
+    specContents.send('update-information', data)
   }
 })
 

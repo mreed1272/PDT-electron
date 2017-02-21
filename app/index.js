@@ -566,6 +566,9 @@ function clearObject(Obj) {
   for (var j in Obj) {
     if (Obj.hasOwnProperty(j)) {
       delete Obj[j];
-    };
+    } ;
+  }
+  if (Obj.length > 0) {
+    Obj.length = 0;
   }
 }

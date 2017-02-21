@@ -44,7 +44,9 @@ function stopRace() {
   clearDisplay();
   clearObject(raceRacers);
   clearObject(raceResults);
+  ipcRenderer.send('stop-race',[raceResults,raceRacers]);
   updateRacerTable();
+  
   var heatTable = document.getElementById("heat-lane-assignments").getElementsByTagName("table");
   heatTable[0].innerHTML = "";
 
@@ -55,6 +57,8 @@ function stopRace() {
   roundTxt.innerHTML = "";
   heatTxt.innerHTML = "";
   roundTable.innerHTML = "";
+  
+  
 
 }
 
@@ -390,6 +394,7 @@ function raceUpdate(type) {
       clearDisplay();
       heatButton.disabled = true;
       redoHeatButton.disabled = true;
+      ipcRenderer.send('redo');
       //resetArduino();
 
       break;
@@ -416,6 +421,8 @@ function raceUpdate(type) {
       heatButton.innerHTML = "Accept Heat Results";
       heatButton.setAttribute('onclick', "raceUpdate('accept')");
 
+      ipcRenderer.send('update-information', [raceResults,raceRacers,currentRnd,currentHeatNum,NumHeats]);
+
       break;
 
     case "finish":
@@ -427,7 +434,8 @@ function raceUpdate(type) {
         return a.total_time - b.total_time;
       });
       updateRacerTable();
-
+      ipcRenderer.send('update-information', [raceResults,raceRacers,currentRnd,currentHeatNum,NumHeats]);
+      
       var resultsDiv = document.getElementById("current-round");
 
       var resultsTxt = "<h1>Winners</h1><ul>";
@@ -628,6 +636,7 @@ function postResults(raceTimes) {
 
   //send results to spectator window
   console.log(raceTimes);
+  ipcRenderer.send('post-results', raceTimes);
 }
 
 function simHeat(nLanes) {
