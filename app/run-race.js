@@ -44,9 +44,9 @@ function stopRace() {
   clearDisplay();
   clearObject(raceRacers);
   clearObject(raceResults);
-  ipcRenderer.send('stop-race',[raceResults,raceRacers]);
+  ipcRenderer.send('stop-race', [raceResults, raceRacers]);
   updateRacerTable();
-  
+
   var heatTable = document.getElementById("heat-lane-assignments").getElementsByTagName("table");
   heatTable[0].innerHTML = "";
 
@@ -57,8 +57,8 @@ function stopRace() {
   roundTxt.innerHTML = "";
   heatTxt.innerHTML = "";
   roundTable.innerHTML = "";
-  
-  
+
+
 
 }
 
@@ -110,7 +110,7 @@ function setupRace() {
   updateRoundTable(raceResults, currentRnd, currentHeatNum, numLanes, NumHeats, numRounds);
   updateCurrentHeat(raceResults, currentRnd, numLanes, currentHeatNum);
 
-  ipcRenderer.send('setup-race', [raceResults,raceRacers,currentRnd,currentHeatNum,NumHeats]);
+  ipcRenderer.send('setup-race', [raceResults, raceRacers, currentRnd, currentHeatNum, NumHeats]);
 }
 
 function generateRound(nRacers, nLanes, RndNo, racerArray) {
@@ -388,6 +388,8 @@ function raceUpdate(type) {
       updateRacerTable();
       updateRoundTable(raceResults, currentRnd, currentHeatNum, numLanes, NumHeats, numRounds);
 
+      ipcRenderer.send('update-information', [raceResults, raceRacers, currentRnd, currentHeatNum, NumHeats]);
+
       break;
 
     case "redo":
@@ -421,7 +423,7 @@ function raceUpdate(type) {
       heatButton.innerHTML = "Accept Heat Results";
       heatButton.setAttribute('onclick', "raceUpdate('accept')");
 
-      ipcRenderer.send('update-information', [raceResults,raceRacers,currentRnd,currentHeatNum,NumHeats]);
+      ipcRenderer.send('update-information', [raceResults, raceRacers, currentRnd, currentHeatNum, NumHeats]);
 
       break;
 
@@ -434,14 +436,14 @@ function raceUpdate(type) {
         return a.total_time - b.total_time;
       });
       updateRacerTable();
-      ipcRenderer.send('update-information', [raceResults,raceRacers,currentRnd,currentHeatNum,NumHeats]);
-      
+      ipcRenderer.send('winner-no-extra', [raceResults, raceRacers, currentRnd, currentHeatNum, NumHeats]);
+
       var resultsDiv = document.getElementById("current-round");
 
       var resultsTxt = "<h1>Winners</h1><ul>";
       var placeTxt = ""
 
-      for (var i = 0; i < numLanes; i++) {
+      for (var i = 0; i < 3; i++) {
         if (i == 0) {
           placeTxt = "1st";
         } else if (i == 1) {
@@ -526,6 +528,8 @@ function raceUpdate(type) {
       updateRacerTable();
       clearDisplay();
 
+      ipcRenderer.send('winner-extra', [raceResults,raceRacers,currentRnd,currentHeatNum,NumHeats]);
+
       startButton.innerHTML = "Start Race"
       startButton.setAttribute('onclick', "setupRace()");
 
@@ -564,6 +568,8 @@ function createChampRound() {
     }
   }
 
+  ipcRenderer.send('update-information', [raceResults, raceRacers, currentRnd, currentHeatNum, NumHeats]);
+
   //next create temp array so we can see the top finishers
   var raceTmpArr = JSON.parse(JSON.stringify(raceRacers));
 
@@ -588,6 +594,9 @@ function createChampRound() {
   updateRacerTable();
   updateRoundTable(raceResults, (numRounds + 1), 1, numLanes, 1, (numRounds + 1));
   updateCurrentHeat(raceResults, (numRounds + 1), numLanes, 1);
+
+  ipcRenderer.send('champ-round', [raceResults, raceRacers, (currentRnd + 1), 1, 1]);
+
   clearDisplay();
   heatButton.disabled = true;
   redoHeatButton.disabled = true;

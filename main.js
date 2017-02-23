@@ -12,6 +12,7 @@ var splashWindow = null;
 
 let mainContents = null;
 let specContents = null;
+let externalDisplay = null;
 
 var racerArray = [];
 var roundResults = [];
@@ -28,7 +29,7 @@ var currentRndNum = 0;
 
 app.on('ready', () => {
   let displays = electron.screen.getAllDisplays();
-  let externalDisplay = displays.find((display) => {
+  externalDisplay = displays.find((display) => {
     return display.bounds.x !== 0 || display.bounds.y !== 0;
   })
   //console.log(externalDisplay);
@@ -51,16 +52,17 @@ app.on('ready', () => {
 
   if (externalDisplay) {
     spectatorWindow = new BrowserWindow({
-      width: externalDisplay.bounds.width,
-      height: externalDisplay.bounds.height,
+      width: externalDisplay.bounds.width - 100,
+      height: externalDisplay.bounds.height - 100,
       frame: false,
       show: false,
       /*skipTaskbar: true,*/
       icon: PDTimage,
-      x: externalDisplay.bounds.x,
-      y: externalDisplay.bounds.y
+      x: externalDisplay.bounds.x + 25,
+      y: externalDisplay.bounds.y + 25
       //transparent: true
     });
+    //spectatorWindow.maximize();
   } else {
     spectatorWindow = new BrowserWindow({
       width: 1024,
@@ -105,29 +107,33 @@ ipcMain.on('spectator-window', (event, command) => {
     switch (command) {
       case "open":
         spectatorWindow.show();
+        if (externalDisplay) {
+          spectatorWindow.maximize();
+        }
         break;
 
       case "close":
         spectatorWindow.hide();
     }
   } else if (spectatorWindow === null) {
-    let displays = electron.screen.getAllDisplays();
+    /*let displays = electron.screen.getAllDisplays();
     let externalDisplay = displays.find((display) => {
       return display.bounds.x !== 0 || display.bounds.y !== 0;
-    })
+    })*/
 
     if (externalDisplay) {
       spectatorWindow = new BrowserWindow({
-        width: externalDisplay.bounds.width,
-        height: externalDisplay.bounds.height,
+        width: externalDisplay.bounds.width - 100,
+        height: externalDisplay.bounds.height - 100,
         frame: false,
         show: false,
         /*skipTaskbar: true,*/
         icon: `${__dirname}/app/images/PDT-main.png`,
-        x: externalDisplay.bounds.x,
-        y: externalDisplay.bounds.y
+        x: externalDisplay.bounds.x + 25,
+        y: externalDisplay.bounds.y + 25
         //transparent: true
       });
+      //spectatorWindow.maximize();
     } else {
       spectatorWindow = new BrowserWindow({
         width: 1024,
