@@ -155,6 +155,30 @@ ipcRenderer.on('update-information', (event, data) => {
   //setupDisplay();
   updateLeaderBoard();
   updateCurrentRound();
+  //updateDisplay();
+
+  //clear the lane times and places for next heat
+  /*for (var l = 1; l <= numLanes; l++) {
+    var tmpID = `Lane-Time-${l}`;
+    var tmp2ID = `Lane${l}Place`;
+    document.getElementById(tmpID).innerHTML = (0.0000).toFixed(4);
+    document.getElementById(tmp2ID).innerHTML = "-";
+    hideTxt(tmp2ID);
+  }*/
+})
+
+ipcRenderer.on('next', (event, data) => {
+  //get new arrays and update displays
+  roundResults = data[0];
+  racerArray = data[1];
+  currentRndNum = data[2];
+  currentHeatNum = data[3];
+  numHeats = data[4];
+  numRacers = racerArray.length;
+
+  //setupDisplay();
+  updateLeaderBoard();
+  updateCurrentRound();
   updateDisplay();
 
   //clear the lane times and places for next heat
@@ -166,6 +190,173 @@ ipcRenderer.on('update-information', (event, data) => {
     hideTxt(tmp2ID);
   }
 })
+
+ipcRenderer.on('winner-no-extra', (event, data) => {
+  //get new arrays and update displays
+  roundResults = data[0];
+  racerArray = data[1];
+  currentRndNum = data[2];
+  currentHeatNum = data[3];
+  numHeats = data[4];
+  numRacers = racerArray.length;
+
+  updateLeaderBoard();
+  updateCurrentRound();
+
+  currentRoundDiv.style.display = "none";
+
+  //create cards showing winners 1st through 3rd unless number of racers is less than 3
+  winnerCards();
+
+})
+
+ipcRenderer.on('winner-extra', (event, data) => {
+  //get new arrays and update displays
+  roundResults = data[0];
+  racerArray = data[1];
+  currentRndNum = data[2];
+  currentHeatNum = data[3];
+  numHeats = data[4];
+  numRacers = racerArray.length;
+
+  //setupDisplay();
+  updateLeaderBoard();
+  updateCurrentRound();
+  updateDisplay();
+
+  //clear the lane times and places for next heat
+  for (var l = 1; l <= numLanes; l++) {
+    var tmpID = `Lane-Time-${l}`;
+    var tmp2ID = `Lane${l}Place`;
+    document.getElementById(tmpID).innerHTML = (0.0000).toFixed(4);
+    document.getElementById(tmp2ID).innerHTML = "-";
+    hideTxt(tmp2ID);
+  }
+})
+
+ipcRenderer.on('champ-round', (event, data) => {
+  //get new arrays and update displays
+  roundResults = data[0];
+  racerArray = data[1];
+  currentRndNum = data[2];
+  currentHeatNum = data[3];
+  numHeats = data[4];
+  numRacers = racerArray.length;
+
+  //setupDisplay();
+  updateLeaderBoard();
+  updateCurrentRound();
+  updateDisplay();
+
+  //clear the lane times and places for next heat
+  for (var l = 1; l <= numLanes; l++) {
+    var tmpID = `Lane-Time-${l}`;
+    var tmp2ID = `Lane${l}Place`;
+    document.getElementById(tmpID).innerHTML = (0.0000).toFixed(4);
+    document.getElementById(tmp2ID).innerHTML = "-";
+    hideTxt(tmp2ID);
+  }
+})
+
+function winnerCards(champ) {
+
+  if (isObjEmpty(champ)) {
+    //first sort the racerArray by total time
+    racerArray.sort(function (a, b) {
+      return a.total_time - b.total_time;
+    })
+
+    var tempTxt = "";
+    tempTxt += `<div class='flex-container-row'>`;
+
+    for (var w = 0; w < 3; w++) {
+      switch (w) {
+        case 0:
+          (numRacers > 2) ? tempTxt += `<div class='first_place_A'>` : tempTxt += `<div class='first_place_B'>`;
+          tempTxt += `<h1>1st Place <span class='winner'>&#xf091;</span></h1>`;
+          break;
+
+        case 1:
+          (numRacers > 2) ? tempTxt += `<div class='second_place_A'>` : tempTxt += `<div class='second_place_B'>`;
+          tempTxt += `<h1>2nd Place</h1>`;
+          break;
+
+        case 2:
+          tempTxt += `<div class='third_place'>`;
+          tempTxt += `<h1>3rd Place</h1>`;
+          break;
+      }
+      tempTxt += `<img id='imgWinner-${w}' src='${getImage(racerArray[w].rank)}'>`;
+      tempTxt += `<p>${racerArray[w].racer_name}</p>`;
+      tempTxt += `<p># ${racerArray[w].car}</p>`;
+      tempTxt += `<p>${(racerArray[w].total_time).toFixed(4)} s</p>`;
+      tempTxt += `</div>`
+    }
+    tempTxt += `</div>`
+    
+    currentHeatDiv.innerHTML = tempTxt;
+    roundNumDiv.innerHTML = "";
+    heatNumDiv.innerHTML = "";
+
+  } else {
+    //first sort the racerArray by total time
+    champ.sort(function (a, b) {
+      return a.heat_time - b.heat_time;
+    })
+
+    var tempTxt = "";
+    tempTxt += `<div class='flex-container-row'>`;
+
+    for (var w = 0; w < 3; w++) {
+      switch (w) {
+        case "0":
+          (numRacers > 2) ? tempTxt += `<div class='first_place_A'>` : tempTxt += `<div class='first_place_B'>`;
+          tempTxt += `<h1>1st Place <span class='winner'>&#xf091;</span></h1>`;
+          break;
+
+        case "1":
+          (numRacers > 2) ? tempTxt += `<div class='second_place_A'>` : tempTxt += `<div class='second_place_B'>`;
+          tempTxt += `<h1>2nd Place</h1>`;
+          break;
+
+        case "2":
+          tempTxt += `<div class='third_place'>`;
+          tempTxt += `<h1>3rd Place</h1>`;
+          break;
+      }
+      tempTxt += `<img id='imgWinner-${w}' src='${getImage(champ[w].rank)}'>`;
+      tempTxt += `<p>${champ[w].racer_name}</p>`;
+      tempTxt += `<p># ${champ[w].car}</p>`;
+      tempTxt += `<p>${(champ[w].heat_time).toFixed(4)} s</p>`;
+      tempTxt += `</div>`
+    }
+    tempTxt += `</div>`
+
+    currentHeatDiv.innerHTML = tempTxt;
+  }
+}
+
+function getImage(rank) {
+  switch (rank) {
+    case "Tiger":
+      return tigerImg;
+
+    case "Wolf":
+      return wolfImg;
+
+    case "Bear":
+      return bearImg;
+
+    case "Webelos":
+      return webelosImg;
+
+    case "AOL":
+      return aolImg;
+
+    default:
+      return defaultImg;
+  }
+}
 
 function setupDisplay() {
   //build lane displays for the first time
@@ -203,7 +394,7 @@ function updateDisplay() {
       var tempImg = document.getElementById(`imgLane-${l + 1}`);
       var tempDiv = document.getElementById(`Racer-Lane-${l + 1}`);
 
-      tempDiv.innerHTML = `${tempName}<br/>${tempCar}`;
+      tempDiv.innerHTML = `${tempName}<br/># ${tempCar}`;
 
       switch (tempRank) {
         case "Tiger":
@@ -262,6 +453,9 @@ function updateLeaderBoard() {
 }
 
 function updateCurrentRound() {
+
+  if (currentRoundDiv.style.display == "none") { currentRoundDiv.style.display == "" };
+
   if (!isObjEmpty(roundResults)) {
     var headerTxt1a = "<tr><th rowspan=2>Heat #</th>";
     var headerTxt1b = "";

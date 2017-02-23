@@ -22,14 +22,7 @@ body {
     background-color: #afbecf;
 }
         
-h1 {
-    font-size: 2.5em;
-    text-align: center;
-}
-        
 img {
-    /*width: 100%;*/
-    /*height: auto;*/
     opacity: 1.0;
     width: 125px;
     height: 125px;
@@ -52,6 +45,16 @@ img {
     margin: 0px;
     -webkit-app-region: drag;
     user-select: none;
+    font-size: 2.5em;
+}
+
+#spec-main {
+    position: fixed;
+    top: 60px;
+    left: 0px;
+    width: 100%;
+    height: calc(100vh - 60px);
+    overflow: auto;
 }
 
 .h2-columns {
@@ -76,6 +79,8 @@ img {
     box-shadow: 3px 3px 8px rgba(0,0,0,0.7), 25px 25px 25px 10px rgba(0,0,0,0.3);
     margin-bottom: 40px;
     background-color: #fff;
+    height: calc(100vh - 45vh - 110px);
+    min-height: 350px;
 }
 
 .flex-container-col img {
@@ -115,15 +120,18 @@ img {
 .racerTxt {
     text-align: center;
     text-shadow: 2px 2px 4px rgb(100,100,100);
-    font-size: 1.2em;
+    font-size: 1.4em;
+    margin: 5px;
 }
 
 #CurrentRound {
     box-shadow: 3px 3px 8px rgba(0,0,0,0.7);
-    height: 35vh;
+    height: calc(45vh - 60px);
+    min-height: 300px;
     width: 48%;
-    margin-left: auto;
+    margin-left: 10px;
     margin-right: 10px;
+    margin-bottom: 10px;
     background-color: #eee;
     overflow-y: auto;
 }
@@ -157,10 +165,12 @@ img {
 
 #LeaderBoard {
     box-shadow: 3px 3px 8px rgba(0,0,0,0.7);
-    height: 35vh;
+    height: calc(45vh - 60px);
+    min-height: 300px;
     width: 48%;
     margin-left: 10px;
-    margin-right: auto;
+    margin-right: 10px;
+    margin-bottom: 10px;
     background-color: #eee;
     overflow-y: auto;
 }
@@ -241,5 +251,68 @@ table#tableRound tr:nth-child(odd) {
 .winner{
     font-family: FontAwesome;
     font-size: 2.0em;
-    color: rgb(206,17,38);
+    color: rgb(204,153,0);
 }
+
+.first_place_A, .first_place_B, .second_place_A, .second_place_B, .third_place {
+    display: flex;
+    flex-flow: column nowrap;
+    align-content: center;
+    justify-content: flex-start;
+    flex: 0 1 250px;
+    
+    margin-bottom: 40px;
+    background-color: #fff;
+    height: calc(100vh - 45vh - 110px);
+    min-height: 350px;
+}
+
+.first_place_A p, .first_place_B p, .second_place_A p, .second_place_B p, .third_place p {
+    font-size: 1.7em;
+    text-align: center;
+    margin: 5px;
+}
+
+.first_place_A h1, .first_place_B h1, .second_place_A h1, .second_place_B h1, .third_place h1 {
+    font-size: 2.25em;
+    text-align: center;
+    margin: 5px;
+    height: 2.5em;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.first_place_A img, .first_place_B img, .second_place_A img, .second_place_B img, .third_place img {
+    margin: 0px auto 0px auto;
+    height: 150px;
+    width: 150px;
+}
+.first_place_A {
+    order: 2;
+    box-shadow: 3px 3px 15px 1px rgba(204,153,0,1.0), 50px 25px 25px 10px rgba(153,102,0,0.4);
+    transform: translate(0,-40px);
+}
+
+.first_place_B {
+    order: 1;
+    box-shadow: 3px 3px 15px 1px rgba(204,153,0,0.9), 50px 25px 25px 10px rgba(153,102,0,0.4);
+    transform: translate(0,-40px);
+}
+
+.second_place_A {
+    order: 1;
+    box-shadow: 3px 3px 15px 1px rgba(220,220,230,1.0), 50px 25px 25px 10px rgba(50,50,50,0.5);
+    transform: translate(0,-10px);
+}
+.second_place_B {
+    order: 2;
+    box-shadow: 3px 3px 15px 1px rgba(220,220,230,1.0), 50px 25px 25px 10px rgba(50,50,50,0.5);
+    transform: translate(0,-10px);
+}
+.third_place {
+    order: 3;
+    box-shadow: 3px 3px 15px 1px rgba(166,125,61,0.9), 50px 25px 25px 10px rgba(140,120,83,0.5);
+    transform: translate(0,20px)
+}
+

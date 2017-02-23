@@ -232,15 +232,70 @@ ipcMain.on('redo', (event) => {
 })
 
 ipcMain.on('update-information', (event,data) => {
+  roundResults = data[0];
   racerArray = data[1];
   currentRndNum = data[2];
   currentHeatNum = data[3];
   numHeats = data[4];
   numRacers = racerArray.length;
-  roundResults = data[0];
   
   if (specContents !== null) {
     specContents.send('update-information', data)
+  }
+})
+
+ipcMain.on('next', (event,data) => {
+  roundResults = data[0];
+  racerArray = data[1];
+  currentRndNum = data[2];
+  currentHeatNum = data[3];
+  numHeats = data[4];
+  numRacers = racerArray.length;
+  
+  if (specContents !== null) {
+    specContents.send('next', data)
+  }
+})
+
+ipcMain.on('winner-no-extra', (event,data) => {
+  roundResults = data[0];
+  racerArray = data[1];
+  currentRndNum = data[2];
+  currentHeatNum = data[3];
+  numHeats = data[4];
+  numRacers = racerArray.length;
+  
+  
+  if (specContents !== null) {
+    specContents.send('winner-no-extra', data)
+  }
+})
+
+ipcMain.on('winner-extra', (event,data) => {
+  roundResults = data[0];
+  racerArray = data[1];
+  currentRndNum = data[2];
+  currentHeatNum = data[3];
+  numHeats = data[4];
+  numRacers = racerArray.length;
+  
+  
+  if (specContents !== null) {
+    specContents.send('winner-extra', data)
+  }
+})
+
+ipcMain.on('champ-round', (event,data) => {
+  roundResults = data[0];
+  racerArray = data[1];
+  currentRndNum = data[2];
+  currentHeatNum = data[3];
+  numHeats = data[4];
+  numRacers = racerArray.length;
+  
+  
+  if (specContents !== null) {
+    specContents.send('champ-round', data)
   }
 })
 

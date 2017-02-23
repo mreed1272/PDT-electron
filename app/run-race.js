@@ -423,7 +423,7 @@ function raceUpdate(type) {
       heatButton.innerHTML = "Accept Heat Results";
       heatButton.setAttribute('onclick', "raceUpdate('accept')");
 
-      ipcRenderer.send('update-information', [raceResults, raceRacers, currentRnd, currentHeatNum, NumHeats]);
+      ipcRenderer.send('next', [raceResults, raceRacers, currentRnd, currentHeatNum, NumHeats]);
 
       break;
 
