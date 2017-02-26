@@ -453,7 +453,7 @@ function raceUpdate(type) {
         } else {
           placeTxt = `${i + 1}th`;
         }
-        resultsTxt += `<li>${placeTxt} Place - ${raceRacers[i].racer_name} / Car #: ${raceRacers[i].car} (${(raceRacers[i].total_time).toFixed(4)}s)</li>`
+        resultsTxt += `<li>${placeTxt} Place - ${raceRacers[i].racer_name} / Car #: ${raceRacers[i].car} (${(raceRacers[i].total_time).toFixed(4)} s)</li>`
       }
       resultsTxt += "</ul>";
 
@@ -507,6 +507,14 @@ function raceUpdate(type) {
       var resultsTxt = "<h1>Winners</h1><ul>";
       var placeTxt = "";
 
+      if (raceTmpArr.length < 3) {
+        raceTmpArr[2] = {};
+        raceTmpArr[2].car = raceRacers[2].car;
+        raceTmpArr[2].racer_name = raceRacers[2].racer_name;
+        raceTmpArr[2].rank = raceRacers[2].rank;
+        raceTmpArr[2].heat_time = raceRacers[2].total_time;
+      }
+
       for (var i = 0; i < raceTmpArr.length; i++) {
         if (i == 0) {
           placeTxt = "1st";
@@ -518,17 +526,17 @@ function raceUpdate(type) {
           placeTxt = `${i + 1}th`;
         }
 
-        resultsTxt += `<li>${placeTxt} Place - ${raceRacers[checkKeyValue(raceRacers, "car", raceTmpArr[i].car)].racer_name} / Car #: ${raceTmpArr[i].car} (${(raceTmpArr[i].heat_time).toFixed(4)}s)</li>`;
+        resultsTxt += `<li>${placeTxt} Place - ${raceRacers[checkKeyValue(raceRacers, "car", raceTmpArr[i].car)].racer_name} / Car #: ${raceTmpArr[i].car} (${(raceTmpArr[i].heat_time).toFixed(4)} s)</li>`;
       }
+
       resultsTxt += "</ul>";
-      //console.log(resultsTxt);
 
       resultsDiv.innerHTML = resultsTxt;
 
       updateRacerTable();
       clearDisplay();
 
-      ipcRenderer.send('winner-extra', [raceResults,raceRacers,currentRnd,currentHeatNum,NumHeats]);
+      ipcRenderer.send('winner-extra', [raceResults, raceRacers, currentRnd, currentHeatNum, NumHeats, raceTmpArr]);
 
       startButton.innerHTML = "Start Race"
       startButton.setAttribute('onclick', "setupRace()");

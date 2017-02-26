@@ -152,19 +152,9 @@ ipcRenderer.on('update-information', (event, data) => {
   numHeats = data[4];
   numRacers = racerArray.length;
 
-  //setupDisplay();
   updateLeaderBoard();
   updateCurrentRound();
-  //updateDisplay();
 
-  //clear the lane times and places for next heat
-  /*for (var l = 1; l <= numLanes; l++) {
-    var tmpID = `Lane-Time-${l}`;
-    var tmp2ID = `Lane${l}Place`;
-    document.getElementById(tmpID).innerHTML = (0.0000).toFixed(4);
-    document.getElementById(tmp2ID).innerHTML = "-";
-    hideTxt(tmp2ID);
-  }*/
 })
 
 ipcRenderer.on('next', (event, data) => {
@@ -217,21 +207,30 @@ ipcRenderer.on('winner-extra', (event, data) => {
   currentRndNum = data[2];
   currentHeatNum = data[3];
   numHeats = data[4];
+  var finalResults = data[5];
   numRacers = racerArray.length;
 
-  //setupDisplay();
   updateLeaderBoard();
   updateCurrentRound();
-  updateDisplay();
 
-  //clear the lane times and places for next heat
-  for (var l = 1; l <= numLanes; l++) {
-    var tmpID = `Lane-Time-${l}`;
-    var tmp2ID = `Lane${l}Place`;
-    document.getElementById(tmpID).innerHTML = (0.0000).toFixed(4);
-    document.getElementById(tmp2ID).innerHTML = "-";
-    hideTxt(tmp2ID);
+  currentRoundDiv.style.display = "none";
+
+  for (var l = 0; l < numLanes; l++) {
+    finalResults[l].racer_name = racerArray[IndexByKeyValue(racerArray, "car", finalResults[l].car)].racer_name;
+    finalResults[l].rank = racerArray[IndexByKeyValue(racerArray, "car", finalResults[l].car)].rank;
   }
+
+  if (numLanes < 3) {
+    racerArray.sort(function (a, b) {
+      return a.total_time - b.total_time;
+    })
+    finalResults[2] = {};
+    finalResults[2].car = racerArray[2].car;
+    finalResults[2].rank = racerArray[2].rank;
+    finalResults[2].racer_name = racerArray[2].racer_name;
+    finalResults[2].heat_time = racerArray[2].total_time;
+  }
+  winnerCards(finalResults);
 })
 
 ipcRenderer.on('champ-round', (event, data) => {
@@ -267,7 +266,7 @@ function winnerCards(champ) {
     })
 
     var tempTxt = "";
-    tempTxt += `<div class='flex-container-row'>`;
+    tempTxt += `<div class='flex-container-row' style='perspective: 100px;'>`;
 
     for (var w = 0; w < 3; w++) {
       switch (w) {
@@ -293,33 +292,33 @@ function winnerCards(champ) {
       tempTxt += `</div>`
     }
     tempTxt += `</div>`
-    
+
     currentHeatDiv.innerHTML = tempTxt;
     roundNumDiv.innerHTML = "";
     heatNumDiv.innerHTML = "";
 
   } else {
-    //first sort the racerArray by total time
+    //first sort the racerArray by heat time
     champ.sort(function (a, b) {
       return a.heat_time - b.heat_time;
     })
 
     var tempTxt = "";
-    tempTxt += `<div class='flex-container-row'>`;
+    tempTxt += `<div class='flex-container-row' style='perspective: 100px;'>`;
 
     for (var w = 0; w < 3; w++) {
       switch (w) {
-        case "0":
+        case 0:
           (numRacers > 2) ? tempTxt += `<div class='first_place_A'>` : tempTxt += `<div class='first_place_B'>`;
           tempTxt += `<h1>1st Place <span class='winner'>&#xf091;</span></h1>`;
           break;
 
-        case "1":
+        case 1:
           (numRacers > 2) ? tempTxt += `<div class='second_place_A'>` : tempTxt += `<div class='second_place_B'>`;
           tempTxt += `<h1>2nd Place</h1>`;
           break;
 
-        case "2":
+        case 2:
           tempTxt += `<div class='third_place'>`;
           tempTxt += `<h1>3rd Place</h1>`;
           break;
@@ -333,6 +332,8 @@ function winnerCards(champ) {
     tempTxt += `</div>`
 
     currentHeatDiv.innerHTML = tempTxt;
+    roundNumDiv.innerHTML = "";
+    heatNumDiv.innerHTML = "";
   }
 }
 

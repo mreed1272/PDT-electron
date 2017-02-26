@@ -61,6 +61,7 @@ img {
     display: flex;
     justify-content: space-around;
     margin: 10px auto;
+    height: 27px;
 }
 
 .flex-container-row {
@@ -261,7 +262,7 @@ table#tableRound tr:nth-child(odd) {
     justify-content: flex-start;
     flex: 0 1 250px;
     
-    margin-bottom: 40px;
+    margin-bottom: 90px;
     background-color: #fff;
     height: calc(100vh - 45vh - 110px);
     min-height: 350px;
@@ -290,29 +291,34 @@ table#tableRound tr:nth-child(odd) {
 }
 .first_place_A {
     order: 2;
-    box-shadow: 3px 3px 15px 1px rgba(204,153,0,1.0), 50px 25px 25px 10px rgba(153,102,0,0.4);
-    transform: translate(0,-40px);
+    box-shadow: 3px 3px 4px 1px rgba(204,153,0,1.0),4px 4px 2px 1px rgba(0,0,0,0.6), 25px 12px 25px 10px rgba(153,102,0,0.4);
+    transform: translate3d(10px,25px,25px);
+    z-index: 100;
 }
 
 .first_place_B {
     order: 1;
-    box-shadow: 3px 3px 15px 1px rgba(204,153,0,0.9), 50px 25px 25px 10px rgba(153,102,0,0.4);
-    transform: translate(0,-40px);
+    box-shadow: 3px 3px 4px 1px rgba(204,153,0,1.0),4px 4px 2px 1px rgba(0,0,0,0.6), 25px 12px 25px 10px rgba(153,102,0,0.4);
+    transform: translate3d(10px,25px,25px);
+    z-index: 100;
 }
 
 .second_place_A {
     order: 1;
-    box-shadow: 3px 3px 15px 1px rgba(220,220,230,1.0), 50px 25px 25px 10px rgba(50,50,50,0.5);
-    transform: translate(0,-10px);
+    box-shadow: 3px 3px 4px 1px rgba(192,192,192,1.0), 4px 4px 2px 1px rgba(0,0,0,0.6), 25px 12px 25px 10px rgba(50,50,50,0.5);
+    transform: translate3d(60px,25px,18px);
+    z-index: 75;
 }
 .second_place_B {
     order: 2;
-    box-shadow: 3px 3px 15px 1px rgba(220,220,230,1.0), 50px 25px 25px 10px rgba(50,50,50,0.5);
-    transform: translate(0,-10px);
+    box-shadow: 3px 3px 4px 1px rgba(192,192,192,1.0), 4px 4px 2px 1px rgba(0,0,0,0.6), 25px 12px 25px 10px rgba(50,50,50,0.5);
+    transform: translate3d(60px,25px,18px);
+    z-index: 75;
 }
 .third_place {
     order: 3;
-    box-shadow: 3px 3px 15px 1px rgba(166,125,61,0.9), 50px 25px 25px 10px rgba(140,120,83,0.5);
-    transform: translate(0,20px)
+    box-shadow: 3px 3px 4px 1px rgba(166,125,61,0.9), 4px 4px 2px 1px rgba(0,0,0,0.6), 25px 12px 25px 10px rgba(140,120,83,0.5);
+    transform: translate3d(-30px, 25px, 11px);
+    z-index: 50;
 }
 

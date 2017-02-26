@@ -12,6 +12,7 @@ var splashWindow = null;
 
 let mainContents = null;
 let specContents = null;
+let splashContents = null;
 let externalDisplay = null;
 
 var racerArray = [];
@@ -32,7 +33,22 @@ app.on('ready', () => {
   externalDisplay = displays.find((display) => {
     return display.bounds.x !== 0 || display.bounds.y !== 0;
   })
-  //console.log(externalDisplay);
+
+  splashWindow = new BrowserWindow({
+    width: 640,
+    height: 360,
+    frame: false,
+    show: false,
+    icon: PDTimage,
+    resizable: false,
+    movable: false,
+    minimizable: false,
+    maximizable: false,
+    title: "PDT Race Manager"
+  })
+  splashWindow.loadURL(`file://${__dirname}/app/splash.html`);
+  splashWindow.openDevTools();
+  splashContents = splashWindow.webContents;
 
   mainWindow = new BrowserWindow({
     width: 1280,
@@ -46,7 +62,7 @@ app.on('ready', () => {
   });
   mainWindow.loadURL(`file://${__dirname}/app/index.html`);
 
-  mainWindow.openDevTools();
+  //mainWindow.openDevTools();
 
   mainContents = mainWindow.webContents;
 
@@ -75,7 +91,7 @@ app.on('ready', () => {
     });
   };
   spectatorWindow.loadURL(`file://${__dirname}/app/spectator.html`);
-  spectatorWindow.openDevTools()
+  //spectatorWindow.openDevTools()
   specContents = spectatorWindow.webContents;
 
   /*mainWindow.on('maximize', ()=> {
@@ -96,10 +112,18 @@ app.on('ready', () => {
     specContents = null;
   });
 
-  mainWindow.once('ready-to-show', () => {
-    mainWindow.show();
+  splashWindow.once('ready-to-show', () => {
+    splashWindow.show();
   });
+
+  /*mainWindow.once('ready-to-show', () => {
+    mainWindow.show();
+  });*/
 });
+ipcMain.once('done-loading', (event) => {
+  splashWindow.close();
+  mainWindow.show();
+})
 
 ipcMain.on('spectator-window', (event, command) => {
   //console.log(spectatorWindow);
@@ -167,19 +191,19 @@ ipcMain.on('spectator-window', (event, command) => {
 
 ipcMain.on('startup', (event) => {
   var data = {};
-  if (!isObjEmpty(raceInfo)){
+  if (!isObjEmpty(raceInfo)) {
     data["raceInfo"] = raceInfo;
   }
-  if (!isObjEmpty(racerArray)){
+  if (!isObjEmpty(racerArray)) {
     data["racerArray"] = racerArray;
   }
-  if (!isObjEmpty(roundResults)){
+  if (!isObjEmpty(roundResults)) {
     data["roundResults"] = roundResults;
   }
-  if (numLanes > 0){ data["numLanes"] = numLanes};
-  if (numHeats > 0){ data["numHeats"] = numHeats};
-  if (currentHeatNum > 0){ data["currentHeatNum"] = currentHeatNum};
-  if (currentRndNum > 0){ data["currentRndNum"] = currentRndNum};
+  if (numLanes > 0) { data["numLanes"] = numLanes };
+  if (numHeats > 0) { data["numHeats"] = numHeats };
+  if (currentHeatNum > 0) { data["currentHeatNum"] = currentHeatNum };
+  if (currentRndNum > 0) { data["currentRndNum"] = currentRndNum };
 
   event.returnValue = data;
 
@@ -211,89 +235,89 @@ ipcMain.on('setup-race', (event, data) => {
 ipcMain.on('stop-race', (event, data) => {
   roundResults = data[0];
   racerArray = data[1];
-  
+
   if (specContents !== null) {
     specContents.send('stop-race', data)
   }
 })
 
-ipcMain.on('post-results', (event,data) => {
-  
+ipcMain.on('post-results', (event, data) => {
+
   if (specContents !== null) {
     specContents.send('post-results', data)
   }
 });
 
 ipcMain.on('redo', (event) => {
-  
+
   if (specContents !== null) {
     specContents.send('redo');
   }
 })
 
-ipcMain.on('update-information', (event,data) => {
+ipcMain.on('update-information', (event, data) => {
   roundResults = data[0];
   racerArray = data[1];
   currentRndNum = data[2];
   currentHeatNum = data[3];
   numHeats = data[4];
   numRacers = racerArray.length;
-  
+
   if (specContents !== null) {
     specContents.send('update-information', data)
   }
 })
 
-ipcMain.on('next', (event,data) => {
+ipcMain.on('next', (event, data) => {
   roundResults = data[0];
   racerArray = data[1];
   currentRndNum = data[2];
   currentHeatNum = data[3];
   numHeats = data[4];
   numRacers = racerArray.length;
-  
+
   if (specContents !== null) {
     specContents.send('next', data)
   }
 })
 
-ipcMain.on('winner-no-extra', (event,data) => {
+ipcMain.on('winner-no-extra', (event, data) => {
   roundResults = data[0];
   racerArray = data[1];
   currentRndNum = data[2];
   currentHeatNum = data[3];
   numHeats = data[4];
   numRacers = racerArray.length;
-  
-  
+
+
   if (specContents !== null) {
     specContents.send('winner-no-extra', data)
   }
 })
 
-ipcMain.on('winner-extra', (event,data) => {
+ipcMain.on('winner-extra', (event, data) => {
   roundResults = data[0];
   racerArray = data[1];
   currentRndNum = data[2];
   currentHeatNum = data[3];
   numHeats = data[4];
   numRacers = racerArray.length;
-  
-  
+
+
   if (specContents !== null) {
     specContents.send('winner-extra', data)
   }
 })
 
-ipcMain.on('champ-round', (event,data) => {
+ipcMain.on('champ-round', (event, data) => {
   roundResults = data[0];
   racerArray = data[1];
   currentRndNum = data[2];
   currentHeatNum = data[3];
   numHeats = data[4];
   numRacers = racerArray.length;
-  
-  
+
+
   if (specContents !== null) {
     specContents.send('champ-round', data)
   }
