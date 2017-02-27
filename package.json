@@ -1,15 +1,20 @@
 {
-  "name": "pdt-electron",
+  "name": "PDT-Race Manager",
   "version": "0.8.0",
   "description": "Software to interface with a Arduino PDT timer for pinewood derby racing.",
   "main": "main.js",
   "dependencies": {
-    "electron": "^1.4.5",
+    "electron-compile": "^6.1.2",
     "serialport": "^4.0.4"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "electron-prebuilt-compile": "1.4.13"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
   },
   "repository": {
     "type": "git",
