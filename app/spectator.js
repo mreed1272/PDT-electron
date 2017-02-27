@@ -35,7 +35,6 @@ const aolImg = `${__dirname}/images/aol-trans.png`;
 
 function getInfo() {
   var data = ipcRenderer.sendSync('startup');
-  //console.log(data);
   if (data.hasOwnProperty("raceInfo")) {
     raceInfo = data.raceInfo
     numRounds = raceInfo.RaceRounds

@@ -8,7 +8,6 @@ var isRacing = false;
 var raceDone = false;
 
 function specWin(command) {
-  //console.log(`Sending to main command: ${command}`);
   ipcRenderer.send('spectator-window', command);
 }
 
@@ -361,7 +360,6 @@ function raceUpdate(type) {
           message: `Do you want the top ${numLanes} finishers to race in a championship round?`,
           icon: PDTimage
         });
-        //console.log(`Dialog response: ${response}`);
         if (response == 1) {
           heatButton.innerHTML = "Finish";
           heatButton.setAttribute('onclick', "raceUpdate('finish')");
@@ -456,9 +454,6 @@ function raceUpdate(type) {
         resultsTxt += `<li>${placeTxt} Place - ${raceRacers[i].racer_name} / Car #: ${raceRacers[i].car} (${(raceRacers[i].total_time).toFixed(4)} s)</li>`
       }
       resultsTxt += "</ul>";
-
-      //console.log(resultsTxt);
-      //console.log(resultsDiv);
 
       resultsDiv.innerHTML = resultsTxt;
 
@@ -652,7 +647,6 @@ function postResults(raceTimes) {
   redoHeatButton.disabled = false;
 
   //send results to spectator window
-  console.log(raceTimes);
   ipcRenderer.send('post-results', raceTimes);
 }
 
@@ -691,7 +685,6 @@ function simHeat(nLanes) {
       var winnerLane = [`race-lane-lane${laneTimes[0].lane}-Li`, `race-lane-lane${laneTimes[1].lane}-Li`,];
     }
   }
-  //console.log(winnerLane);
   document.getElementById(winnerLane[0]).className = "winner1";
   document.getElementById(winnerLane[1]).className = "winner2";
   if (nLanes > 2) {
@@ -807,8 +800,7 @@ function displayResults() {
   //let's load the data from the main file into a temp variable;
 
   var resultsTmp = JSON.parse(JSON.stringify(raceInformation.heat_results));
-  console.log(resultsTmp);
-
+  
   //build the table header for each round
   for (var i = 1; i <= raceInformation.number_lanes; i++) {
     headerTxt1b += `<th colspan=2>Lane ${i}</th>`

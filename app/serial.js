@@ -8,7 +8,7 @@ var readySerial = null;
 var isArduino = null;
 
 function initSerial() {
-  console.log("Starting iniSerial - Initializing serial port");
+  //console.log("Starting iniSerial - Initializing serial port");
   SerialPort.list(function (err, ports) {
     var outStr = [];
     if (comPorts.length != 0) {
@@ -25,7 +25,7 @@ function initSerial() {
     loadSelect("serial-port-list", comPorts, "");
 
     if (ports.length !== 0) {
-      console.log("Calling setupArduino. . . ");
+      //console.log("Calling setupArduino. . . ");
       isArduino = setupArduino(ports);
     } else {
       console.log("No serial ports found");
@@ -52,11 +52,11 @@ function initSerial() {
     };
   });
   readySerial = true;
-  console.log("End of initSerial");
+  //console.log("End of initSerial");
 }
 
 function setupArduino(availPorts) {
-  console.log("Starting setupArduino. . . ")
+  //console.log("Starting setupArduino. . . ")
   for (var i = 0; i < availPorts.length; i++) {
     var testStr = availPorts[i].manufacturer.toString();
     //console.log(`testing port: ${availPorts[i].comName}\n manufacturer: ${testStr}`);
@@ -82,13 +82,12 @@ function setupArduino(availPorts) {
       initLane = true;
       //populate lane listing under test track select id "test-lane-watch"
       var tmpArr = [];
-      //tmpArr[0] = "all"
       for (var i = 0; i < numLanes; i++) {
         tmpArr[i] = i + 1;
       }
       loadSelect("test-lane-watch", tmpArr, 0);
     }
-    console.log("Ending setupArduino on false");
+    //console.log("Ending setupArduino on false");
     readyArduino = false;
     return false;
   }
@@ -96,7 +95,6 @@ function setupArduino(availPorts) {
 
   PDT.on('data', function (data) {
     var outStr = `${data}<br/>`;
-    //console.log(`Serial data: ${data}`);
 
     if (data.trim() == "K" && lastSerialResponse == "P") {
       writeToArduino("V");
@@ -113,7 +111,7 @@ function setupArduino(availPorts) {
   PDT.on('error', function(err){
     console.log(`Error with com port: ${err.message}`);
   })
-  console.log("Ending setupArduino.");
+  //console.log("Ending setupArduino.");
   readyArduino = true;
   return true;
 }

@@ -40,12 +40,12 @@ var timerId = null;
 
 
 function onBodyLoad() {
-  console.log("Starting main body load function");
+  //console.log("Starting main body load function");
   document.getElementById("RaceSideDialog").style.width = 0;
   document.getElementById("mainT").style.display = "block";
   document.getElementById("RacerInfo").style.display = "none";
 
-  console.log("Setting interval checker...");
+  //console.log("Setting interval checker...");
   timerID = setInterval(() => {
     if(readyArduino !== null && initLane === true && readySerial === true){
       setTimeout(() => {ipcRenderer.send('done-loading');}, 3000);
@@ -55,12 +55,12 @@ function onBodyLoad() {
     }
   }, 250);
 
-  console.log("calling loadOptions. . .")
+  //console.log("calling loadOptions. . .")
   loadOptions();
-  console.log("calling initSerial. . .")
+  //console.log("calling initSerial. . .")
   initSerial();
 
-  console.log("end of onBodyLoad")
+  //console.log("end of onBodyLoad")
 }
 
 function openTabContent(evt, tabName) {
@@ -107,7 +107,7 @@ function loadSelect(selectID, optValueArr, selectItem, optTextArr) {
 }
 
 function initLanes(numLanes, ulId, showMask) {
-  console.log(`Starting initLanes(${numLanes},${ulId},${showMask})`);
+  //console.log(`Starting initLanes(${numLanes},${ulId},${showMask})`);
   var selElem = document.getElementById(ulId);
   var liID = "";
   var liLane = null;
@@ -151,7 +151,7 @@ function initLanes(numLanes, ulId, showMask) {
       laneMask[i] = 0;
     }
   }
-  console.log(`Ending initLanes(${numLanes},${ulId},${showMask})`);
+  //console.log(`Ending initLanes(${numLanes},${ulId},${showMask})`);
 }
 
 function clearClass(class_Name) {
@@ -197,7 +197,7 @@ function loadRace() {
       raceInfoFileDiv.innerHTML = filenames[0].split('\\').pop().split('/').pop();
       raceInfoFile = filenames[0];
       updateRaceInfo();
-      console.log("Sending communication to 'race-information' channel.");
+      //console.log("Sending communication to 'race-information' channel.");
       ipcRenderer.send('race-information', [raceInformation, numLanes]);
     }
   })
@@ -501,7 +501,7 @@ function updateRaceInfo() {
 }
 
 function loadOptions() {
-  console.log("Loading the options/variable file");
+  //console.log("Loading the options/variable file");
   //load the config json file
   if (!fs.existsSync(`${__dirname}/config/default-config.json`)) {
     console.log("Cannot find the options/variable file");
@@ -517,7 +517,7 @@ function loadOptions() {
 
   // create checkboxes for ranks in Race Info dialog
   createCheckList("orgRankInclude", "rank", rankTextPDT, rankValuePDT);
-  console.log("End of loadOptions");
+  //console.log("End of loadOptions");
 }
 
 function loadRanks(orgTypeTxt) {

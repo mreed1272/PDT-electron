@@ -48,7 +48,7 @@ function saveHistory() {
             }
         ]
     }, (filenames) => {
-        console.log(`Filenames from save dialog: ${filenames}`);
+        //console.log(`Filenames from save dialog: ${filenames}`);
         if (!filenames) return;
         if (filenames.length > 0) {
             //generate txt
@@ -82,7 +82,7 @@ function loadHistory() {
             // parse, format input txt and put into page
             var dataObj = JSON.parse(tmpData);
             document.getElementById("test-lane-watch").value = dataObj["lane"];
-            console.log(dataObj["lane"]);
+            //console.log(dataObj["lane"]);
             setLane(dataObj["lane"]);
             document.getElementById("test-notes").value = dataObj["notes"];
             document.getElementById("test-date").innerHTML = dataObj["session_date"];

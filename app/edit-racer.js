@@ -262,12 +262,6 @@ function editRacer(objCollection, type) {
 
   //find the index position of the entry in the array
   index = checkKeyValue(racerStats, "car", tempCarNum)
-  /*for (var i = 0; i < racerStats.length; i++) {
-      if (racerStats[i].car === tempCarNum) {
-          index = i;
-          break;
-      }
-  }*/
 
   //now let's deal with the delete or edit
   switch (type) {
