@@ -47,7 +47,7 @@ app.on('ready', () => {
     title: "PDT Race Manager"
   })
   splashWindow.loadURL(`file://${__dirname}/app/splash.html`);
-  splashWindow.openDevTools();
+  //splashWindow.openDevTools();
   splashContents = splashWindow.webContents;
 
   mainWindow = new BrowserWindow({
@@ -62,7 +62,7 @@ app.on('ready', () => {
   });
   mainWindow.loadURL(`file://${__dirname}/app/index.html`);
 
-  mainWindow.openDevTools();
+  //mainWindow.openDevTools();
 
   mainContents = mainWindow.webContents;
 
@@ -91,7 +91,7 @@ app.on('ready', () => {
     });
   };
   spectatorWindow.loadURL(`file://${__dirname}/app/spectator.html`);
-  spectatorWindow.openDevTools()
+  //spectatorWindow.openDevTools()
   specContents = spectatorWindow.webContents;
 
   mainWindow.on('closed', () => {
@@ -163,7 +163,7 @@ ipcMain.on('spectator-window', (event, command) => {
       });
     };
     spectatorWindow.loadURL(`file://${__dirname}/app/spectator.html`);
-    spectatorWindow.openDevTools()
+    //spectatorWindow.openDevTools()
     specContents = spectatorWindow.webContents;
 
     spectatorWindow.once('ready-to-show', () => {
