@@ -62,7 +62,7 @@ app.on('ready', () => {
   });
   mainWindow.loadURL(`file://${__dirname}/app/index.html`);
 
-  //mainWindow.openDevTools();
+  mainWindow.openDevTools();
 
   mainContents = mainWindow.webContents;
 
@@ -91,16 +91,9 @@ app.on('ready', () => {
     });
   };
   spectatorWindow.loadURL(`file://${__dirname}/app/spectator.html`);
-  //spectatorWindow.openDevTools()
+  spectatorWindow.openDevTools()
   specContents = spectatorWindow.webContents;
 
-  /*mainWindow.on('maximize', ()=> {
-      mainWindow.webContents.send('maximized');
-  });
-  
-  mainWindow.on('unmaximize', () => {
-      mainWindow.webContents.send('restored')
-  });*/
   mainWindow.on('closed', () => {
     console.log("Main window closed - quitting app");
     mainWindow = null;

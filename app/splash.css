@@ -39,13 +39,25 @@ img {
     height: 250px;
 }
 #splash-title {
-    font-size: 2.5em;
+    
     font-family: 'Palatino Linotype', 'Book Antiqua', Palatino;
     font-style: italic;
     font-weight: bold;
     float: left;
     width: 200px;
     margin: 0px auto 0px 10px;
+}
+
+#splash-title h1 {
+    margin: 0px;
+    padding: 0px;
+    font-size: 2.5em;
+}
+
+#splash-title p {
+    font-size: 0.8em;
+    margin: 0px;
+    padding: 0px;
 }
 
 #splash-loader {

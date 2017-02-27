@@ -3,9 +3,12 @@ var SerialPort = require('serialport');
 var PDT = null;
 var patt = "Arduino";
 var comPorts = [];
+var readyArduino = null;
+var readySerial = null;
+var isArduino = null;
 
 function initSerial() {
-  console.log("Initializing serial port");
+  console.log("Starting iniSerial - Initializing serial port");
   SerialPort.list(function (err, ports) {
     var outStr = [];
     if (comPorts.length != 0) {
@@ -18,11 +21,12 @@ function initSerial() {
       return port.comName
     });
 
-    console.log(comPorts);
+    //console.log(comPorts);
     loadSelect("serial-port-list", comPorts, "");
 
     if (ports.length !== 0) {
-      setupArduino(ports);
+      console.log("Calling setupArduino. . . ");
+      isArduino = setupArduino(ports);
     } else {
       console.log("No serial ports found");
       var footerElem = document.getElementsByClassName("footer-item");
@@ -47,13 +51,15 @@ function initSerial() {
 
     };
   });
+  readySerial = true;
+  console.log("End of initSerial");
 }
 
 function setupArduino(availPorts) {
-
+  console.log("Starting setupArduino. . . ")
   for (var i = 0; i < availPorts.length; i++) {
     var testStr = availPorts[i].manufacturer.toString();
-    console.log(`testing port: ${availPorts[i].comName}\n manufacturer: ${testStr}`);
+    //console.log(`testing port: ${availPorts[i].comName}\n manufacturer: ${testStr}`);
     if (testStr.search(patt) >= 0) {
       document.getElementById("serial-timer").innerHTML = availPorts[i].comName;
       PDT = new SerialPort(availPorts[i].comName, { baudrate: 9600, parser: SerialPort.parsers.readline('\n') });
@@ -82,13 +88,15 @@ function setupArduino(availPorts) {
       }
       loadSelect("test-lane-watch", tmpArr, 0);
     }
+    console.log("Ending setupArduino on false");
+    readyArduino = false;
     return false;
   }
 
 
   PDT.on('data', function (data) {
     var outStr = `${data}<br/>`;
-    console.log(`Serial data: ${data}`);
+    //console.log(`Serial data: ${data}`);
 
     if (data.trim() == "K" && lastSerialResponse == "P") {
       writeToArduino("V");
@@ -105,6 +113,9 @@ function setupArduino(availPorts) {
   PDT.on('error', function(err){
     console.log(`Error with com port: ${err.message}`);
   })
+  console.log("Ending setupArduino.");
+  readyArduino = true;
+  return true;
 }
 
 function writeToArduino(str) {

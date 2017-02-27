@@ -35,17 +35,32 @@ var laneMask = [];
 var laneTimes = [];
 var numLanes = 2; //default to 2 lanes
 var numRounds = 0;
-
+var timerId = null;
 
 
 
 function onBodyLoad() {
+  console.log("Starting main body load function");
   document.getElementById("RaceSideDialog").style.width = 0;
   document.getElementById("mainT").style.display = "block";
   document.getElementById("RacerInfo").style.display = "none";
 
+  console.log("Setting interval checker...");
+  timerID = setInterval(() => {
+    if(readyArduino !== null && initLane === true && readySerial === true){
+      setTimeout(() => {ipcRenderer.send('done-loading');}, 3000);
+      if (timerId != null) {
+        clearInterval(timerID);
+      }
+    }
+  }, 250);
+
+  console.log("calling loadOptions. . .")
   loadOptions();
+  console.log("calling initSerial. . .")
   initSerial();
+
+  console.log("end of onBodyLoad")
 }
 
 function openTabContent(evt, tabName) {
@@ -92,6 +107,7 @@ function loadSelect(selectID, optValueArr, selectItem, optTextArr) {
 }
 
 function initLanes(numLanes, ulId, showMask) {
+  console.log(`Starting initLanes(${numLanes},${ulId},${showMask})`);
   var selElem = document.getElementById(ulId);
   var liID = "";
   var liLane = null;
@@ -133,9 +149,9 @@ function initLanes(numLanes, ulId, showMask) {
     console.log("Initializing laneMask variable")
     for (var i = 0; i < numLanes; i++) {
       laneMask[i] = 0;
-    };
-  };
-
+    }
+  }
+  console.log(`Ending initLanes(${numLanes},${ulId},${showMask})`);
 }
 
 function clearClass(class_Name) {
@@ -182,7 +198,7 @@ function loadRace() {
       raceInfoFile = filenames[0];
       updateRaceInfo();
       console.log("Sending communication to 'race-information' channel.");
-      ipcRenderer.send('race-information', [raceInformation,numLanes]);
+      ipcRenderer.send('race-information', [raceInformation, numLanes]);
     }
   })
 }
@@ -480,7 +496,7 @@ function updateRaceInfo() {
 
   raceInfoDiv.innerHTML = tmpOutStr;
   displayResults();
-  ipcRenderer.send('race-information', [raceInformation,numLanes]);
+  ipcRenderer.send('race-information', [raceInformation, numLanes]);
   return true;
 }
 
@@ -501,7 +517,7 @@ function loadOptions() {
 
   // create checkboxes for ranks in Race Info dialog
   createCheckList("orgRankInclude", "rank", rankTextPDT, rankValuePDT);
-
+  console.log("End of loadOptions");
 }
 
 function loadRanks(orgTypeTxt) {
@@ -566,7 +582,7 @@ function clearObject(Obj) {
   for (var j in Obj) {
     if (Obj.hasOwnProperty(j)) {
       delete Obj[j];
-    } ;
+    };
   }
   if (Obj.length > 0) {
     Obj.length = 0;
