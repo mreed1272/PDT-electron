@@ -1,6 +1,6 @@
 {
   "name": "pdt-electron",
-  "version": "1.0.0",
+  "version": "0.8.0",
   "description": "Software to interface with a Arduino PDT timer for pinewood derby racing.",
   "main": "main.js",
   "dependencies": {
@@ -19,7 +19,7 @@
     "pinewood",
     "derby"
   ],
-  "author": "matthew reed",
+  "author": "Matthew Reed",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/mreed1272/PDT-electron/issues"
