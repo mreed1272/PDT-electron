@@ -8,6 +8,9 @@
     "serialport": "^4.0.4"
   },
   "devDependencies": {
+    "babel-plugin-transform-async-to-generator": "^6.22.0",
+    "babel-preset-env": "^1.1.10",
+    "babel-preset-react": "^6.23.0",
     "electron-prebuilt-compile": "1.4.13"
   },
   "scripts": {
