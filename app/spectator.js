@@ -23,6 +23,7 @@ var heatNumDiv = "";
 var currentHeatDiv = "";
 var currentRoundDiv = "";
 var leaderBoardDiv = "";
+var champDiv = "";
 
 //let's create constants pointing to images for the ranks
 
@@ -45,17 +46,31 @@ function getInfo() {
   if (data.hasOwnProperty("racerArray")) {
     racerArray = data.racerArray
     numRacers = racerArray.length;
+  } else {
+    
+    clearObject(racerArray);
+  }
+  if (data.hasOwnProperty("roundResults")) { 
+    roundResults = data.roundResults 
+  } else {
+    
+    clearObject(roundResults);
   };
-  if (data.hasOwnProperty("roundResults")) { roundResults = data.roundResults };
   if (data.hasOwnProperty("numLanes")) { numLanes = data.numLanes };
   if (data.hasOwnProperty("numHeats")) { numHeats = data.numHeats };
   if (data.hasOwnProperty("currentHeatNum")) { currentHeatNum = data.currentHeatNum };
   if (data.hasOwnProperty("currentRndNum")) { currentRndNum = data.currentRndNum };
+  if (raceInfo.hasOwnProperty("race_finished") && raceInfo.race_finished == true) {
+    roundResults = JSON.parse(JSON.stringify(raceInfo.heat_results));
+    racerArray = JSON.parse(JSON.stringify(raceInfo.racer_table))
+    showResults();
 
-  setupDisplay();
-  updateLeaderBoard();
-  updateCurrentRound();
-  updateDisplay();
+  } else {
+    setupDisplay();
+    updateLeaderBoard();
+    updateCurrentRound();
+    //updateDisplay();
+  }
 }
 
 function setVariables() {
@@ -65,6 +80,7 @@ function setVariables() {
   currentHeatDiv = document.getElementById("CurrentHeat");
   currentRoundDiv = document.getElementById("CurrentRound");
   leaderBoardDiv = document.getElementById("LeaderBoard");
+  champDiv = document.getElementById("ChampRound");
 }
 
 ipcRenderer.on('race-information', (event, data) => {
@@ -73,6 +89,18 @@ ipcRenderer.on('race-information', (event, data) => {
   numRounds = data[0].RaceRounds;
   if (raceInfo.OrgName != "") {
     titleDiv.innerHTML = `${raceInfo.OrgName} Pinewood Derby Race`
+  }
+  if (raceInfo.hasOwnProperty("race_finished") && raceInfo.race_finished == true) {
+    roundResults = JSON.parse(JSON.stringify(raceInfo.heat_results));
+    racerArray = JSON.parse(JSON.stringify(raceInfo.racer_table))
+    showResults();
+  } else {
+    if(!isObjEmpty(racerArray)) {clearObject(racerArray);}
+    if(!isObjEmpty(roundResults)) {clearObject(roundResults);}
+    setupDisplay();
+    updateLeaderBoard();
+    updateCurrentRound();
+    //updateDisplay();
   }
 })
 
@@ -254,13 +282,17 @@ ipcRenderer.on('champ-round', (event, data) => {
     hideTxt(tmp2ID);
   }
 
-  //Change the banner to display champ round
-  var bannerTxt = document.getElementsByClassName('h2-columns');
-  bannerTxt[0].innerHTML = "Championship Round";
+  //Change the banner to display champ round and hide round and heat
+  champDiv.style.display = "block";
+  roundNumDiv.style.display = "none";
+  heatNumDiv.style.display = "none";
 
 })
 
 function winnerCards(champ) {
+
+  roundNumDiv.innerHTML = "";
+  heatNumDiv.innerHTML = "";
 
   if (isObjEmpty(champ)) {
     //first sort the racerArray by total time
@@ -274,12 +306,14 @@ function winnerCards(champ) {
     for (var w = 0; w < 3; w++) {
       switch (w) {
         case 0:
-          (numRacers > 2) ? tempTxt += `<div class='first_place_A'>` : tempTxt += `<div class='first_place_B'>`;
+          //(numRacers > 2) ? tempTxt += `<div class='first_place_A'>` : tempTxt += `<div class='first_place_B'>`;
+          tempTxt += `<div class='first_place_B'>`;
           tempTxt += `<h1>1st Place <span class='winner'>&#xf091;</span></h1>`;
           break;
 
         case 1:
-          (numRacers > 2) ? tempTxt += `<div class='second_place_A'>` : tempTxt += `<div class='second_place_B'>`;
+          //(numRacers > 2) ? tempTxt += `<div class='second_place_A'>` : tempTxt += `<div class='second_place_B'>`;
+          tempTxt += `<div class='second_place_B'>`;
           tempTxt += `<h1>2nd Place</h1>`;
           break;
 
@@ -297,14 +331,15 @@ function winnerCards(champ) {
     tempTxt += `</div>`
 
     currentHeatDiv.innerHTML = tempTxt;
-    roundNumDiv.innerHTML = "";
-    heatNumDiv.innerHTML = "";
+
 
   } else {
     //first sort the racerArray by heat time
-    champ.sort(function (a, b) {
-      return a.heat_time - b.heat_time;
-    })
+    if (champ.hasOwnProperty("heat_time")) {
+      champ.sort(function (a, b) {
+        return a.heat_time - b.heat_time;
+      })
+    }
 
     var tempTxt = "";
     tempTxt += `<div class='flex-container-row' style='perspective: 100px;'>`;
@@ -329,14 +364,17 @@ function winnerCards(champ) {
       tempTxt += `<img id='imgWinner-${w}' src='${getImage(champ[w].rank)}'>`;
       tempTxt += `<p>${champ[w].racer_name}</p>`;
       tempTxt += `<p># ${champ[w].car}</p>`;
-      tempTxt += `<p>${(champ[w].heat_time).toFixed(4)} s</p>`;
+      if (champ.hasOwnProperty("heat_time")) {
+        tempTxt += `<p>${(champ[w].heat_time).toFixed(4)} s</p>`;
+      } else if (champ.hasOwnProperty("time")) {
+        tempTxt += `<p>${(champ[w].time).toFixed(4)} s</p>`;
+      }
       tempTxt += `</div>`
     }
     tempTxt += `</div>`
 
     currentHeatDiv.innerHTML = tempTxt;
-    roundNumDiv.innerHTML = "";
-    heatNumDiv.innerHTML = "";
+
   }
 }
 
@@ -381,6 +419,12 @@ function setupDisplay() {
 }
 
 function updateDisplay() {
+
+  if (roundNumDiv.style.display == "none") {
+    roundNumDiv.style.display = "block";
+    heatNumDiv.style.display = "block";
+    champDiv.style.display = "none";
+  }
   roundNumDiv.innerHTML = `Round: ${currentRndNum} / ${numRounds}`;
   heatNumDiv.innerHTML = `Heat: ${currentHeatNum} / ${numHeats}`;
 
@@ -517,3 +561,67 @@ function isObjEmpty(obj) {
   return true;
 }
 
+function showResults() {
+  
+  if (raceInfo.hasOwnProperty("winners")) {
+    winnerCards(JSON.parse(JSON.stringify(raceInfo.winners)));
+  } else {
+    winnerCards();
+  }
+  updateLeaderBoard();
+
+  // generate output for each round and heat
+  //var resultsDiv = document.getElementById("current-round");
+  var resultsTxtOut = "";
+
+  var headerTxt1a = "<tr><th rowspan=2>Heat #</th>";
+  var headerTxt1b = "";
+  var headerTxt1c = "</tr>";
+  var headerTxt2base = "<th>Car #</th><th>Heat Time</th>";
+  var headerTxt2 = "";
+
+
+  //let's load the data from the main file into a temp variable;
+  //just use roundResults as data has already been loaded;
+  //var resultsTmp = JSON.parse(JSON.stringify(raceInformation.heat_results));
+
+  //build the table header for each round
+  for (var l = 1; l <= numLanes; l++) {
+    headerTxt1b += `<th colspan=2>Lane ${l}</th>`
+    headerTxt2 += headerTxt2base;
+  }
+  //now loop through the array and generate the output
+  for (var r = 0; r < roundResults.length; r++) {
+    resultsTxtOut += `<H2>Round: ${r + 1}</h2>`;
+    resultsTxtOut += `<table>${headerTxt1a}${headerTxt1b}${headerTxt1c}<tr>${headerTxt2}</tr>`
+
+    for (var h = 0; h < raceInfo.number_heats; h++) {
+      resultsTxtOut += `<tr><td>${(h + 1)}</td>`;
+
+      for (var l = 0; l < numLanes; l++) {
+        if (roundResults[r][l][h].car !== "-") {
+          resultsTxtOut += `<td>${roundResults[r][l][h].car}</td><td>${roundResults[r][l][h].heat_time}</td>`;
+        } else {
+          resultsTxtOut += `<td>No Racer</td><td>-</td>`;
+        }
+
+      }
+      resultsTxtOut += "</tr>"
+    }
+    resultsTxtOut += `</table>`;
+  }
+
+  currentRoundDiv.innerHTML = resultsTxtOut;
+
+}
+
+function clearObject(Obj) {
+  for (var j in Obj) {
+    if (Obj.hasOwnProperty(j)) {
+      delete Obj[j];
+    };
+  }
+  if (Obj.length > 0) {
+    Obj.length = 0;
+  }
+}

@@ -198,7 +198,7 @@ function loadRace() {
       raceInfoFile = filenames[0];
       updateRaceInfo();
       //console.log("Sending communication to 'race-information' channel.");
-      ipcRenderer.send('race-information', [raceInformation, numLanes]);
+      //ipcRenderer.send('race-information', [raceInformation, numLanes]);
     }
   })
 }
@@ -441,7 +441,6 @@ function updateRaceInfo() {
 
   if (racerStatsFile !== undefined && racerStatsFile !== "" && racerStatsFile !== null) {
     tmpRacerStatsName = racerStatsFile.split('\\').pop().split('/').pop();
-
   }
 
   if (!isObjEmpty(raceInformation)) {

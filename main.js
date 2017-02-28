@@ -207,6 +207,9 @@ ipcMain.on('race-information', (event, data) => {
   numLanes = data[1];
   numRounds = data[0].RaceRounds;
 
+  clearObject(racerArray);
+  clearObject(roundResults);
+
   if (specContents !== null) {
     specContents.send('race-information', data)
   }
@@ -324,4 +327,15 @@ app.on('window-all-closed', () => {
 function isObjEmpty(obj) {
   for (var x in obj) { if (obj.hasOwnProperty(x)) return false; }
   return true;
+}
+
+function clearObject(Obj) {
+  for (var j in Obj) {
+    if (Obj.hasOwnProperty(j)) {
+      delete Obj[j];
+    };
+  }
+  if (Obj.length > 0) {
+    Obj.length = 0;
+  }
 }

@@ -6,6 +6,7 @@ var NumHeats = 0;
 var raceRacers = [];
 var isRacing = false;
 var raceDone = false;
+var winnerArr = [];
 
 function specWin(command) {
   ipcRenderer.send('spectator-window', command);
@@ -451,7 +452,12 @@ function raceUpdate(type) {
         } else {
           placeTxt = `${i + 1}th`;
         }
-        resultsTxt += `<li>${placeTxt} Place - ${raceRacers[i].racer_name} / Car #: ${raceRacers[i].car} (${(raceRacers[i].total_time).toFixed(4)} s)</li>`
+        resultsTxt += `<li>${placeTxt} Place - ${raceRacers[i].racer_name} / Car #: ${raceRacers[i].car} (${(raceRacers[i].total_time).toFixed(4)} s)</li>`;
+        winnerArr[i] = {};
+        winnerArr[i].car = raceRacers[i].car;
+        winnerArr[i].racer_name = raceRacers[i].racer_name;
+        winnerArr[i].rank = raceRacers[i].rank;
+        winnerArr[i].time = raceRacers[i].total_time;
       }
       resultsTxt += "</ul>";
 
@@ -522,6 +528,11 @@ function raceUpdate(type) {
         }
 
         resultsTxt += `<li>${placeTxt} Place - ${raceRacers[checkKeyValue(raceRacers, "car", raceTmpArr[i].car)].racer_name} / Car #: ${raceTmpArr[i].car} (${(raceTmpArr[i].heat_time).toFixed(4)} s)</li>`;
+        winnerArr[i] = {};
+        winnerArr[i].car = raceTmpArr[i].car;
+        winnerArr[i].racer_name = raceTmpArr[i].racer_name;
+        winnerArr[i].rank = raceTmpArr[i].rank;
+        winnerArr[i].time = raceTmpArr[i].heat_time;
       }
 
       resultsTxt += "</ul>";
@@ -712,6 +723,7 @@ function saveResults() {
   raceInformation["number_heats"] = NumHeats;
   raceInformation["race_finished"] = raceDone;
   raceInformation["racer_table"] = JSON.parse(JSON.stringify(raceRacers));
+  raceInformation["winners"] = JSON.parse(JSON.stringify(winnerArr));
 
 
   startButton.disabled = false;
@@ -787,7 +799,7 @@ function displayResults() {
     return;
   }
   // generate output for each round and heat
-  var resultsDiv = document.getElementById("current-round");
+  //var resultsDiv = document.getElementById("current-round");
   var resultsTxtOut = "";
 
   var headerTxt1a = "<tr><th rowspan=2>Heat #</th>";
