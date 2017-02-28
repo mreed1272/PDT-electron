@@ -1,23 +1,15 @@
 {
-  "name": "PDT-Race Manager",
+  "name": "pdt-race-manager",
   "version": "0.8.0",
   "description": "Software to interface with a Arduino PDT timer for pinewood derby racing.",
   "main": "main.js",
   "dependencies": {
-    "electron-compile": "^6.1.2",
+    "electron": "^1.4.5",
     "serialport": "^4.0.4"
   },
-  "devDependencies": {
-    "babel-plugin-transform-async-to-generator": "^6.22.0",
-    "babel-preset-env": "^1.1.10",
-    "babel-preset-react": "^6.23.0",
-    "electron-prebuilt-compile": "1.4.15"
-  },
+  "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron-forge start",
-    "package": "electron-forge package",
-    "make": "electron-forge make"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -27,39 +19,10 @@
     "pinewood",
     "derby"
   ],
-  "author": "Matthew Reed",
+  "author": "matthew reed",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/mreed1272/PDT-electron/issues"
   },
-  "homepage": "https://github.com/mreed1272/PDT-electron#readme",
-  "config": {
-    "forge": {
-      "make_targets": {
-        "win32": [
-          "squirrel"
-        ],
-        "darwin": [
-          "zip"
-        ],
-        "linux": [
-          "deb",
-          "rpm"
-        ]
-      },
-      "electronPackagerConfig": {},
-      "electronWinstallerConfig": {
-        "name": ""
-      },
-      "electronInstallerDebian": {},
-      "electronInstallerRedhat": {},
-      "github_repository": {
-        "owner": "",
-        "name": ""
-      },
-      "windowsStoreConfig": {
-        "packageName": ""
-      }
-    }
-  }
+  "homepage": "https://github.com/mreed1272/PDT-electron#readme"
 }
