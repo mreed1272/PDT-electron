@@ -241,7 +241,6 @@ ipcRenderer.on('champ-round', (event, data) => {
   numHeats = data[4];
   numRacers = racerArray.length;
 
-  //setupDisplay();
   updateLeaderBoard();
   updateCurrentRound();
   updateDisplay();
@@ -254,6 +253,11 @@ ipcRenderer.on('champ-round', (event, data) => {
     document.getElementById(tmp2ID).innerHTML = "-";
     hideTxt(tmp2ID);
   }
+
+  //Change the banner to display champ round
+  var bannerTxt = document.getElementsByClassName('h2-columns');
+  bannerTxt[0].innerHTML = "Championship Round";
+
 })
 
 function winnerCards(champ) {

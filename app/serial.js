@@ -29,6 +29,7 @@ function initSerial() {
       isArduino = setupArduino(ports);
     } else {
       console.log("No serial ports found");
+      
       var footerElem = document.getElementsByClassName("footer-item");
 
       for (var i = 0; i < footerElem.length; i++) {
@@ -48,7 +49,7 @@ function initSerial() {
       }
 
       loadSelect("test-lane-watch", tmpArr, 0);
-
+      readyArduino = false;
     };
   });
   readySerial = true;
