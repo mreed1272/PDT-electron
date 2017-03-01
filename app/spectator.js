@@ -347,12 +347,14 @@ function winnerCards(champ) {
     for (var w = 0; w < 3; w++) {
       switch (w) {
         case 0:
-          (numRacers > 2) ? tempTxt += `<div class='first_place_A'>` : tempTxt += `<div class='first_place_B'>`;
+          /*(numRacers > 2) ? tempTxt += `<div class='first_place_A'>` : tempTxt += `<div class='first_place_B'>`;*/
+          tempTxt += `<div class='first_place_B'>`;
           tempTxt += `<h1>1st Place <span class='winner'>&#xf091;</span></h1>`;
           break;
 
         case 1:
-          (numRacers > 2) ? tempTxt += `<div class='second_place_A'>` : tempTxt += `<div class='second_place_B'>`;
+          /*(numRacers > 2) ? tempTxt += `<div class='second_place_A'>` : tempTxt += `<div class='second_place_B'>`;*/
+          tempTxt += `<div class='second_place_B'>`;
           tempTxt += `<h1>2nd Place</h1>`;
           break;
 
