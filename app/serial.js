@@ -29,7 +29,7 @@ function initSerial() {
       isArduino = setupArduino(ports);
     } else {
       console.log("No serial ports found");
-      
+
       var footerElem = document.getElementsByClassName("footer-item");
 
       for (var i = 0; i < footerElem.length; i++) {
@@ -109,7 +109,7 @@ function setupArduino(availPorts) {
     lastSerialResponse = data.trim();
   });
 
-  PDT.on('error', function(err){
+  PDT.on('error', function (err) {
     console.log(`Error with com port: ${err.message}`);
   })
   //console.log("Ending setupArduino.");
@@ -168,12 +168,18 @@ function checkSerialData(data) {
       writeToArduino("G");
       break;
 
+    case "C":
+      console.log("Gate closed");
+      document.getElementById("gate-timer").innerHTML = "Gate Closed";
+      document.getElementById("gate-timer").className = "footer-item closed";
+      break;
+      
     case ".":
-      if (lastSerialCommand == "G") {
+      /*if (lastSerialCommand == "G") {
         console.log("Gate closed");
         document.getElementById("gate-timer").innerHTML = "Gate Closed";
         document.getElementById("gate-timer").className = "footer-item closed";
-      };
+      };*/
       if (/M(\d)/.test(lastSerialCommand)) {
         var maskedLane = RegExp.$1;
         laneMask[maskedLane - 1] = 1;
