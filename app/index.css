@@ -212,6 +212,21 @@ a:active {
 	box-shadow: -2px 2px 0 rgb(204,228,255);
 }
 
+.app-exit {
+	float: right;
+	font-style: italic;
+	text-shadow: 1px 1px 2px rgba(206,17,38,0.5);
+	color: rgb(0,63,135);
+	margin: 5px 10px;
+	cursor: pointer;
+	user-select: none;
+}
+
+.app-exit:hover {
+	text-decoration: underline;
+	text-shadow: 1px 1px 2px rgba(206,17,38,0.5), -1px -1px 8px rgba(252, 209, 22,1), 3px 3px 8px rgba(0,0,0,0.5);;
+}
+
 #RacerInfo {
 	background: #eee;
 	box-shadow: 3px 3px 6px rgba(0,0,0,0.3);

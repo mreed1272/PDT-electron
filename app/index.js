@@ -587,3 +587,7 @@ function clearObject(Obj) {
     Obj.length = 0;
   }
 }
+
+function closePDT(){
+  ipcRenderer.send("close-PDT");
+}

@@ -319,6 +319,10 @@ ipcMain.on('champ-round', (event, data) => {
   }
 })
 
+ipcMain.on('close-PDT', ()=>{
+  console.log("Closing application");
+  app.quit();
+})
 app.on('window-all-closed', () => {
   console.log("All windows closed -> quitting app")
   app.quit();
