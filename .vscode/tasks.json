@@ -20,7 +20,7 @@
             "showOutput": "always",
             "args": [
                 "${workspaceRoot}",
-                "PDT Race Manager",
+                "PDT_Race_Manager",
                 "--arch=x64",
                 "--platform=win32",
                 "--icon=.\\app\\images\\PDT-race-manager.ico",

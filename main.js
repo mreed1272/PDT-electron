@@ -4,7 +4,7 @@ const BrowserWindow = electron.BrowserWindow;
 const ipcMain = electron.ipcMain;
 const nativeImage = electron.nativeImage;
 
-let PDTimage = nativeImage.createFromPath(`${__dirname}/app/images/PDT-main.png`);
+let PDTimage = `${__dirname}/app/images/PDT-main.png`;
 
 var mainWindow = null;
 var spectatorWindow = null;
