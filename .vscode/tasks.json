@@ -1,23 +1,42 @@
 {
     // See https://go.microsoft.com/fwlink/?LinkId=733558
     // for the documentation about the tasks.json format
-    "version": "0.1.0",
-    "command": "electron",
-    "isShellCommand": true,
-    "showOutput": "always",
-    "args": ["main.js"]
-    /*"tasks": [
+    "version": "2.0.0",
+    "tasks": [
         {
-            "taskName": "install",
-            "args": ["install"]
+            "taskName": "run",
+            "command": "electron",
+            "isShellCommand": true,
+            "showOutput": "always",
+            "args": [
+                "main.js"
+            ],
+            "isBuildCommand": true
         },
         {
-            "taskName": "update",
-            "args": ["update"]
-        },
+            "taskName": "package",
+            "command": "electron-packager",
+            "isShellCommand": true,
+            "showOutput": "always",
+            "args": [
+                "${workspaceRoot}",
+                "PDT Race Manager",
+                "--arch=x64",
+                "--platform=win32",
+                "--icon=.\\app\\images\\PDT-race-manager.ico",
+                "--electronVersion=1.4.15",
+                "--overwrite",
+                "--out=E:\\electron-apps\\",
+                "--asar"
+            ]
+        }
+        /*,  
         {
             "taskName": "test",
-            "args": ["run", "test"]
-        }
-    ]*/
+            "args": [
+                "run",
+                "test"
+            ]
+        }*/
+    ]
 }
