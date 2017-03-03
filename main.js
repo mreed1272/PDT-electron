@@ -4,7 +4,7 @@ const BrowserWindow = electron.BrowserWindow;
 const ipcMain = electron.ipcMain;
 const nativeImage = electron.nativeImage;
 
-let PDTimage = nativeImage.createFromPath(`${__dirname}/app/images/PDT-main.png`);
+let PDTimage = `${__dirname}/app/images/PDT-main.png`;
 
 var mainWindow = null;
 var spectatorWindow = null;
@@ -33,6 +33,11 @@ app.on('ready', () => {
   externalDisplay = displays.find((display) => {
     return display.bounds.x !== 0 || display.bounds.y !== 0;
   })
+
+  app.setAppUserModelId("Pack54MSR.PDTRaceManager");
+  //console.log(app.getName());
+  if (app.getName() != "PDT Race Manager") {app.setName("PDT Race Manager")};
+  //console.log(app.getName())
 
   splashWindow = new BrowserWindow({
     width: 640,
