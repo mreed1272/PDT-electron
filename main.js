@@ -3,6 +3,8 @@ const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 const ipcMain = electron.ipcMain;
 const nativeImage = electron.nativeImage;
+const Menu = electron.Menu;
+const MenuItem = electron.MenuItem; 
 
 let PDTimage = `${__dirname}/app/images/PDT-main.png`;
 
@@ -26,6 +28,12 @@ var numRounds = 0;
 var currentHeatNum = 0;
 var currentRndNum = 0;
 
+const rcMenu = new Menu();
+rcMenu.append (new MenuItem({label: 'Print', click() {console.log('Clicked Print'); mainContents.print()}}))
+rcMenu.append (new MenuItem({label: 'Print to PDF', click(){console.log('Clicked Print PDF'); mainContents.printToPDF({},(error,data)=>{if(error) throw error})}}))
+rcMenu.append (new MenuItem({label: 'Toggle Console', role: 'toggledevtools' ,click(){console.log('Clicked open console')}}))
+
+
 //global.fileToOpen = null;
 
 app.on('ready', () => {
@@ -36,7 +44,7 @@ app.on('ready', () => {
 
   app.setAppUserModelId("Pack54MSR.PDTRaceManager");
   //console.log(app.getName());
-  if (app.getName() != "PDT Race Manager") {app.setName("PDT Race Manager")};
+  if (app.getName() != "PDT Race Manager") { app.setName("PDT Race Manager") };
   //console.log(app.getName())
 
   splashWindow = new BrowserWindow({
@@ -70,6 +78,14 @@ app.on('ready', () => {
   //mainWindow.openDevTools();
 
   mainContents = mainWindow.webContents;
+
+  mainContents.on('context-menu', (event, params) => {
+    event.preventDefault();
+
+    mainContents.send('click-context-menu', [event, params])
+
+    rcMenu.popup(mainWindow)
+  })
 
   if (externalDisplay) {
     spectatorWindow = new BrowserWindow({
@@ -324,7 +340,7 @@ ipcMain.on('champ-round', (event, data) => {
   }
 })
 
-ipcMain.on('close-PDT', ()=>{
+ipcMain.on('close-PDT', () => {
   console.log("Closing application");
   app.quit();
 })

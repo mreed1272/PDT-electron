@@ -591,3 +591,7 @@ function clearObject(Obj) {
 function closePDT(){
   ipcRenderer.send("close-PDT");
 }
+
+ipcRenderer.on('click-context-menu', (event,data)=>{
+  console.log(data);
+})
