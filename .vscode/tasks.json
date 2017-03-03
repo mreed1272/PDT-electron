@@ -23,7 +23,7 @@
                 "PDT_Race_Manager",
                 "--arch=x64",
                 "--platform=win32",
-                "--icon=.\\app\\images\\PDT-race-manager.ico",
+                "--icon=.\\app\\images\\PDT-race-manager3.ico",
                 "--electronVersion=1.4.15",
                 "--overwrite",
                 "--out=E:\\electron-apps\\",
