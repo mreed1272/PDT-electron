@@ -34,6 +34,11 @@ app.on('ready', () => {
     return display.bounds.x !== 0 || display.bounds.y !== 0;
   })
 
+  app.setAppUserModelId("Pack54MSR.PDTRaceManager");
+  //console.log(app.getName());
+  app.setName("PDT Race Manager")
+  //console.log(app.getName())
+
   splashWindow = new BrowserWindow({
     width: 640,
     height: 360,
