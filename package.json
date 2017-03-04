@@ -6,7 +6,7 @@
   "description": "Software to interface with a Arduino PDT timer for pinewood derby racing.",
   "main": "main.js",
   "dependencies": {
-    "electron": "^1.4.15",
+    "electron": "1.4.15",
     "serialport": "^4.0.4"
   },
   "devDependencies": {},
