@@ -348,7 +348,7 @@ function winnerCards(champ) {
       switch (w) {
         case 0:
           /*(numRacers > 2) ? tempTxt += `<div class='first_place_A'>` : tempTxt += `<div class='first_place_B'>`;*/
-          tempTxt += `<div class='first_place_B'>`;
+          tempTxt += `<div class='first_place_B'>`; 
           tempTxt += `<h1>1st Place <span class='winner'>&#xf091;</span></h1>`;
           break;
 

@@ -15,7 +15,7 @@
         },
         {
             "taskName": "package",
-            "command": "pdt-package.cmd",
+            "command": ".\\pdt-package.bat",
             "isShellCommand": true,
             "showOutput": "always",
             "args": [
