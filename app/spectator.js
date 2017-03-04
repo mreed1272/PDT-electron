@@ -293,6 +293,7 @@ function winnerCards(champ) {
 
   roundNumDiv.innerHTML = "";
   heatNumDiv.innerHTML = "";
+  champDiv.style.display = "none";
 
   if (isObjEmpty(champ)) {
     //first sort the racerArray by total time
@@ -301,7 +302,7 @@ function winnerCards(champ) {
     })
 
     var tempTxt = "";
-    tempTxt += `<div class='flex-container-row' style='perspective: 100px;'>`;
+    tempTxt += `<div class='flex-container-row' style='perspective: 200px;'>`;
 
     for (var w = 0; w < 3; w++) {
       switch (w) {
@@ -342,7 +343,7 @@ function winnerCards(champ) {
     }
 
     var tempTxt = "";
-    tempTxt += `<div class='flex-container-row' style='perspective: 100px;'>`;
+    tempTxt += `<div class='flex-container-row' style='perspective: 200px;'>`;
 
     for (var w = 0; w < 3; w++) {
       switch (w) {

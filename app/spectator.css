@@ -88,7 +88,7 @@ img {
     margin-bottom: 40px;
     background-color: #fff;
     height: calc(100vh - 45vh - 110px);
-    min-height: 350px;
+    /*min-height: 350px;*/
 }
 
 .flex-container-col img {
@@ -134,8 +134,8 @@ img {
 
 #CurrentRound {
     box-shadow: 3px 3px 8px rgba(0,0,0,0.7);
-    height: calc(45vh - 60px);
-    min-height: 300px;
+    height: calc(45vh - 70px);
+    /*min-height: 300px;*/
     width: 48%;
     margin-left: 10px;
     margin-right: 10px;
@@ -174,8 +174,8 @@ img {
 
 #LeaderBoard {
     box-shadow: 3px 3px 8px rgba(0,0,0,0.7);
-    height: calc(45vh - 60px);
-    min-height: 300px;
+    height: calc(45vh - 70px);
+    /*min-height: 300px;*/
     width: 48%;
     padding: 5px;
     margin-left: 10px;
@@ -274,7 +274,7 @@ table#tableRound tr:nth-child(odd) {
     margin-bottom: 90px;
     background-color: #fff;
     height: calc(100vh - 45vh - 110px);
-    min-height: 350px;
+    /*min-height: 350px;*/
 }
 
 .first_place_A p, .first_place_B p, .second_place_A p, .second_place_B p, .third_place p {
@@ -295,39 +295,39 @@ table#tableRound tr:nth-child(odd) {
 
 .first_place_A img, .first_place_B img, .second_place_A img, .second_place_B img, .third_place img {
     margin: 0px auto 0px auto;
-    height: 150px;
-    width: 150px;
+    /*height: 150px;
+    width: 150px;*/
 }
 .first_place_A {
     order: 2;
     box-shadow: 3px 3px 4px 1px rgba(204,153,0,1.0),4px 4px 2px 1px rgba(0,0,0,0.6), 25px 12px 25px 10px rgba(153,102,0,0.4);
-    transform: translate3d(10px,25px,25px);
+    transform: translate3d(10px,0px,25px);
     z-index: 100;
 }
 
 .first_place_B {
     order: 1;
     box-shadow: 3px 3px 4px 1px rgba(204,153,0,1.0),4px 4px 2px 1px rgba(0,0,0,0.6), 25px 12px 25px 10px rgba(153,102,0,0.4);
-    transform: translate3d(100px,25px,25px);
+    transform: translate3d(100px,0px,25px);
     z-index: 100;
 }
 
 .second_place_A {
     order: 1;
     box-shadow: 3px 3px 4px 1px rgba(192,192,192,1.0), 4px 4px 2px 1px rgba(0,0,0,0.6), 25px 12px 25px 10px rgba(50,50,50,0.5);
-    transform: translate3d(60px,25px,18px);
+    transform: translate3d(60px,5px,18px);
     z-index: 75;
 }
 .second_place_B {
     order: 2;
     box-shadow: 3px 3px 4px 1px rgba(192,192,192,1.0), 4px 4px 2px 1px rgba(0,0,0,0.6), 25px 12px 25px 10px rgba(50,50,50,0.5);
-    transform: translate3d(25px,25px,18px);
+    transform: translate3d(25px,5px,18px);
     z-index: 75;
 }
 .third_place {
     order: 3;
     box-shadow: 3px 3px 4px 1px rgba(166,125,61,0.9), 4px 4px 2px 1px rgba(0,0,0,0.6), 25px 12px 25px 10px rgba(140,120,83,0.5);
-    transform: translate3d(-30px, 25px, 11px);
+    transform: translate3d(-30px, 10px, 11px);
     z-index: 50;
 }
 
@@ -341,3 +341,53 @@ table#tableRound tr:nth-child(odd) {
         font-size: 1.5em;
     }
 }
+@media screen and (max-height: 1000px) {
+    body {
+        font-size: 90%;
+    }
+    img {
+        width: 100px;
+        height: 100px;
+    }
+}
+
+@media screen and (max-height: 750px) {
+    body {
+        font-size: 80%;
+    }
+    img {
+        width: 75px;
+        height: 75px;
+    }
+}
+
+@media screen and (max-height: 601px) {
+    body {
+        font-size: 70%;
+    }
+    img {
+        width: 50px;
+        height:50px;
+    }
+    #CurrentRound table {
+        font-size: 1.0em;
+    }
+    .first_place_B {
+        transform: translate3d(40px,-10px,25px);
+    }
+    .second_place_B {
+        transform: translate3d(8px,5px,18px);
+    }
+    .third_place {
+        transform: translate3d(-15px,20px,11px);
+    }
+    .first_place_A, .first_place_B, .second_place_A, .second_place_B, .third_place {
+        margin-bottom: 50px;
+        max-width: 225px;
+    }
+    .first_place_A h1, .first_place_B h1, .second_place_A h1, .second_place_B h1, .third_place h1{
+        font-size: 2.0em;
+        height: 2.0em;
+    }
+}
+

@@ -33,7 +33,7 @@ var lastRunTimes = [];
 
 var laneMask = [];
 var laneTimes = [];
-var numLanes = 2; //default to 2 lanes
+var numLanes = 3; //default to 2 lanes
 var numRounds = 0;
 var timerId = null;
 
