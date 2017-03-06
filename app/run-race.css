@@ -74,6 +74,7 @@
     padding: 10px;
     font-size: 0.9em;
     width: 35%;
+    overflow: auto;
 }
 #racer-race-results table {
 	border-collapse: collapse;
