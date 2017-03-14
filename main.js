@@ -73,8 +73,8 @@ app.on('ready', () => {
 
   if (externalDisplay) {
     spectatorWindow = new BrowserWindow({
-      width: externalDisplay.bounds.width - 100,
-      height: externalDisplay.bounds.height - 100,
+      width: 800,
+      height: 600,
       frame: false,
       show: false,
       /*skipTaskbar: true,*/
@@ -86,8 +86,8 @@ app.on('ready', () => {
     //spectatorWindow.maximize();
   } else {
     spectatorWindow = new BrowserWindow({
-      width: 1024,
-      height: 768,
+      width: 800,
+      height: 600,
       frame: false,
       show: false,
       /*skipTaskbar: true,*/
@@ -145,8 +145,8 @@ ipcMain.on('spectator-window', (event, command) => {
 
     if (externalDisplay) {
       spectatorWindow = new BrowserWindow({
-        width: externalDisplay.bounds.width - 100,
-        height: externalDisplay.bounds.height - 100,
+        width: 800,
+        height: 600,
         frame: false,
         show: false,
         /*skipTaskbar: true,*/
@@ -158,8 +158,8 @@ ipcMain.on('spectator-window', (event, command) => {
       //spectatorWindow.maximize();
     } else {
       spectatorWindow = new BrowserWindow({
-        width: 1024,
-        height: 768,
+        width: 800,
+        height: 600,
         frame: false,
         show: false,
         /*skipTaskbar: true,*/
