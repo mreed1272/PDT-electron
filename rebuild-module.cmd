@@ -1,0 +1,1 @@
+node-gyp rebuild --target=%1 --msvs_version=2015 --dist-url=https://atom.io/download/electron
