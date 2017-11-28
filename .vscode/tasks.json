@@ -4,23 +4,25 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "taskName": "run",
-            "command": "electron",
-            "isShellCommand": true,
-            "showOutput": "always",
-            "args": [
-                "main.js"
-            ],
-            "isBuildCommand": true,
+            "label": "Run test",
+            "command": "electron main.js",
+            "type": "shell",
+            "presentation": {
+                "reveal": "always"
+            },
+            "group": "build",
             "problemMatcher": [
                 "$tslint5"
             ]
         },
         {
-            "taskName": "package",
+            "label": "Package PDT",
             "command": ".\\pdt-package.bat",
-            "isShellCommand": true,
-            "showOutput": "always",
+            "type": "shell",
+            "presentation": {
+                "reveal": "always"
+            },
+            "group": "none",
             "args": [
                 "../"
             ]
