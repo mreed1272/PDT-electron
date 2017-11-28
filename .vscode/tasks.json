@@ -11,7 +11,10 @@
             "args": [
                 "main.js"
             ],
-            "isBuildCommand": true
+            "isBuildCommand": true,
+            "problemMatcher": [
+                "$tslint5"
+            ]
         },
         {
             "taskName": "package",
@@ -22,13 +25,5 @@
                 "../"
             ]
         }
-        /*,  
-        {
-            "taskName": "test",
-            "args": [
-                "run",
-                "test"
-            ]
-        }*/
     ]
 } 
