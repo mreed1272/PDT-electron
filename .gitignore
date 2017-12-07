@@ -47,7 +47,7 @@ jspm_packages
 # Yarn Integrity file
 .yarn-integrity
 
-.vscode
+.vscode/
 .eslintrc.json
 jsconfig.json
 launch.json
