@@ -7,7 +7,7 @@
   "main": "main.js",
   "dependencies": {
     "electron": "1.7.11",
-    "serialport": "6.0.4"
+    "serialport": "4.0.7"
   },
   "devDependencies": {},
   "scripts": {

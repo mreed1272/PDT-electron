@@ -63,7 +63,7 @@ function setupArduino(availPorts) {
     //console.log(`testing port: ${availPorts[i].comName}\n manufacturer: ${testStr}`);
     if (testStr.search(patt) >= 0) {
       document.getElementById("serial-timer").innerHTML = availPorts[i].comName;
-      PDT = new SerialPort(availPorts[i].comName, { baudrate: 9600, parser: SerialPort.parsers.readline('\n') });
+      PDT = new SerialPort(availPorts[i].comName, { baudRate: 9600, parser: SerialPort.parsers.readline('\n')});  // 
       initArduino = true;
       break;
     }
@@ -96,7 +96,7 @@ function setupArduino(availPorts) {
 
   PDT.on('data', function (data) {
     var outStr = `${data}<br/>`;
-
+    //console.log('Serial data:',data);
     if (data.trim() == "K" && lastSerialResponse == "P") {
       writeToArduino("V");
       writeToArduino("N");
