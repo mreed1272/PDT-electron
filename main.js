@@ -52,7 +52,7 @@ app.on('ready', () => {
     title: "PDT Race Manager"
   })
   splashWindow.loadURL(`file://${__dirname}/app/splash.html`);
-  splashWindow.openDevTools();
+  //splashWindow.openDevTools();
   splashContents = splashWindow.webContents;
 
   mainWindow = new BrowserWindow({
@@ -67,7 +67,7 @@ app.on('ready', () => {
   });
   mainWindow.loadURL(`file://${__dirname}/app/index.html`);
 
-   mainWindow.openDevTools();
+   //mainWindow.openDevTools();
 
   mainContents = mainWindow.webContents;
 
