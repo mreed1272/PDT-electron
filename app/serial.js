@@ -22,7 +22,7 @@ function initSerial() {
     });
 
     //console.log(comPorts);
-    loadSelect("serial-port-list", comPorts, "");
+    //loadSelect("serial-port-list", comPorts, "");
 
     if (ports.length !== 0) {
       //console.log("Calling setupArduino. . . ");

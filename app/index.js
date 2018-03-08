@@ -191,7 +191,14 @@ function loadRace() {
         checkRaceDialog('cancel');
       }
       // parse, format input txt and put into page
-      raceInformation = JSON.parse(tmpData);
+      //raceInformation = JSON.parse(tmpData);
+      var tmpRaceData = JSON.parse(tmpData);
+      if (tmpRaceData.hasOwnProperty(raceInformation) && tmpRaceData.hasOwnProperty(racerStats)) {
+        raceInformation = tmpRaceData.raceInformation;
+        racerStats = tmpRaceData.racerStats;
+      } else {
+        raceInformation = tmpRaceData;
+      }
 
       remote.app.addRecentDocument(filenames[0]);
       raceInfoFileDiv.innerHTML = filenames[0].split('\\').pop().split('/').pop();
@@ -222,7 +229,7 @@ function saveRace() {
   }, (filenames) => {
     if (!filenames) return;
     if (filenames.length > 0) {
-      var contentJSON = JSON.stringify(raceInformation);
+      var contentJSON = JSON.stringify({"raceInformation" : raceInformation, "racerStats": racerStats});
 
       //save txt
       fs.writeFileSync(filenames, contentJSON);
@@ -272,15 +279,15 @@ function editRaceDialog(type) {
   var raceScoreInput = document.getElementById("raceScoreMethod");
   var raceCoordInput = document.getElementById("raceCoord");
   var raceDateInput = document.getElementById("raceDate");
-  var racerInputTD = document.getElementById("racerFileInput");
+  //var racerInputTD = document.getElementById("racerFileInput");
 
   var rankCheck = document.getElementById("orgRankInclude").getElementsByTagName("input");
 
-  if (racerStatsFile === "" || racerStatsFile === undefined) {
+  /* if (racerStatsFile === "" || racerStatsFile === undefined) {
     racerInputTD.innerHTML = `<button type="button" onclick='loadRacers()'>Select Racers File</button> <button type="button" onclick='clickMenuTab(2)'>Enter New Racers</button>`
   } else {
     racerInputTD.innerHTML = racerStatsFile.split('\\').pop().split('/').pop();
-  }
+  } */
 
   switch (type) {
 
@@ -360,7 +367,7 @@ function editRaceDialog(type) {
       raceInformation["RaceScoring"] = raceScoreInput.value;
       raceInformation["RaceCoordinator"] = raceCoordInput.value;
       raceInformation["RaceDate"] = raceDateInput.value;
-      raceInformation["RacerStatsFile"] = racerStatsFile;
+      //raceInformation["RacerStatsFile"] = racerStatsFile;
       raceInformation["RacerRanks"] = tmpRankCheckedIndex;
 
       //reset the form, keeping the select values
