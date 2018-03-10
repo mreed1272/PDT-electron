@@ -22,7 +22,7 @@
             "presentation": {
                 "reveal": "always"
             },
-            "group": "none",
+            "group": "build",
             "args": [
                 "../"
             ]
