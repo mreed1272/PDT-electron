@@ -171,7 +171,7 @@ function saveRacers() {
     return -1;
   }
   var racerFileDiv = document.getElementById("racer-data-file");
-  var racerInputTD = document.getElementById("racerFileInput");
+  //var racerInputTD = document.getElementById("racerFileInput");
   var currentWindowObj = remote.getCurrentWindow();
 
   dialog.showSaveDialog(currentWindowObj, {
@@ -190,7 +190,7 @@ function saveRacers() {
       //save txt
       fs.writeFileSync(filenames, contentJSON);
       racerFileDiv.innerHTML = filenames.split('\\').pop().split('/').pop();
-      racerInputTD.innerHTML = filenames.split('\\').pop().split('/').pop();
+      //racerInputTD.innerHTML = filenames.split('\\').pop().split('/').pop();
       racerStatsFile = filenames;
     }
   })
@@ -198,7 +198,7 @@ function saveRacers() {
 
 function loadRacers() {
   var racerFileDiv = document.getElementById("racer-data-file");
-  var racerInputTD = document.getElementById("racerFileInput");
+  //var racerInputTD = document.getElementById("racerFileInput");
   var currentWindowObj = remote.getCurrentWindow();
 
   dialog.showOpenDialog(currentWindowObj, {
@@ -218,7 +218,7 @@ function loadRacers() {
       //racerStats.push(dataObj);
       remote.app.addRecentDocument(filenames[0]);
       racerFileDiv.innerHTML = filenames[0].split('\\').pop().split('/').pop();
-      racerInputTD.innerHTML = filenames[0].split('\\').pop().split('/').pop();
+      //racerInputTD.innerHTML = filenames[0].split('\\').pop().split('/').pop();
       racerStatsFile = filenames[0];
       updateRacerStatsList();
     }
@@ -227,11 +227,11 @@ function loadRacers() {
 
 function clearRacers() {
   var racerFileDiv = document.getElementById("racer-data-file");
-  var racerInputTD = document.getElementById("racerFileInput");
+  //var racerInputTD = document.getElementById("racerFileInput");
 
   racerStats.length = 0;
   racerFileDiv.innerHTML = "none";
-  racerInputTD.innerHTML = "";
+  //racerInputTD.innerHTML = "";
   racerStatsFile = "";
   updateRacerStatsList();
 }

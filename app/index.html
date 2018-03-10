@@ -9,11 +9,13 @@
 	<link rel="stylesheet" href="test-track.css">
 	<link rel="stylesheet" href="edit-racer.css">
 	<link rel="stylesheet" href="run-race.css">
+	<link rel="stylesheet" href="best-show.css">
 	<script src="index.js"></script>
 	<script src="serial.js"></script>
 	<script src="test-track.js"></script>
 	<script src="edit-racer.js"></script>
 	<script src="run-race.js"></script>
+	<script src="best-show.js"></script>
 </head>
 
 <body onload="onBodyLoad()">
@@ -269,7 +271,19 @@
 
 		<!--Tab Content - Best Show-->
 		<div class="tabcontent" id="derbyWinnersT">
-			<h2>This page is still being developed.  No functionality at present.</h2>
+			<button>Select Winners</button>
+			<button>Edit Winners</button>
+			<button>Show Winners Window</button>
+			<button>Close Winners Window</button>
+			<div id="bestShow-select">
+				<p>1st place: <select id="bestShow-select-1"></select></p>
+				<p>2nd place: <select id="bestShow-select-2"></select></p>
+				<p>3rd place: <select id="bestShow-select-3"></select></p>
+				<button>Done</button>
+			</div>
+			<div id="bestShow-display">
+
+			</div>
 	
 		</div>
 		<!--End Tab Content - Best Show-->
