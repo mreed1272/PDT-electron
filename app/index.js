@@ -17,6 +17,10 @@ var optionsPDT = [];
 var rankValuePDT = [];
 var rankTextPDT = [];
 
+var showSelectValue = [];
+var showSelectTxt = []
+var showWinners = [];
+
 var includedRacers = [];
 
 var lastSerialCommand = "";
