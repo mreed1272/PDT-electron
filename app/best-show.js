@@ -6,6 +6,9 @@ function selectWinners () {
     
     if (racerStats.length != 0){
 
+        showSelectTxt.push(" ");
+        showSelectValue.push(0);
+
         for (var i =0; i < racerStats.length; i++) {
             showSelectTxt.push(`${racerStats[i].car} - ${racerStats[i].racer_name}`);
             showSelectValue.push(racerStats[i].car)
@@ -22,6 +25,9 @@ function selectWinners () {
 
     if (showID.style.display ="none") showID.style.display = "block";
 
-
+selectID1.onchange = function(){
+    selectID2.disabled = false;
+    selectID2.options[selectID1.selectedIndex].disabled = true;
+}
 
 }
