@@ -40,9 +40,69 @@ function selectWinners() {
                 selectID3.options[i].disabled = true;
             } else {
                 selectID2.options[i].disabled = false;
+                //selectID3.options[i].disabled = false;
+            }
+            if (selectID1.value === selectID3.options[i].value) {
+                //selectID2.options[i].disabled = true;
+                selectID3.options[i].disabled = true;
+            } else {
+                //selectID2.options[i].disabled = false;
                 selectID3.options[i].disabled = false;
             }
         }
     }
 
+    selectID2.onchange = function () {
+        selectID3.disabled = false;
+
+        if (selectID2.value === selectID3.value) {
+            selectID3.selectedIndex = 0;
+        }
+        if (selectID2.value === selectID1.value){
+            selectID1.selectedIndex = 0;
+        }
+        for (var i = 0; i < showSelectValue.length; i++) {
+            if (selectID2.value === selectID3.options[i].value) {
+                selectID3.options[i].disabled = true;
+                //selectID3.options[i].disabled = true;
+            } else {
+                selectID3.options[i].disabled = false;
+                //selectID3.options[i].disabled = false;
+            }
+            if (selectID2.value === selectID1.options[i].value) {
+                //selectID2.options[i].disabled = true;
+                selectID1.options[i].disabled = true;
+            } else {
+                //selectID2.options[i].disabled = false;
+                selectID1.options[i].disabled = false;
+            }
+        }
+    }
+    
+    selectID3.onchange = function () {
+        //selectID3.disabled = false;
+
+        if (selectID3.value === selectID1.value) {
+            selectID3.selectedIndex = 0;
+        }
+        if (selectID3.value === selectID2.value){
+            selectID2.selectedIndex = 0;
+        }
+        for (var i = 0; i < showSelectValue.length; i++) {
+            if (selectID3.value === selectID1.options[i].value) {
+                selectID1.options[i].disabled = true;
+                //selectID3.options[i].disabled = true;
+            } else {
+                selectID1.options[i].disabled = false;
+                //selectID3.options[i].disabled = false;
+            }
+            if (selectID3.value === selectID2.options[i].value) {
+                //selectID2.options[i].disabled = true;
+                selectID2.options[i].disabled = true;
+            } else {
+                //selectID2.options[i].disabled = false;
+                selectID2.options[i].disabled = false;
+            }
+        }
+    }
 }
