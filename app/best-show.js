@@ -34,21 +34,25 @@ function selectWinners() {
         if (selectID1.value === selectID3.value){
             selectID3.selectedIndex = 0;
         }
+
+        //first re-enable all the options
         for (var i = 0; i < showSelectValue.length; i++) {
-            if (selectID1.value === selectID2.options[i].value) {
-                selectID2.options[i].disabled = true;
-                selectID3.options[i].disabled = true;
-            } else {
-                selectID2.options[i].disabled = false;
-                //selectID3.options[i].disabled = false;
-            }
-            if (selectID1.value === selectID3.options[i].value) {
-                //selectID2.options[i].disabled = true;
-                selectID3.options[i].disabled = true;
-            } else {
-                //selectID2.options[i].disabled = false;
-                selectID3.options[i].disabled = false;
-            }
+            selectID1.options[i].disabled = false;    
+            selectID2.options[i].disabled = false;
+            selectID3.options[i].disabled = false;
+        }
+        //now set the selected options to disable in all lists
+        selectID2.options[selectID1.selectedIndex].disabled = true;
+        selectID3.options[selectID1.selectedIndex].disabled = true;
+
+        //Now check other lists and disable
+        if (selectID2.selectedIndex > 0) {
+            selectID1.options[selectID2.selectedIndex].disabled = true;
+            selectID3.options[selectID2.selectedIndex].disabled = true;
+        }
+        if (selectID3.selectedIndex > 0) {
+            selectID1.options[selectID3.selectedIndex].disabled = true;
+            selectID2.options[selectID3.selectedIndex].disabled = true;
         }
     }
 
@@ -61,21 +65,24 @@ function selectWinners() {
         if (selectID2.value === selectID1.value){
             selectID1.selectedIndex = 0;
         }
+        //first re-enable all the options
         for (var i = 0; i < showSelectValue.length; i++) {
-            if (selectID2.value === selectID3.options[i].value) {
-                selectID3.options[i].disabled = true;
-                //selectID3.options[i].disabled = true;
-            } else {
-                selectID3.options[i].disabled = false;
-                //selectID3.options[i].disabled = false;
-            }
-            if (selectID2.value === selectID1.options[i].value) {
-                //selectID2.options[i].disabled = true;
-                selectID1.options[i].disabled = true;
-            } else {
-                //selectID2.options[i].disabled = false;
-                selectID1.options[i].disabled = false;
-            }
+            selectID1.options[i].disabled = false;    
+            selectID2.options[i].disabled = false;
+            selectID3.options[i].disabled = false;
+        }
+        //now set the selected options to disable in all lists
+        selectID1.options[selectID2.selectedIndex].disabled = true;
+        selectID3.options[selectID2.selectedIndex].disabled = true;
+
+        //Now check other lists and disable
+        if (selectID1.selectedIndex > 0) {
+            selectID2.options[selectID1.selectedIndex].disabled = true;
+            selectID3.options[selectID1.selectedIndex].disabled = true;
+        }
+        if (selectID3.selectedIndex > 0) {
+            selectID1.options[selectID3.selectedIndex].disabled = true;
+            selectID2.options[selectID3.selectedIndex].disabled = true;
         }
     }
     
@@ -88,21 +95,24 @@ function selectWinners() {
         if (selectID3.value === selectID2.value){
             selectID2.selectedIndex = 0;
         }
+        //first re-enable all the options
         for (var i = 0; i < showSelectValue.length; i++) {
-            if (selectID3.value === selectID1.options[i].value) {
-                selectID1.options[i].disabled = true;
-                //selectID3.options[i].disabled = true;
-            } else {
-                selectID1.options[i].disabled = false;
-                //selectID3.options[i].disabled = false;
-            }
-            if (selectID3.value === selectID2.options[i].value) {
-                //selectID2.options[i].disabled = true;
-                selectID2.options[i].disabled = true;
-            } else {
-                //selectID2.options[i].disabled = false;
-                selectID2.options[i].disabled = false;
-            }
+            selectID1.options[i].disabled = false;    
+            selectID2.options[i].disabled = false;
+            selectID3.options[i].disabled = false;
+        }
+        //now set the selected options to disable in all lists
+        selectID2.options[selectID3.selectedIndex].disabled = true;
+        selectID1.options[selectID3.selectedIndex].disabled = true;
+
+        //Now check other lists and disable
+        if (selectID2.selectedIndex > 0) {
+            selectID1.options[selectID2.selectedIndex].disabled = true;
+            selectID3.options[selectID2.selectedIndex].disabled = true;
+        }
+        if (selectID1.selectedIndex > 0) {
+            selectID3.options[selectID1.selectedIndex].disabled = true;
+            selectID2.options[selectID1.selectedIndex].disabled = true;
         }
     }
 }
