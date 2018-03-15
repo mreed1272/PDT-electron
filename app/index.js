@@ -436,6 +436,7 @@ function updateRaceInfo() {
     racerStatsFile = raceInformation.RacerStatsFile;
   };
 
+  //check this logic again !!!!!!!
   if (isObjEmpty(racerStats) && (racerStatsFile !== undefined && racerStatsFile !== "" && racerStatsFile !== null)) {
     //if not loaded, load the racer stats file but first check to make sure the file exists 
     if (!fs.existsSync(racerStatsFile)) {
@@ -498,7 +499,7 @@ function updateRaceInfo() {
     tmpOutStr += `<li>Race Scoring Method: <b>${(raceInformation.RaceScoring === "timed" ? "Fastest Time" : "Point Elimination")}</b></li>`;
     tmpOutStr += `<li>Race Coordinator: <b>${raceInformation.RaceCoordinator}</b></li>`;
     tmpOutStr += `<li>Date of Race: <b>${raceInformation.RaceDate}</b></li>`;
-    tmpOutStr += `<li>Racer Information File: <b>${tmpRacerStatsName}</b></li>`;
+    //tmpOutStr += `<li>Racer Information File: <b>${tmpRacerStatsName}</b></li>`;
     tmpOutStr += `</ul>`;
   };
 
