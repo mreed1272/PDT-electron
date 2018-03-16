@@ -4,31 +4,34 @@ function selectWinners() {
     const selectID2 = document.getElementById("bestShow-select-2");
     const selectID3 = document.getElementById("bestShow-select-3");
 
-    if (racerStats.length != 0) {
+    if (racerStats.length != 0 && raceRacers.length != 0) {
 
         if (showSelectValue.length <= 0) {
             showSelectTxt.push(" ");
             showSelectValue.push(0);
 
-            for (var i = 0; i < racerStats.length; i++) {
-                showSelectTxt.push(`${racerStats[i].car} - ${racerStats[i].racer_name}`);
-                showSelectValue.push(racerStats[i].car)
+            for (var i = 0; i < raceRacers.length; i++) {
+                showSelectTxt.push(`${raceRacers[i].car} - ${raceRacers[i].racer_name}`);
+                showSelectValue.push(raceRacers[i].car)
             }
         }
         if (selectID1.options.length <= 0 && selectID2.options.length <= 0 && selectID3.options.length <= 0) {
             loadSelect("bestShow-select-1", showSelectValue, "", showSelectTxt);
             loadSelect("bestShow-select-2", showSelectValue, "", showSelectTxt);
             loadSelect("bestShow-select-3", showSelectValue, "", showSelectTxt);
-            console.log(selectID1);
+            //console.log(selectID1);
         }
     } else {
-        dialog.showErrorBox("No Racers Loaded", "Please enter some racers into the race.");
+        dialog.showErrorBox("No Racers Loaded or Selected", "Please enter and select some racers for the race.");
         return -1;
     }
 
     if (isObjEmpty(raceInformation)){
         dialog.showErrorBox("No Race Information", "Please either load a race file or start a new race.");
         return -1;
+    }
+    if ((showSelectValue.length-1) !== raceRacers.length) {
+        alert("need to update the drop down list")
     }
 
     if (showID.style.display = "none") showID.style.display = "block";
