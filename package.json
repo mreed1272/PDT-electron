@@ -1,8 +1,8 @@
 {
   "name": "pdt-race-manager",
   "productName": "PDT Race Manager",
-  "version": "0.8.0",
-  "appVersion": "0.8.0",
+  "version": "0.9.0",
+  "appVersion": "0.9.0",
   "description": "Software to interface with a Arduino PDT timer for pinewood derby racing.",
   "main": "main.js",
   "dependencies": {

@@ -1,3 +1,5 @@
+//import { isObject } from 'util';
+
 const electron = require('electron');
 const remote = electron.remote;
 const dialog = electron.remote.dialog;
@@ -197,7 +199,8 @@ function loadRace() {
       // parse, format input txt and put into page
       //raceInformation = JSON.parse(tmpData);
       var tmpRaceData = JSON.parse(tmpData);
-      if (tmpRaceData.hasOwnProperty(raceInformation) && tmpRaceData.hasOwnProperty(racerStats)) {
+      
+      if (tmpRaceData.hasOwnProperty("raceInformation") && tmpRaceData.hasOwnProperty("racerStats")) {
         raceInformation = tmpRaceData.raceInformation;
         racerStats = tmpRaceData.racerStats;
       } else {
@@ -431,10 +434,10 @@ function updateRaceInfo() {
   var tmpRanksNames = [];
   var tmpRacerStatsName = "";
 
-  if (racerStatsFile !== raceInformation.RacerStatsFile) {
+  /* if (racerStatsFile !== raceInformation.RacerStatsFile) {
     clearObject(racerStats);
     racerStatsFile = raceInformation.RacerStatsFile;
-  };
+  }; */
 
   //check this logic again !!!!!!!
   if (isObjEmpty(racerStats) && (racerStatsFile !== undefined && racerStatsFile !== "" && racerStatsFile !== null)) {

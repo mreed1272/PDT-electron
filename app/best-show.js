@@ -26,12 +26,62 @@ function selectWinners() {
         return -1;
     }
 
-    if (isObjEmpty(raceInformation)){
+    if (isObjEmpty(raceInformation)) {
         dialog.showErrorBox("No Race Information", "Please either load a race file or start a new race.");
         return -1;
     }
-    if ((showSelectValue.length-1) !== raceRacers.length) {
-        alert("need to update the drop down list")
+
+    //check to see if # of racers has changed
+    if ((showSelectValue.length - 1) !== raceRacers.length) {
+        //store the original values
+        var tmpSelectValue1 = selectID1.value;
+        var tmpSelectValue2 = selectID2.value;
+        var tmpSelectValue3 = selectID3.value;
+
+        showSelectValue.length = 0;
+        showSelectTxt.length = 0;
+
+        //now reload the arrays for the drop down lists
+        showSelectTxt.push(" ");
+        showSelectValue.push(0);
+
+        for (var i = 0; i < raceRacers.length; i++) {
+            showSelectTxt.push(`${raceRacers[i].car} - ${raceRacers[i].racer_name}`);
+            showSelectValue.push(raceRacers[i].car)
+        }
+
+        //clear the drop down lists
+        removeSelectOptions(selectID1);
+        removeSelectOptions(selectID2);
+        removeSelectOptions(selectID3);
+
+        //now reload the drop down lists with new racers
+        loadSelect("bestShow-select-1", showSelectValue, "", showSelectTxt);
+        loadSelect("bestShow-select-2", showSelectValue, "", showSelectTxt);
+        loadSelect("bestShow-select-3", showSelectValue, "", showSelectTxt);
+
+        //now select the correct value, set it to blank if racer not there anymore
+        for (var i = 0; i < showSelectValue.length; i++){
+            if (selectID1.options[i].value === tmpSelectValue1){
+                selectID1.value = tmpSelectValue1;
+            }
+            if (selectID2.options[i].value === tmpSelectValue2){
+                selectID2.value = tmpSelectValue2;
+            }
+            if (selectID3.options[i].value === tmpSelectValue3){
+                selectID3.value = tmpSelectValue3;
+            }
+        }
+
+        //now set the disabled options in each list
+        selectID1.options[selectID2.selectedIndex].disabled = true;
+        selectID1.options[selectID3.selectedIndex].disabled = true;
+
+        selectID2.options[selectID1.selectedIndex].disabled = true;
+        selectID2.options[selectID3.selectedIndex].disabled = true;
+
+        selectID3.options[selectID1.selectedIndex].disabled = true;
+        selectID3.options[selectID2.selectedIndex].disabled = true;
     }
 
     if (showID.style.display = "none") showID.style.display = "block";
