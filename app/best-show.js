@@ -61,14 +61,14 @@ function selectWinners() {
         loadSelect("bestShow-select-3", showSelectValue, "", showSelectTxt);
 
         //now select the correct value, set it to blank if racer not there anymore
-        for (var i = 0; i < showSelectValue.length; i++){
-            if (selectID1.options[i].value === tmpSelectValue1){
+        for (var i = 0; i < showSelectValue.length; i++) {
+            if (selectID1.options[i].value === tmpSelectValue1) {
                 selectID1.value = tmpSelectValue1;
             }
-            if (selectID2.options[i].value === tmpSelectValue2){
+            if (selectID2.options[i].value === tmpSelectValue2) {
                 selectID2.value = tmpSelectValue2;
             }
-            if (selectID3.options[i].value === tmpSelectValue3){
+            if (selectID3.options[i].value === tmpSelectValue3) {
                 selectID3.value = tmpSelectValue3;
             }
         }
@@ -213,4 +213,61 @@ function saveWinners() {
     };
 
     console.log(raceInformation.showWinners);
+}
+
+function loadWinners() {
+    const showID = document.getElementById("bestShow-select");
+    const selectID1 = document.getElementById("bestShow-select-1");
+    const selectID2 = document.getElementById("bestShow-select-2");
+    const selectID3 = document.getElementById("bestShow-select-3");
+
+     
+
+    if (raceInformation.hasOwnProperty("showWinners")) {
+        var tmpSelectValue1 = raceInformation.showWinners["1st"].car;
+        var tmpSelectValue2 = raceInformation.showWinners["2nd"].car;
+        var tmpSelectValue3 = raceInformation.showWinners["3rd"].car;
+
+        if (racerStats.length != 0 && raceRacers.length != 0) {
+
+            if (showSelectValue.length <= 0) {
+                showSelectTxt.push(" ");
+                showSelectValue.push(0);
+    
+                for (var i = 0; i < raceRacers.length; i++) {
+                    showSelectTxt.push(`${raceRacers[i].car} - ${raceRacers[i].racer_name}`);
+                    showSelectValue.push(raceRacers[i].car)
+                }
+            }
+            if (selectID1.options.length <= 0 && selectID2.options.length <= 0 && selectID3.options.length <= 0) {
+                loadSelect("bestShow-select-1", showSelectValue, "", showSelectTxt);
+                loadSelect("bestShow-select-2", showSelectValue, "", showSelectTxt);
+                loadSelect("bestShow-select-3", showSelectValue, "", showSelectTxt);
+                //console.log(selectID1);
+            }
+        }
+
+
+        for (var i = 0; i < showSelectValue.length; i++) {
+            if (selectID1.options[i].value === tmpSelectValue1) {
+                selectID1.value = tmpSelectValue1;
+            }
+            if (selectID2.options[i].value === tmpSelectValue2) {
+                selectID2.value = tmpSelectValue2;
+            }
+            if (selectID3.options[i].value === tmpSelectValue3) {
+                selectID3.value = tmpSelectValue3;
+            }
+        }
+
+        //now set the disabled options in each list
+        selectID1.options[selectID2.selectedIndex].disabled = true;
+        selectID1.options[selectID3.selectedIndex].disabled = true;
+
+        selectID2.options[selectID1.selectedIndex].disabled = true;
+        selectID2.options[selectID3.selectedIndex].disabled = true;
+
+        selectID3.options[selectID1.selectedIndex].disabled = true;
+        selectID3.options[selectID2.selectedIndex].disabled = true;
+    }
 }

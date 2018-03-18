@@ -53,8 +53,8 @@ function onBodyLoad() {
 
   //console.log("Setting interval checker...");
   timerID = setInterval(() => {
-    if(readyArduino !== null && initLane === true && readySerial === true){
-      setTimeout(() => {ipcRenderer.send('done-loading');}, 3000);
+    if (readyArduino !== null && initLane === true && readySerial === true) {
+      setTimeout(() => { ipcRenderer.send('done-loading'); }, 3000);
       if (timerId != null) {
         clearInterval(timerID);
       }
@@ -199,7 +199,7 @@ function loadRace() {
       // parse, format input txt and put into page
       //raceInformation = JSON.parse(tmpData);
       var tmpRaceData = JSON.parse(tmpData);
-      
+
       if (tmpRaceData.hasOwnProperty("raceInformation") && tmpRaceData.hasOwnProperty("racerStats")) {
         raceInformation = tmpRaceData.raceInformation;
         racerStats = tmpRaceData.racerStats;
@@ -210,9 +210,12 @@ function loadRace() {
       remote.app.addRecentDocument(filenames[0]);
       raceInfoFileDiv.innerHTML = filenames[0].split('\\').pop().split('/').pop();
       raceInfoFile = filenames[0];
+
+
       updateRaceInfo();
-      //console.log("Sending communication to 'race-information' channel.");
-      //ipcRenderer.send('race-information', [raceInformation, numLanes]);
+      if (raceInformation.hasOwnProperty("showWinners")) {
+        loadWinners();
+      }
     }
   })
 }
@@ -236,7 +239,7 @@ function saveRace() {
   }, (filenames) => {
     if (!filenames) return;
     if (filenames.length > 0) {
-      var contentJSON = JSON.stringify({"raceInformation" : raceInformation, "racerStats": racerStats});
+      var contentJSON = JSON.stringify({ "raceInformation": raceInformation, "racerStats": racerStats });
 
       //save txt
       fs.writeFileSync(filenames, contentJSON);
@@ -485,6 +488,10 @@ function updateRaceInfo() {
         racerInfoDiv.innerHTML = tempOutTable;
       }
     } else {
+
+      if (!isObjEmpty(racerStats)) {
+        updateRacerStatsList();
+      }
       raceDone = false;
       raceRacers.length = 0;
       updateRacerTable();
@@ -603,6 +610,6 @@ function clearObject(Obj) {
   }
 }
 
-function closePDT(){
+function closePDT() {
   ipcRenderer.send("close-PDT");
 }
