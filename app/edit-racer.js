@@ -77,9 +77,9 @@ function addRacer(type, oldCarNum) {
       tmpRacerRank.value = "Tiger";
 
       if (modButton.innerHTML == "Update Racer") {
-        //now change to read Update Racer
+        //now change to read Add Racer
         modButton.innerHTML = "Add Racer"
-        //now change onclick to update
+        //now change onclick to add
         modButton.setAttribute('onclick', `addRacer("add")`);
       }
 
@@ -160,10 +160,12 @@ function updateRacerStatsList() {
     document.getElementById("RacerInfo").style.display = "block";
   }
 
-  if (!isObjEmpty(raceInformation) && racerStatsFile !== "") {
+  /* if (!isObjEmpty(raceInformation) && racerStatsFile !== "") {
     raceInformation.RacerStatsFile = racerStatsFile;
     updateRaceInfo();
-  }
+  } */
+  raceRacers.length = 0;
+  updateRacerTable();
 }
 
 function saveRacers() {
