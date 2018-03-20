@@ -96,7 +96,7 @@ app.on('ready', () => {
     });
   };
   spectatorWindow.loadURL(`file://${__dirname}/app/spectator.html`);
-  spectatorWindow.openDevTools()
+  //spectatorWindow.openDevTools()
   specContents = spectatorWindow.webContents;
 
   mainWindow.on('closed', () => {
