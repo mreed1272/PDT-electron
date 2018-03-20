@@ -235,6 +235,12 @@ function clearRacers() {
   racerFileDiv.innerHTML = "none";
   //racerInputTD.innerHTML = "";
   racerStatsFile = "";
+
+  removeSelectOptions(document.getElementById("bestShow-select-1"));
+  removeSelectOptions(document.getElementById("bestShow-select-2"));
+  removeSelectOptions(document.getElementById("bestShow-select-3"));
+  document.getElementById("bestShow-display").innerHTML = "";
+
   updateRacerStatsList();
 }
 
