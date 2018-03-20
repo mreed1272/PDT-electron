@@ -233,7 +233,34 @@ function saveRace() {
   var raceInfoFileDiv = document.getElementById("RaceInfoFile");
   var currentWindowObj = remote.getCurrentWindow();
 
-  dialog.showSaveDialog(currentWindowObj, {
+  var tmp_filenames = dialog.showSaveDialog(currentWindowObj, {
+    title: 'Save Race . . .',
+    filters: [
+      {
+        name: "PDT race information files",
+        extensions: ['pdt_race']
+      }
+    ]
+  });
+  
+  //console.log(`Save filename: ${tmp_filenames}`)
+
+  if (!tmp_filenames) {
+    return -1;
+  }
+  if (tmp_filenames.length > 0) {
+    var contentJSON = JSON.stringify({ "raceInformation": raceInformation, "racerStats": racerStats });
+
+    //save txt
+    fs.writeFileSync(tmp_filenames, contentJSON);
+
+    raceInfoFileDiv.innerHTML = tmp_filenames.split('\\').pop().split('/').pop();
+    raceInfoFile = tmp_filenames;
+    return 1;
+  } else {
+    return -1;
+  }
+  /* dialog.showSaveDialog(currentWindowObj, {
     title: 'Save Race . . .',
     filters: [
       {
@@ -242,7 +269,7 @@ function saveRace() {
       }
     ]
   }, (filenames) => {
-    if (!filenames) return;
+    if (!filenames) return -1;
     if (filenames.length > 0) {
       var contentJSON = JSON.stringify({ "raceInformation": raceInformation, "racerStats": racerStats });
 
@@ -251,8 +278,10 @@ function saveRace() {
 
       raceInfoFileDiv.innerHTML = filenames.split('\\').pop().split('/').pop();
       raceInfoFile = filenames;
+      return 1;
     }
-  })
+  }) */
+  
   /*document.activeElement.blur();*/
 }
 
@@ -616,5 +645,41 @@ function clearObject(Obj) {
 }
 
 function closePDT() {
-  ipcRenderer.send("close-PDT");
+  if (!isObjEmpty(raceInformation)) {
+    var response = dialog.showMessageBox(remote.getCurrentWindow(), {
+      title: "Save Race?",
+      type: "warning",
+      buttons: ["Yes", "No", "Cancel"],
+      message: "Do you want to save the race information before quiting?"
+    })
+    switch (response) {
+
+      case 2:
+        return -1;
+
+      case 1:
+        ipcRenderer.send("close-PDT");
+        break;
+
+      case 0:
+        //save the file
+        if (raceInfoFile != "") {
+          if (fs.existsSync(raceInfoFile)) {
+            var contentJSON = JSON.stringify({ "raceInformation": raceInformation, "racerStats": racerStats });
+            //save txt
+            fs.writeFileSync(raceInfoFile, contentJSON);
+            ipcRenderer.send("close-PDT");
+          } else {
+            var result = saveRace();
+            if(result > 0) {ipcRenderer.send("close-PDT");}
+          }
+        } else {
+          var result = saveRace();
+          if(result > 0) {ipcRenderer.send("close-PDT");}
+        }
+    }
+  } else {
+    ipcRenderer.send("close-PDT");
+  }
+
 }
