@@ -273,8 +273,8 @@
 		<div class="tabcontent" id="derbyWinnersT">
 			<button type="button" onclick="selectWinners()">Select Winners</button>
 			<!-- <button disabled>Edit Winners</button> -->
-			<button disabled>Show Winners Window</button>
-			<button disabled>Hide Winners Window</button>
+			<button id="bestShowButton" disabled onclick="bestShowSpec('show')">Show Winners Window</button>
+			<button id="bestHideButton" disabled onclick="bestShowSpec('hide')">Hide Winners Window</button>
 			<div id="bestShow-select">
 				<p>1st place: <select id="bestShow-select-1"></select></p>
 				<p>2nd place: <select disabled id="bestShow-select-2"></select></p>

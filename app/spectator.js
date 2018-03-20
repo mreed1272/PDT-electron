@@ -289,6 +289,15 @@ ipcRenderer.on('champ-round', (event, data) => {
 
 })
 
+ipcRenderer.on('best-show-results', (event, data) => {
+  console.log(`Data sent to spec window from best-in-show : ${JSON.stringify(data)}`);
+});
+
+ipcRenderer.on('best-show-window', (event, data) => {
+  console.log(`Command sent to spec window from best-in-show : ${data}`);
+});
+
+
 function winnerCards(champ) {
 
   roundNumDiv.innerHTML = "";

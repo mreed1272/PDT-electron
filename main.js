@@ -249,6 +249,20 @@ ipcMain.on('post-results', (event, data) => {
   }
 });
 
+ipcMain.on('best-show-results', (event, data) => {
+  console.log("Received command 'best-show-results'");
+  if (specContents !== null) {
+    specContents.send('best-show-results', data)
+  }
+});
+
+ipcMain.on('best-show-window', (event, data) => {
+  console.log("Received command 'best-show-window'");
+  if (specContents !== null) {
+    specContents.send('best-show-window', data)
+  }
+});
+
 ipcMain.on('redo', (event) => {
 
   if (specContents !== null) {

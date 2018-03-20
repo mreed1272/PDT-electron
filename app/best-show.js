@@ -1,3 +1,10 @@
+const defaultImg = `${__dirname}/images/PDT-main-256.png`;
+const tigerImg = `${__dirname}/images/tiger-trans.png`;
+const wolfImg = `${__dirname}/images/wolf-trans.png`;
+const bearImg = `${__dirname}/images/bear-trans.png`;
+const webelosImg = `${__dirname}/images/webelos-trans.png`;
+const aolImg = `${__dirname}/images/aol-trans.png`;
+
 function selectWinners() {
     const showID = document.getElementById("bestShow-select");
     const selectID1 = document.getElementById("bestShow-select-1");
@@ -212,7 +219,8 @@ function saveWinners() {
         }
     };
 
-    console.log(raceInformation.showWinners);
+    //console.log(raceInformation.showWinners);
+    showWinners();
 }
 
 function loadWinners() {
@@ -271,3 +279,76 @@ function loadWinners() {
         selectID3.options[selectID2.selectedIndex].disabled = true;
     }
 }
+
+function showWinners() {
+    const showID = document.getElementById("bestShow-select");
+    const showWinnersID = document.getElementById("bestShow-display");
+    const selectID1 = document.getElementById("bestShow-select-1");
+    const selectID2 = document.getElementById("bestShow-select-2");
+    const selectID3 = document.getElementById("bestShow-select-3");
+    const buttonShow = document.getElementById("bestShowButton");
+    const buttonHide = document.getElementById("bestHideButton");
+
+    if (!isObjEmpty(raceInformation.showWinners)){
+
+        //create the txt first
+        var tmpText = "";
+        tmpText += `<div class='flex-container-row' style='perspective: 200px;'>`;
+        tmpText += `<div class='first_place'>`;
+        tmpText += `<h1>1<sup>st</sup> Place <span class='winner'>&#xf091;</span></h1>`;
+        tmpText += `<img id='imgShowWinner-1' src='${getImage(raceInformation.showWinners["1st"].rank)}'>`;
+        tmpText += `<p>${raceInformation.showWinners["1st"].racer_name}</p>`;
+        tmpText += `<p># ${raceInformation.showWinners["1st"].car}</p>`;
+        tmpText += `</div>`
+        tmpText += `<div class='second_place'>`;
+        tmpText += `<h1>2<sup>nd</sup> Place</h1>`;
+        tmpText += `<img id='imgShowWinner-2' src='${getImage(raceInformation.showWinners["2nd"].rank)}'>`;
+        tmpText += `<p>${raceInformation.showWinners["2nd"].racer_name}</p>`;
+        tmpText += `<p># ${raceInformation.showWinners["2nd"].car}</p>`;
+        tmpText += `</div>`
+        tmpText += `<div class='third_place'>`;
+        tmpText += `<h1>3<sup>rd</sup> Place</h1>`;
+        tmpText += `<img id='imgShowWinner-3' src='${getImage(raceInformation.showWinners["3rd"].rank)}'>`;
+        tmpText += `<p>${raceInformation.showWinners["3rd"].racer_name}</p>`;
+        tmpText += `<p># ${raceInformation.showWinners["3rd"].car}</p>`;
+        tmpText += `</div>`;
+        tmpText += `</div>`;
+
+        //now place it in the div
+        showWinnersID.innerHTML = tmpText;
+
+        if (showWinnersID.style === "none") showWinnersID.style = "block";
+
+        buttonHide.disabled = false;
+        buttonShow.disabled = false;
+
+        ipcRenderer.send('best-show-results', raceInformation.showWinners);
+    }
+}
+
+function bestShowSpec(type){
+
+    ipcRenderer.send('best-show-window', type);
+}
+
+function getImage(rank) {
+    switch (rank) {
+      case "Tiger":
+        return tigerImg;
+  
+      case "Wolf":
+        return wolfImg;
+  
+      case "Bear":
+        return bearImg;
+  
+      case "Webelos":
+        return webelosImg;
+  
+      case "AOL":
+        return aolImg;
+  
+      default:
+        return defaultImg;
+    }
+  }
