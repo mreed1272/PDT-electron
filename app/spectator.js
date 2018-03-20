@@ -47,13 +47,13 @@ function getInfo() {
     racerArray = data.racerArray
     numRacers = racerArray.length;
   } else {
-    
+
     clearObject(racerArray);
   }
-  if (data.hasOwnProperty("roundResults")) { 
-    roundResults = data.roundResults 
+  if (data.hasOwnProperty("roundResults")) {
+    roundResults = data.roundResults
   } else {
-    
+
     clearObject(roundResults);
   };
   if (data.hasOwnProperty("numLanes")) { numLanes = data.numLanes };
@@ -95,8 +95,8 @@ ipcRenderer.on('race-information', (event, data) => {
     racerArray = JSON.parse(JSON.stringify(raceInfo.racer_table))
     showResults();
   } else {
-    if(!isObjEmpty(racerArray)) {clearObject(racerArray);}
-    if(!isObjEmpty(roundResults)) {clearObject(roundResults);}
+    if (!isObjEmpty(racerArray)) { clearObject(racerArray); }
+    if (!isObjEmpty(roundResults)) { clearObject(roundResults); }
     setupDisplay();
     updateLeaderBoard();
     updateCurrentRound();
@@ -290,11 +290,60 @@ ipcRenderer.on('champ-round', (event, data) => {
 })
 
 ipcRenderer.on('best-show-results', (event, data) => {
-  console.log(`Data sent to spec window from best-in-show : ${JSON.stringify(data)}`);
+  //console.log(`Data sent to spec window from best-in-show : ${JSON.stringify(data)}`);
+  showWinners(data);
 });
 
+function showWinners(data) {
+  const bestShowDIV = document.getElementById("bestShowWinners");
+  //console.log("running show winners in spec window")
+
+  if (!isObjEmpty(data)){
+
+      //create the txt first
+      var tmpText = "";
+      tmpText += `<div class='flex-container-row' style='perspective: 1500px; justify-content: center'>`;
+      tmpText += `<div class='show_first_place'>`;
+      tmpText += `<h1>1<sup>st</sup> Place <span class='winner'>&#xf091;</span></h1>`;
+      tmpText += `<img id='imgShowWinner-1' src='${getImage(data["1st"].rank)}'>`;
+      tmpText += `<p>${data["1st"].racer_name}</p>`;
+      tmpText += `<p># ${data["1st"].car}</p>`;
+      tmpText += `</div>`
+      tmpText += `<div class='show_second_place'>`;
+      tmpText += `<h1>2<sup>nd</sup> Place</h1>`;
+      tmpText += `<img id='imgShowWinner-2' src='${getImage(data["2nd"].rank)}'>`;
+      tmpText += `<p>${data["2nd"].racer_name}</p>`;
+      tmpText += `<p># ${data["2nd"].car}</p>`;
+      tmpText += `</div>`
+      tmpText += `<div class='show_third_place'>`;
+      tmpText += `<h1>3<sup>rd</sup> Place</h1>`;
+      tmpText += `<img id='imgShowWinner-3' src='${getImage(data["3rd"].rank)}'>`;
+      tmpText += `<p>${data["3rd"].racer_name}</p>`;
+      tmpText += `<p># ${data["3rd"].car}</p>`;
+      tmpText += `</div>`;
+      tmpText += `</div>`;
+
+      //now place it in the div
+      bestShowDIV.innerHTML = tmpText;
+
+      
+  }
+}
+
 ipcRenderer.on('best-show-window', (event, data) => {
-  console.log(`Command sent to spec window from best-in-show : ${data}`);
+  //console.log(`Command sent to spec window from best-in-show : ${data}`);
+  switch (data) {
+    case "show":
+      document.getElementById("spec-main").style.display = "none";
+      document.getElementById("bestShowWinners").style.display = "block"
+      break;
+
+    case "hide":
+      document.getElementById("spec-main").style.display = "block";
+      document.getElementById("bestShowWinners").style.display = "none"
+      break;
+
+  }
 });
 
 
@@ -358,7 +407,7 @@ function winnerCards(champ) {
       switch (w) {
         case 0:
           /*(numRacers > 2) ? tempTxt += `<div class='first_place_A'>` : tempTxt += `<div class='first_place_B'>`;*/
-          tempTxt += `<div class='first_place_B'>`; 
+          tempTxt += `<div class='first_place_B'>`;
           tempTxt += `<h1>1st Place <span class='winner'>&#xf091;</span></h1>`;
           break;
 
@@ -574,7 +623,7 @@ function isObjEmpty(obj) {
 }
 
 function showResults() {
-  
+
   if (raceInfo.hasOwnProperty("winners")) {
     winnerCards(JSON.parse(JSON.stringify(raceInfo.winners)));
   } else {

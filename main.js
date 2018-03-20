@@ -96,7 +96,7 @@ app.on('ready', () => {
     });
   };
   spectatorWindow.loadURL(`file://${__dirname}/app/spectator.html`);
-  //spectatorWindow.openDevTools()
+  spectatorWindow.openDevTools()
   specContents = spectatorWindow.webContents;
 
   mainWindow.on('closed', () => {
@@ -174,6 +174,9 @@ ipcMain.on('spectator-window', (event, command) => {
     spectatorWindow.once('ready-to-show', () => {
       if (command === "open") {
         spectatorWindow.show();
+        if (externalDisplay) {
+          spectatorWindow.maximize();
+        }
       }
     })
 
@@ -250,17 +253,68 @@ ipcMain.on('post-results', (event, data) => {
 });
 
 ipcMain.on('best-show-results', (event, data) => {
-  console.log("Received command 'best-show-results'");
+  
   if (specContents !== null) {
     specContents.send('best-show-results', data)
   }
 });
 
 ipcMain.on('best-show-window', (event, data) => {
-  console.log("Received command 'best-show-window'");
-  if (specContents !== null) {
-    specContents.send('best-show-window', data)
-  }
+  if (spectatorWindow != null) {
+    if (spectatorWindow.isVisible()){
+      if (specContents !== null) {
+        specContents.send('best-show-window', data)
+      }
+    } else {
+      spectatorWindow.show();
+      if (externalDisplay) {
+        spectatorWindow.maximize();
+      }
+      if (specContents !== null) {
+        specContents.send('best-show-window', data)
+      }
+    }
+  } else if (spectatorWindow === null) {
+    
+    if (externalDisplay) {
+      spectatorWindow = new BrowserWindow({
+        width: 800,
+        height: 600,
+        frame: false,
+        show: false,
+        icon: `${__dirname}/app/images/PDT-main.png`,
+        x: externalDisplay.bounds.x + 25,
+        y: externalDisplay.bounds.y + 25
+      });
+    } else {
+      spectatorWindow = new BrowserWindow({
+        width: 800,
+        height: 600,
+        frame: false,
+        show: false,
+        icon: `${__dirname}/app/images/PDT-main.png`,
+     });
+    };
+    spectatorWindow.loadURL(`file://${__dirname}/app/spectator.html`);
+    //spectatorWindow.openDevTools()
+    specContents = spectatorWindow.webContents;
+
+    spectatorWindow.once('ready-to-show', () => {
+      spectatorWindow.show();
+      if (externalDisplay) {
+        spectatorWindow.maximize();
+      }
+      specContents.send('best-show-window', data)
+    })
+
+    spectatorWindow.on('closed', () => {
+      console.log("User clicked on close for spectator window - clear the reference.")
+      spectatorWindow = null;
+      specContents = null;
+    });
+
+  };
+  
 });
 
 ipcMain.on('redo', (event) => {

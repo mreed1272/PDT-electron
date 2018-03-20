@@ -215,6 +215,11 @@ function loadRace() {
       updateRaceInfo();
       if (raceInformation.hasOwnProperty("showWinners")) {
         loadWinners();
+      } else {
+        removeSelectOptions(document.getElementById("bestShow-select-1"));
+        removeSelectOptions(document.getElementById("bestShow-select-2"));
+        removeSelectOptions(document.getElementById("bestShow-select-3"));
+        document.getElementById("bestShow-display").innerHTML = "";
       }
     }
   })

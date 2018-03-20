@@ -194,11 +194,13 @@ function saveWinners() {
 
     if (showID.style.display = "block") showID.style.display = "none";
 
+    if (selectID1.selectedIndex === 0 || selectID2.selectedIndex === 0 || selectID3.selectedIndex === 0) {return -1;}
+
     var index1 = checkKeyValue(racerStats, "car", selectID1.value);
     var index2 = checkKeyValue(racerStats, "car", selectID2.value);
     var index3 = checkKeyValue(racerStats, "car", selectID3.value);
 
-    raceInformation.showWinners = {
+      raceInformation.showWinners = {
         "1st": {
             "car": racerStats[index1].car,
             "racer_name": racerStats[index1].racer_name,
@@ -277,6 +279,8 @@ function loadWinners() {
 
         selectID3.options[selectID1.selectedIndex].disabled = true;
         selectID3.options[selectID2.selectedIndex].disabled = true;
+
+        showWinners();
     }
 }
 
@@ -328,6 +332,9 @@ function showWinners() {
 
 function bestShowSpec(type){
 
+    if (!isObjEmpty(raceInformation.showWinners)) {
+        ipcRenderer.send('best-show-results', raceInformation.showWinners);
+    }
     ipcRenderer.send('best-show-window', type);
 }
 
