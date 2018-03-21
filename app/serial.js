@@ -63,7 +63,7 @@ function setupArduino(availPorts) {
     //console.log(`testing port: ${availPorts[i].comName}\n manufacturer: ${testStr}`);
     if (testStr.search(patt) >= 0) {
       document.getElementById("serial-timer").innerHTML = availPorts[i].comName;
-      PDT = new SerialPort(availPorts[i].comName, { baudRate: 9600, parser: SerialPort.parsers.readline('\n')});  // 
+      PDT = new SerialPort(availPorts[i].comName, { baudRate: 9600, parser: SerialPort.parsers.readline('\n') });  // 
       initArduino = true;
       break;
     }
@@ -152,6 +152,9 @@ function checkSerialData(data) {
       break;
 
     case "B":
+      if (currentTab === "runRaceT" && readyRace === false) {
+        break;
+      }
       console.log("Racing...");
       document.getElementById("status-timer").innerHTML = "Racing...";
       document.getElementById("status-timer").className = "footer-item racing";
@@ -173,7 +176,7 @@ function checkSerialData(data) {
       document.getElementById("gate-timer").innerHTML = "Gate Closed";
       document.getElementById("gate-timer").className = "footer-item closed";
       break;
-      
+
     case ".":
       /*if (lastSerialCommand == "G") {
         console.log("Gate closed");
@@ -238,6 +241,12 @@ function checkSerialData(data) {
       break;
 
     default:
+    if (currentTab === "runRaceT" && readyRace === false) {
+      return;
+    }
+    if (currentTab === "runRaceT" && readyRace === true) {
+      readyRace = false;
+    }
       var testRegEx = /(\d) - (\d+\.\d*)/.test(data);
       if (testRegEx) {
         var tempLaneNum = RegExp.$1 * 1;
@@ -268,7 +277,7 @@ function checkSerialData(data) {
             if (numLanes > 2) {
               var winnerLane = [`race-lane-lane${laneTimes[0].lane}-Li`, `race-lane-lane${laneTimes[1].lane}-Li`, `race-lane-lane${laneTimes[2].lane}-Li`];
             } else {
-              var winnerLane = [`race-lane-lane${laneTimes[0].lane}-Li`, `race-lane-lane${laneTimes[1].lane}-Li`,];
+              var winnerLane = [`race-lane-lane${laneTimes[0].lane}-Li`, `race-lane-lane${laneTimes[1].lane}-Li`];
             }
           }
 

@@ -6,6 +6,7 @@ var NumHeats = 0;
 var raceRacers = [];
 var isRacing = false;
 var raceDone = false;
+var readyRace = false;
 var winnerArr = [];
 
 function specWin(command) {
@@ -423,6 +424,7 @@ function raceUpdate(type) {
       heatButton.setAttribute('onclick', "raceUpdate('accept')");
 
       ipcRenderer.send('next', [raceResults, raceRacers, currentRnd, currentHeatNum, NumHeats]);
+      readyRace = true;
 
       break;
 

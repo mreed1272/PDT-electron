@@ -418,3 +418,49 @@ a:active {
 .hide {
 	display: none;
 }
+
+#configSerial {
+float: left;
+width: 45%;
+padding: 0px 20px;
+background: #eee;
+box-shadow: 3px 3px 8px rgba(0,0,0,0.3);
+margin: 0px 0px 10px 20px;
+}
+
+#configSerial h4{
+	margin: 15px 0px 0px 0px;
+}
+
+#configSerial table {
+	border-collapse: collapse;
+	width: 100%;
+	margin: 5px;
+}
+
+#configSerial td {
+	padding-right: 10px;
+}
+
+#configSerial td:nth-child(1) {
+	width: 40%;
+	text-align: left; 
+}
+
+#configSerial td:nth-child(2) {
+	width: 40%;
+	text-align: left; 
+}
+
+#configSerial tr:nth-child(even) {
+	background-color: rgba(0,63,135,0.2);
+}
+
+#configOrg {
+	float: left;
+	width: 45%;
+	padding: 0px 20px;
+	background: #eee;
+	box-shadow: 3px 3px 8px rgba(0,0,0,0.3);
+	margin: 0px 0px 10px 20px;
+}

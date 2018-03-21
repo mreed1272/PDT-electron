@@ -573,6 +573,42 @@ function loadOptions() {
   // create checkboxes for ranks in Race Info dialog
   createCheckList("orgRankInclude", "rank", rankTextPDT, rankValuePDT);
   //console.log("End of loadOptions");
+
+  //now let's add information to configuration tab
+  const pdtConfig = document.getElementById("timer-config");
+
+  var tmpTxt = "";
+
+  tmpTxt += `<h2>Configuration: ${optionsPDT["configuration name"]}</h2>`;
+  tmpTxt += `<div id='configSerial'><h3>Serial Communication Setup</h3>`;
+  tmpTxt += `<p>Com port: ${optionsPDT.serial}</p>`;
+  tmpTxt += `<H4>Serial commands:</h4><table>`;
+
+  for (var i = 0; i < optionsPDT.commands.length; i++) {
+    tmpTxt += `<tr><td>${optionsPDT.commands[i].name}</td><td>${optionsPDT.commands[i].value}</td></tr>`;
+  }  
+  tmpTxt += `</table><h4>Serial messages:</h4><table>`;
+
+  for (var i = 0; i < optionsPDT.messages.length; i++) {
+    if (optionsPDT.messages[i]["regexValue"]) {
+      tmpTxt += `<tr><td>${optionsPDT.messages[i].name} (RegEx value)</td><td>${optionsPDT.messages[i].regexValue}</td></tr>`;
+    } else {
+      tmpTxt += `<tr><td>${optionsPDT.messages[i].name}</td><td>${optionsPDT.messages[i].value}`;
+    }
+  }
+  tmpTxt += `</table></div><div id='configOrg'><H3>Organization Types:</H3><ol>`;
+
+  for (var i = 0; i < optionsPDT.OrgType.length; i++){
+    tmpTxt += `<li>${optionsPDT.OrgType[i].name}</li> Ranks:<ul>`
+    for (var w = 0; w < optionsPDT.OrgType[i].rank_text.length; w++){
+      tmpTxt += `<li>${optionsPDT.OrgType[i].rank_text[w]}`;
+    }
+    tmpTxt += `</ul>`;
+  }
+  tmpTxt += `</ol></div>`;
+
+  pdtConfig.innerHTML = tmpTxt;
+
 }
 
 function loadRanks(orgTypeTxt) {
