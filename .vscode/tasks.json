@@ -25,6 +25,9 @@
             "group": "build",
             "args": [
                 "../"
+            ],
+            "problemMatcher": [
+                "$eslint-compact"
             ]
         }
     ]
