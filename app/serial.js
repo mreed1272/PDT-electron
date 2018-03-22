@@ -241,12 +241,10 @@ function checkSerialData(data) {
       break;
 
     default:
-    if (currentTab === "runRaceT" && readyRace === false) {
-      return;
-    }
-    if (currentTab === "runRaceT" && readyRace === true) {
-      readyRace = false;
-    }
+      if (currentTab === "runRaceT" && readyRace === false) {
+        return;
+      }
+
       var testRegEx = /(\d) - (\d+\.\d*)/.test(data);
       if (testRegEx) {
         var tempLaneNum = RegExp.$1 * 1;
@@ -258,7 +256,9 @@ function checkSerialData(data) {
           var tempLaneId = `race-lane-lane${tempLaneNum}`;
         }
         if (laneMask[tempLaneNum - 1] != 1) {
-          document.getElementById(tempLaneId).innerHTML = tempLaneTime.toFixed(4);
+          if ((currentTab === "runRaceT" && readyRace === true) || (currentTab === "testTrackT")) {
+            document.getElementById(tempLaneId).innerHTML = tempLaneTime.toFixed(4);
+          }
           laneTimes.push({ lane: tempLaneNum, time: tempLaneTime });
         } else {
           laneTimes.push({ lane: tempLaneNum, time: 99 });
@@ -273,19 +273,26 @@ function checkSerialData(data) {
             } else {
               var winnerLane = [`tlane-lane${laneTimes[0].lane}-Li`, `tlane-lane${laneTimes[1].lane}-Li`];
             }
-          } else {
+            document.getElementById(winnerLane[0]).className = "winner1";
+            document.getElementById(winnerLane[1]).className = "winner2";
+            if (numLanes > 2) {
+              document.getElementById(winnerLane[2]).className = "winner3";
+            }
+          } else if (currentTab === "runRaceT" && readyRace === true) {
             if (numLanes > 2) {
               var winnerLane = [`race-lane-lane${laneTimes[0].lane}-Li`, `race-lane-lane${laneTimes[1].lane}-Li`, `race-lane-lane${laneTimes[2].lane}-Li`];
             } else {
               var winnerLane = [`race-lane-lane${laneTimes[0].lane}-Li`, `race-lane-lane${laneTimes[1].lane}-Li`];
             }
+            document.getElementById(winnerLane[0]).className = "winner1";
+            document.getElementById(winnerLane[1]).className = "winner2";
+            if (numLanes > 2) {
+              document.getElementById(winnerLane[2]).className = "winner3";
+            }
+            readyRace = false;
           }
 
-          document.getElementById(winnerLane[0]).className = "winner1";
-          document.getElementById(winnerLane[1]).className = "winner2";
-          if (numLanes > 2) {
-            document.getElementById(winnerLane[2]).className = "winner3";
-          }
+
           if (currentTab == "testTrackT") {
             updateHistoryTable(laneTimes);
           }

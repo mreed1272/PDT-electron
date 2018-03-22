@@ -112,6 +112,8 @@ function setupRace() {
   updateCurrentHeat(raceResults, currentRnd, numLanes, currentHeatNum);
 
   ipcRenderer.send('setup-race', [raceResults, raceRacers, currentRnd, currentHeatNum, NumHeats]);
+
+  readyRace = true;
 }
 
 function generateRound(nRacers, nLanes, RndNo, racerArray) {
@@ -254,7 +256,7 @@ function updateRoundTable(resultsArr, RndNo, HeatNo, nLanes, numberHeats, number
     tempOut += `<tr><td>${(h + 1)}</td>`;
     for (var l = 0; l < nLanes; l++) {             // l is the lane #
       if (resultsArr[RndNo - 1][l][h].car !== "-") {
-        tempOut += `<td>${resultsArr[RndNo - 1][l][h].car}</td><td>${resultsArr[RndNo - 1][l][h].heat_time}</td>`;
+        tempOut += `<td>${resultsArr[RndNo - 1][l][h].car}</td><td>${resultsArr[RndNo - 1][l][h].heat_time.toFixed(4)}</td>`;
       } else {
         tempOut += `<td>No Racer</td><td>-</td>`;
       }
