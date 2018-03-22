@@ -260,29 +260,7 @@ function saveRace() {
   } else {
     return -1;
   }
-  /* dialog.showSaveDialog(currentWindowObj, {
-    title: 'Save Race . . .',
-    filters: [
-      {
-        name: "PDT race information files",
-        extensions: ['pdt_race']
-      }
-    ]
-  }, (filenames) => {
-    if (!filenames) return -1;
-    if (filenames.length > 0) {
-      var contentJSON = JSON.stringify({ "raceInformation": raceInformation, "racerStats": racerStats });
-
-      //save txt
-      fs.writeFileSync(filenames, contentJSON);
-
-      raceInfoFileDiv.innerHTML = filenames.split('\\').pop().split('/').pop();
-      raceInfoFile = filenames;
-      return 1;
-    }
-  }) */
   
-  /*document.activeElement.blur();*/
 }
 
 function checkRaceDialog(type) {

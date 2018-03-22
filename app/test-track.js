@@ -144,13 +144,13 @@ function updateHistoryTable(runObj) {
         if (runObj[i].time != 99) {
             outStr += "<tr>";
             outStr += `<td>${runNum} (${runObj[i].lane})</td>`;
-            outStr += `<td>${runObj[i].time}</td>`;
+            outStr += `<td>${runObj[i].time.toFixed(4)}</td>`;
             if (runNum == 1) {
                 outStr += "<td>-</td>"
             } else {
                 var tempTime2 = lastRunTimes[i].time;
                 var tempTime1 = runObj[i].time;
-                var deltaTime = (tempTime1 - tempTime2).toPrecision(4);
+                var deltaTime = (tempTime1 - tempTime2).toFixed(4);
                 outStr += `<td>${deltaTime}</td>`;
             }
             outStr += "</tr>"

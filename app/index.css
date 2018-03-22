@@ -269,7 +269,7 @@ a:active {
 }
 #RacerInfo td:nth-child(5), #RacerInfo th:nth-child(5) {
 	width: 10em;
-	text-align: left; 
+	text-align: right; 
 }
 
 #RacerInfo tr:nth-child(even) {

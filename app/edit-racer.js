@@ -144,7 +144,7 @@ function updateRacerStatsList() {
       if (racerStats[i].total_time === undefined) {
         racerStats[i].total_time = 0;
       };
-      tempOutTable += `<td>${racerStats[i].total_time}</td></tr>`;
+      tempOutTable += `<td>${racerStats[i].total_time.toFixed(4)}</td></tr>`;
     }
   } else {
     tempOutStr = "No Racers.";
@@ -160,10 +160,6 @@ function updateRacerStatsList() {
     document.getElementById("RacerInfo").style.display = "block";
   }
 
-  /* if (!isObjEmpty(raceInformation) && racerStatsFile !== "") {
-    raceInformation.RacerStatsFile = racerStatsFile;
-    updateRaceInfo();
-  } */
   raceRacers.length = 0;
   updateRacerTable();
 }
