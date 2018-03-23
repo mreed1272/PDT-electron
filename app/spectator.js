@@ -9,6 +9,7 @@ var racerArray = [];
 var roundResults = [];
 var raceInfo = [];
 var laneTimes = [];
+var finalResults = [];
 
 var numLanes = 0;
 var numRacers = 0;
@@ -223,18 +224,21 @@ ipcRenderer.on('winner-no-extra', (event, data) => {
   currentRoundDiv.style.display = "none";
 
   //create cards showing winners 1st through 3rd unless number of racers is less than 3
+  //console.log('Calling winnerCards empty from "winner-no-extra"')
   winnerCards();
 
 })
 
 ipcRenderer.on('winner-extra', (event, data) => {
+  //console.log("Running winner-extra.")
+  //console.log(data);
   //get new arrays and update displays
   roundResults = data[0];
   racerArray = data[1];
   currentRndNum = data[2];
   currentHeatNum = data[3];
   numHeats = data[4];
-  var finalResults = data[5];
+  finalResults = data[5];
   numRacers = racerArray.length;
 
   updateLeaderBoard();
@@ -257,6 +261,8 @@ ipcRenderer.on('winner-extra', (event, data) => {
     finalResults[2].racer_name = racerArray[2].racer_name;
     finalResults[2].heat_time = racerArray[2].total_time;
   }
+  //console.log(`Final results: ${finalResults}`);
+  //console.log("Calling winnerCards from 'winner-extra'");
   winnerCards(finalResults);
 })
 
@@ -394,6 +400,7 @@ function winnerCards(champ) {
 
   } else {
     //first sort the racerArray by heat time
+    //console.log(champ);
     if (champ.hasOwnProperty("heat_time")) {
       champ.sort(function (a, b) {
         return a.heat_time - b.heat_time;
@@ -625,8 +632,10 @@ function isObjEmpty(obj) {
 function showResults() {
 
   if (raceInfo.hasOwnProperty("winners")) {
+    //console.log('Calling winnerCards with raceInfo.winners from showResults()')
     winnerCards(JSON.parse(JSON.stringify(raceInfo.winners)));
   } else {
+    //console.log('Calling winnerCards empty from showResults()')
     winnerCards();
   }
   updateLeaderBoard();
@@ -656,10 +665,11 @@ function showResults() {
     resultsTxtOut += `<H2>Round: ${r + 1}</h2>`;
     resultsTxtOut += `<table>${headerTxt1a}${headerTxt1b}${headerTxt1c}<tr>${headerTxt2}</tr>`
 
-    for (var h = 0; h < raceInfo.number_heats; h++) {
+    for (var h = 0; h < roundResults[r][0].length; h++) {
       resultsTxtOut += `<tr><td>${(h + 1)}</td>`;
 
       for (var l = 0; l < numLanes; l++) {
+        //console.log(`Round ${r} - Heat ${h} - Lane ${l}`);
         if (roundResults[r][l][h].car !== "-") {
           resultsTxtOut += `<td>${roundResults[r][l][h].car}</td><td>${roundResults[r][l][h].heat_time}</td>`;
         } else {

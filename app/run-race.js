@@ -203,6 +203,12 @@ function generateRound(nRacers, nLanes, RndNo, racerArray) {
         raceResults[RndNo - 1][l][h].heat_time = 0;
       }
     }
+    //now let's try to change when there are 2 blanks so that at least 2 cars are always racing by
+    //swapping the bottom 2 heats in lane 3
+    var tempData1 = JSON.parse(JSON.stringify(raceResults[RndNo-1][nLanes-1][NumHeats-1]));
+    var tempData2 = JSON.parse(JSON.stringify(raceResults[RndNo-1][nLanes-1][NumHeats-2]));
+    raceResults[RndNo-1][nLanes-1][NumHeats-1] = JSON.parse(JSON.stringify(tempData2));
+    raceResults[RndNo-1][nLanes-1][NumHeats-2] = JSON.parse(JSON.stringify(tempData1));
   }
 }
 
@@ -547,8 +553,9 @@ function raceUpdate(type) {
 
       updateRacerTable();
       clearDisplay();
-
-      ipcRenderer.send('winner-extra', [raceResults, raceRacers, currentRnd, currentHeatNum, NumHeats, raceTmpArr]);
+      updateMainData();
+      console.log("Sending winner-extra");
+      ipcRenderer.send('winner-extra', [raceResults, raceRacers, currentRnd, currentHeatNum, NumHeats, raceTmpArr]);//raceTmpArr
 
       startButton.innerHTML = "Start Race"
       startButton.setAttribute('onclick', "setupRace()");
@@ -561,7 +568,7 @@ function raceUpdate(type) {
       startButton.disabled = true;
       var heatTable = document.getElementById("heat-lane-assignments").getElementsByTagName("table");
       heatTable[0].innerHTML = "";
-      updateMainData();
+      
 
       break;
 
@@ -621,6 +628,7 @@ function createChampRound() {
   clearDisplay();
   heatButton.disabled = true;
   redoHeatButton.disabled = true;
+  readyRace = true;
 
 }
 
