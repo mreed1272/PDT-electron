@@ -242,7 +242,7 @@ function saveRace() {
       }
     ]
   });
-  
+
   //console.log(`Save filename: ${tmp_filenames}`)
 
   if (!tmp_filenames) {
@@ -260,7 +260,7 @@ function saveRace() {
   } else {
     return -1;
   }
-  
+
 }
 
 function checkRaceDialog(type) {
@@ -423,6 +423,9 @@ function editRaceDialog(type) {
       raceInfoFile = "";
       document.getElementById("RaceInfoFile").innerHTML = raceInfoFile.split('\\').pop().split('/').pop();
 
+      var mainButtons = document.getElementById("mainT").getElementsByTagName("button");
+      if (mainButtons[0].disabled === true) {disableButtons(mainButtons);};
+
 
       return -1;
 
@@ -564,7 +567,7 @@ function loadOptions() {
 
   for (var i = 0; i < optionsPDT.commands.length; i++) {
     tmpTxt += `<tr><td>${optionsPDT.commands[i].name}</td><td>${optionsPDT.commands[i].value}</td></tr>`;
-  }  
+  }
   tmpTxt += `</table><h4>Serial messages:</h4><table>`;
 
   for (var i = 0; i < optionsPDT.messages.length; i++) {
@@ -576,9 +579,9 @@ function loadOptions() {
   }
   tmpTxt += `</table></div><div id='configOrg'><H3>Organization Types:</H3><ol>`;
 
-  for (var i = 0; i < optionsPDT.OrgType.length; i++){
+  for (var i = 0; i < optionsPDT.OrgType.length; i++) {
     tmpTxt += `<li>${optionsPDT.OrgType[i].name}</li> Ranks:<ul>`
-    for (var w = 0; w < optionsPDT.OrgType[i].rank_text.length; w++){
+    for (var w = 0; w < optionsPDT.OrgType[i].rank_text.length; w++) {
       tmpTxt += `<li>${optionsPDT.OrgType[i].rank_text[w]}`;
     }
     tmpTxt += `</ul>`;
@@ -685,11 +688,11 @@ function closePDT() {
             ipcRenderer.send("close-PDT");
           } else {
             var result = saveRace();
-            if(result > 0) {ipcRenderer.send("close-PDT");}
+            if (result > 0) { ipcRenderer.send("close-PDT"); }
           }
         } else {
           var result = saveRace();
-          if(result > 0) {ipcRenderer.send("close-PDT");}
+          if (result > 0) { ipcRenderer.send("close-PDT"); }
         }
     }
   } else {

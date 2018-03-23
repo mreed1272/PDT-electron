@@ -399,6 +399,7 @@ function raceUpdate(type) {
       heatButton.disabled = true;
       redoHeatButton.disabled = true;
       ipcRenderer.send('redo');
+      readyRace = true;
       //resetArduino();
 
       break;
@@ -478,6 +479,7 @@ function raceUpdate(type) {
       startButton.disabled = true;
       var heatTable = document.getElementById("heat-lane-assignments").getElementsByTagName("table");
       heatTable[0].innerHTML = "";
+      updateMainData();
 
       break;
 
@@ -559,6 +561,7 @@ function raceUpdate(type) {
       startButton.disabled = true;
       var heatTable = document.getElementById("heat-lane-assignments").getElementsByTagName("table");
       heatTable[0].innerHTML = "";
+      updateMainData();
 
       break;
 
@@ -713,6 +716,24 @@ function simHeat(nLanes) {
   }
 }
 
+function updateMainData() {
+
+  //store information in raceInformation variable
+
+  raceInformation["number_lanes"] = numLanes;
+  raceInformation["current_heat"] = currentHeatNum;
+  raceInformation["current_round"] = currentRnd;
+  raceInformation["number_heats"] = NumHeats;
+  raceInformation["race_finished"] = raceDone;
+
+  if (raceResults.length !== 0) { raceInformation["heat_results"] = JSON.parse(JSON.stringify(raceResults)); }
+  if (raceRacers.length !== 0) { raceInformation["racer_table"] = JSON.parse(JSON.stringify(raceRacers)) };
+  if (winnerArr.length !== 0) { raceInformation["winners"] = JSON.parse(JSON.stringify(winnerArr)); }
+
+  ipcRenderer.send('race-information', [raceInformation, numLanes]);
+
+}
+
 function saveResults() {
   var heatButton = document.getElementById("heat-button");
   var redoHeatButton = document.getElementById("redo-heat");
@@ -816,7 +837,7 @@ function displayResults() {
   //let's load the data from the main file into a temp variable;
 
   var resultsTmp = JSON.parse(JSON.stringify(raceInformation.heat_results));
-  
+
   //build the table header for each round
   for (var i = 1; i <= raceInformation.number_lanes; i++) {
     headerTxt1b += `<th colspan=2>Lane ${i}</th>`

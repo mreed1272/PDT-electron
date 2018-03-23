@@ -241,7 +241,8 @@ function checkSerialData(data) {
       break;
 
     default:
-      if (currentTab === "runRaceT" && readyRace === false) {
+      if (isRacing && readyRace === false) {
+        //console.log(`Got some race data but ending because not ready: ${data}`);
         return;
       }
 
@@ -249,6 +250,10 @@ function checkSerialData(data) {
       if (testRegEx) {
         var tempLaneNum = RegExp.$1 * 1;
         var tempLaneTime = RegExp.$2 * 1;
+
+        //console.log(`result data: ${data}`);
+        //console.log(`Lane Number: ${tempLaneNum} Lane Time:${tempLaneTime} Lane Mask: ${laneMask[tempLaneNum-1]}`)
+        //console.log(`isRacing = ${isRacing}; readyRace = ${readyRace}`);
 
         if (currentTab == "testTrackT") {
           var tempLaneId = `tlane-lane${tempLaneNum}`;
@@ -264,6 +269,7 @@ function checkSerialData(data) {
           laneTimes.push({ lane: tempLaneNum, time: 99 });
         };
         if (tempLaneNum == numLanes) {
+          //console.log(`Looks like last lane data came through: ${data}`);
           laneTimes.sort(function (a, b) {
             return a.time - b.time;
           });
@@ -278,7 +284,7 @@ function checkSerialData(data) {
             if (numLanes > 2) {
               document.getElementById(winnerLane[2]).className = "winner3";
             }
-          } else if (currentTab === "runRaceT" && readyRace === true) {
+          } else if (isRacing && readyRace === true) {
             if (numLanes > 2) {
               var winnerLane = [`race-lane-lane${laneTimes[0].lane}-Li`, `race-lane-lane${laneTimes[1].lane}-Li`, `race-lane-lane${laneTimes[2].lane}-Li`];
             } else {
@@ -289,7 +295,7 @@ function checkSerialData(data) {
             if (numLanes > 2) {
               document.getElementById(winnerLane[2]).className = "winner3";
             }
-            readyRace = false;
+            
           }
 
 
@@ -298,6 +304,7 @@ function checkSerialData(data) {
           }
           if (isRacing) {
             postResults(laneTimes);
+            readyRace = false;
           }
           writeToArduino("G");
         }

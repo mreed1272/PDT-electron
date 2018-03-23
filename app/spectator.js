@@ -69,7 +69,7 @@ function getInfo() {
     setupDisplay();
     updateLeaderBoard();
     updateCurrentRound();
-    //updateDisplay();
+    updateDisplay();
   }
 }
 
