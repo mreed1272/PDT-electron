@@ -67,7 +67,7 @@ app.on('ready', () => {
   });
   mainWindow.loadURL(`file://${__dirname}/app/index.html`);
 
-   //mainWindow.openDevTools();
+  //mainWindow.openDevTools();
 
   mainContents = mainWindow.webContents;
 

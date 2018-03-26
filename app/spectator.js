@@ -4,6 +4,7 @@ const dialog = electron.remote.dialog;
 //const shell = electron.shell;
 //const fs = require('fs');
 const ipcRenderer = electron.ipcRenderer;
+const {Menu, MenuItem} = remote;
 
 var racerArray = [];
 var roundResults = [];
@@ -34,6 +35,17 @@ const wolfImg = `${__dirname}/images/wolf-trans.png`;
 const bearImg = `${__dirname}/images/bear-trans.png`;
 const webelosImg = `${__dirname}/images/webelos-trans.png`;
 const aolImg = `${__dirname}/images/aol-trans.png`;
+
+//create context menu
+const rightMenu = new Menu();
+const rightMenuItem = new MenuItem({label: 'Open/Close Console', role: 'toggledevtools'});
+
+rightMenu.append(rightMenuItem);
+
+window.addEventListener('contextmenu', (e) => {
+  e.preventDefault();
+  rightMenu.popup(remote.getCurrentWindow());
+})
 
 function getInfo() {
   var data = ipcRenderer.sendSync('startup');

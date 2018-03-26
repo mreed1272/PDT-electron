@@ -7,6 +7,8 @@ const shell = electron.shell;
 const fs = require('fs');
 const ipcRenderer = electron.ipcRenderer;
 const nativeImage = electron.nativeImage;
+const {Menu, MenuItem} = remote;
+
 
 let PDTimage = `${__dirname}/images/PDT-main.png`;
 
@@ -43,6 +45,12 @@ var numLanes = 3; //default to 2 lanes
 var numRounds = 0;
 var timerId = null;
 
+//create context menu
+const rightMenu = new Menu();
+const rightMenuItem = new MenuItem({label: 'Open/Close Console', role: 'toggledevtools'});
+
+rightMenu.append(rightMenuItem);
+
 
 
 function onBodyLoad() {
@@ -65,6 +73,11 @@ function onBodyLoad() {
   loadOptions();
   //console.log("calling initSerial. . .")
   initSerial();
+
+  window.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+    rightMenu.popup(remote.getCurrentWindow());
+  })
 
   //console.log("end of onBodyLoad")
 }
