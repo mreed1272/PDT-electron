@@ -4,7 +4,7 @@ const dialog = electron.remote.dialog;
 //const shell = electron.shell;
 //const fs = require('fs');
 const ipcRenderer = electron.ipcRenderer;
-const {Menu, MenuItem} = remote;
+const { Menu, MenuItem } = remote;
 
 var racerArray = [];
 var roundResults = [];
@@ -38,7 +38,7 @@ const aolImg = `${__dirname}/images/aol-trans.png`;
 
 //create context menu
 const rightMenu = new Menu();
-const rightMenuItem = new MenuItem({label: 'Open/Close Console', role: 'toggledevtools'});
+const rightMenuItem = new MenuItem({ label: 'Open/Close Console', role: 'toggledevtools' });
 
 rightMenu.append(rightMenuItem);
 
@@ -316,35 +316,35 @@ function showWinners(data) {
   const bestShowDIV = document.getElementById("bestShowWinners");
   //console.log("running show winners in spec window")
 
-  if (!isObjEmpty(data)){
+  if (!isObjEmpty(data)) {
 
-      //create the txt first
-      var tmpText = "";
-      tmpText += `<div class='flex-container-row' style='perspective: 1500px; justify-content: center'>`;
-      tmpText += `<div class='show_first_place'>`;
-      tmpText += `<h1>1<sup>st</sup> Place <span class='winner'>&#xf091;</span></h1>`;
-      tmpText += `<img id='imgShowWinner-1' src='${getImage(data["1st"].rank)}'>`;
-      tmpText += `<p>${data["1st"].racer_name}</p>`;
-      tmpText += `<p># ${data["1st"].car}</p>`;
-      tmpText += `</div>`
-      tmpText += `<div class='show_second_place'>`;
-      tmpText += `<h1>2<sup>nd</sup> Place</h1>`;
-      tmpText += `<img id='imgShowWinner-2' src='${getImage(data["2nd"].rank)}'>`;
-      tmpText += `<p>${data["2nd"].racer_name}</p>`;
-      tmpText += `<p># ${data["2nd"].car}</p>`;
-      tmpText += `</div>`
-      tmpText += `<div class='show_third_place'>`;
-      tmpText += `<h1>3<sup>rd</sup> Place</h1>`;
-      tmpText += `<img id='imgShowWinner-3' src='${getImage(data["3rd"].rank)}'>`;
-      tmpText += `<p>${data["3rd"].racer_name}</p>`;
-      tmpText += `<p># ${data["3rd"].car}</p>`;
-      tmpText += `</div>`;
-      tmpText += `</div>`;
+    //create the txt first
+    var tmpText = "";
+    tmpText += `<div class='flex-container-row' style='perspective: 1500px; justify-content: center'>`;
+    tmpText += `<div class='show_first_place'>`;
+    tmpText += `<h1>1<sup>st</sup> Place <span class='winner'>&#xf091;</span></h1>`;
+    tmpText += `<img id='imgShowWinner-1' src='${getImage(data["1st"].rank)}'>`;
+    tmpText += `<p>${data["1st"].racer_name}</p>`;
+    tmpText += `<p># ${data["1st"].car}</p>`;
+    tmpText += `</div>`
+    tmpText += `<div class='show_second_place'>`;
+    tmpText += `<h1>2<sup>nd</sup> Place</h1>`;
+    tmpText += `<img id='imgShowWinner-2' src='${getImage(data["2nd"].rank)}'>`;
+    tmpText += `<p>${data["2nd"].racer_name}</p>`;
+    tmpText += `<p># ${data["2nd"].car}</p>`;
+    tmpText += `</div>`
+    tmpText += `<div class='show_third_place'>`;
+    tmpText += `<h1>3<sup>rd</sup> Place</h1>`;
+    tmpText += `<img id='imgShowWinner-3' src='${getImage(data["3rd"].rank)}'>`;
+    tmpText += `<p>${data["3rd"].racer_name}</p>`;
+    tmpText += `<p># ${data["3rd"].car}</p>`;
+    tmpText += `</div>`;
+    tmpText += `</div>`;
 
-      //now place it in the div
-      bestShowDIV.innerHTML = tmpText;
+    //now place it in the div
+    bestShowDIV.innerHTML = tmpText;
 
-      
+
   }
 }
 
@@ -441,9 +441,19 @@ function winnerCards(champ) {
           tempTxt += `<h1>3rd Place</h1>`;
           break;
       }
-      tempTxt += `<img id='imgWinner-${w}' src='${getImage(champ[w].rank)}'>`;
-      tempTxt += `<p>${champ[w].racer_name}</p>`;
+      var racerIndex = IndexByKeyValue(racerArray, "car", champ[w].car);
+      if (champ[w].hasOwnProperty("rank")) {
+        tempTxt += `<img id='imgWinner-${w}' src='${getImage(champ[w].rank)}'>`;
+      } else {
+        tempTxt += `<img id='imgWinner-${w}' src='${getImage(racerArray[racerIndex].rank)}'>`;
+      }
+      if (champ[w].hasOwnProperty("racer_name")){
+        tempTxt += `<p>${champ[w].racer_name}</p>`;
+      } else {
+        tempTxt += `<p>${racerArray[racerIndex].racer_name}</p>`;
+      }
       tempTxt += `<p># ${champ[w].car}</p>`;
+      
       if (champ.hasOwnProperty("heat_time")) {
         tempTxt += `<p>${(champ[w].heat_time).toFixed(4)} s</p>`;
       } else if (champ.hasOwnProperty("time")) {
@@ -642,7 +652,7 @@ function isObjEmpty(obj) {
 }
 
 function showResults() {
-
+  //console.log(`Winners stored: ${raceInfo.hasOwnProperty("winners")}`);
   if (raceInfo.hasOwnProperty("winners")) {
     //console.log('Calling winnerCards with raceInfo.winners from showResults()')
     winnerCards(JSON.parse(JSON.stringify(raceInfo.winners)));

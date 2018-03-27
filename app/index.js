@@ -216,6 +216,7 @@ function loadRace() {
       if (tmpRaceData.hasOwnProperty("raceInformation") && tmpRaceData.hasOwnProperty("racerStats")) {
         raceInformation = tmpRaceData.raceInformation;
         racerStats = tmpRaceData.racerStats;
+        updateRacerStatsList();
       } else {
         raceInformation = tmpRaceData;
       }
@@ -471,7 +472,7 @@ function updateRaceInfo() {
   }; */
 
   //check this logic again !!!!!!!
-  if (isObjEmpty(racerStats) && (racerStatsFile !== undefined && racerStatsFile !== "" && racerStatsFile !== null)) {
+  /* if (isObjEmpty(racerStats) && (racerStatsFile !== undefined && racerStatsFile !== "" && racerStatsFile !== null)) {
     //if not loaded, load the racer stats file but first check to make sure the file exists 
     if (!fs.existsSync(racerStatsFile)) {
       dialog.showErrorBox("File Missing", `The file ${racerStatsFile} cannot be found.`)
@@ -487,7 +488,7 @@ function updateRaceInfo() {
 
   if (racerStatsFile !== undefined && racerStatsFile !== "" && racerStatsFile !== null) {
     tmpRacerStatsName = racerStatsFile.split('\\').pop().split('/').pop();
-  }
+  } */
 
   if (!isObjEmpty(raceInformation)) {
     for (var i = 0; i < raceInformation.RacerRanks.length; i++) {
@@ -514,6 +515,7 @@ function updateRaceInfo() {
         tempOutTable += "</table>";
 
         racerInfoDiv.innerHTML = tempOutTable;
+        if (racerInfoDiv.style.display === "none") {racerInfoDiv.style.display = "block"};
       }
     } else {
 

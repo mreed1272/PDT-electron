@@ -845,6 +845,7 @@ function displayResults() {
   //let's load the data from the main file into a temp variable;
 
   var resultsTmp = JSON.parse(JSON.stringify(raceInformation.heat_results));
+  
 
   //build the table header for each round
   for (var i = 1; i <= raceInformation.number_lanes; i++) {
@@ -856,10 +857,11 @@ function displayResults() {
     resultsTxtOut += `<H2>Round: ${r + 1}</h2>`;
     resultsTxtOut += `<table>${headerTxt1a}${headerTxt1b}${headerTxt1c}<tr>${headerTxt2}</tr>`
 
-    for (var h = 0; h < raceInformation.number_heats; h++) {
+    for (var h = 0; h < resultsTmp[r][0].length; h++) {
       resultsTxtOut += `<tr><td>${(h + 1)}</td>`;
 
       for (var l = 0; l < raceInformation.number_lanes; l++) {
+        
         if (resultsTmp[r][l][h].car !== "-") {
           resultsTxtOut += `<td>${resultsTmp[r][l][h].car}</td><td>${resultsTmp[r][l][h].heat_time}</td>`;
         } else {
