@@ -634,7 +634,7 @@ function createChampRound() {
 
 function genRandomNumArray(entries, min, max) {
   // parameters
-  // entries : how many numbers you want to generate. For example it is 5.
+  // entries : how many numbers you want to generate. For example 5.
   // min(inclusive) : minimum/low value of a range. it must be any positive integer but less than max. i.e 4
   // max(inclusive) : maximun value of a range. it must be any positive integer. i.e 50
   // return type: array
